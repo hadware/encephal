@@ -1,2 +1,2 @@
-# encephal
+# Encephal
 A simple library to build complex neural networks of all kinds: NN, LSTM, RNN,...
