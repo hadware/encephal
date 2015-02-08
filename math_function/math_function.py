@@ -9,7 +9,7 @@ class Sigmoid:
 
     @staticmethod
     def function(x):
-        return 1/(1+exp(x))
+        return 1/(1+exp(-x))
 
     @staticmethod
     def differential(y):

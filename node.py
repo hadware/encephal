@@ -21,5 +21,5 @@ class Node:
     def add_output_connexion(self, connexion):
         self.output_connexion.append(connexion)
 
-    def learn(self):
+    def learn(self, alpha):
         pass

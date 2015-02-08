@@ -6,7 +6,8 @@ from layer.layer import *
 from math_function.math_function import *
 from connexion.full_connexion import *
 from network import *
-
+from learning.labeled_database import *
+from testing.labeled_database import *
 from encoder import *
 
 db = database.logical_function.LogicalFunctionDatabase("and")
@@ -15,35 +16,28 @@ encoder = onehot.Onehot(2)
 
 input_layer = InputLayer(2)
 
-hidden_layer = PerceptronLayer(3, Sigmoid)
+#hidden_layer = PerceptronLayer(4, Sigmoid)
+#hidden_layer.randomize()
 
 output_layer = OutputLayer(2, Sigmoid, QuadraticError)
+output_layer.randomize()
 
-connexion1 = FullConnexion(input_layer, hidden_layer)
+#connexion1 = FullConnexion(input_layer, hidden_layer)
+connexion1 = FullConnexion(input_layer, output_layer)
 connexion1.randomize()
 
-connexion2 = FullConnexion(hidden_layer, output_layer)
-connexion2.randomize()
+#connexion2 = FullConnexion(hidden_layer, output_layer)
+#connexion2.randomize()
 
 network = Network(input_layer, output_layer)
-print(connexion2.input)
 network.verify()
 
-print(network.sorted_node)
-print(network.sorted_connexion)
+learning = LearnLabeledDatabase(network, db, encoder)
+learning.online_learn(100000, 0.01)
+#learning.conv_bacth_learn(1, 0.1, True)
 
-data, label = db.database[1]
 
-input_layer.input_data_prop[:] = data
-print(input_layer.output_data_prop)
-network.propagation()
-
-print(output_layer.output_data_prop)
-
-output_layer.error(encoder.encode(label))
-
-network.backpropagation()
-print(encoder.encode(label))
-print(hidden_layer.input_data_prop)
+testing = TestLabeledDatabase(network, db, encoder)
+print(testing.test(True))
 
 

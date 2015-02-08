@@ -69,12 +69,11 @@ class Network:
             for connexion in self.sorted_connexion[i-1]:
                 connexion.backpropagation()
 
-    def learn(self):
+    def learn(self, alpha):
         for node_list in self.sorted_node:
             for node in node_list:
-                node.learn()
+                node.learn(alpha)
 
         for connexion_list in self.sorted_connexion:
             for connexion in connexion_list:
-                connexion.learn()
-
+                connexion.learn(alpha)

@@ -11,7 +11,7 @@ class FullConnexion(connexion.connexion.Connexion):
         self.delta = zeros((self.input_size, self.output_size))
 
     def randomize(self):
-        self.matrix = 0.1*(random.random_sample((self.input_size, self.output_size)) - 0.5)
+        self.matrix = 0.01*(random.random_sample((self.input_size, self.output_size)) - 0.05)
         #TODO: make parameters
 
     def propagation(self):
@@ -19,3 +19,8 @@ class FullConnexion(connexion.connexion.Connexion):
 
     def backpropagation(self):
         self.input.output_data_backprop[:] = dot(self.matrix, self.output.input_data_backprop)
+
+    def learn(self, alpha):
+        #self.delta[:, :] = 0.5*self.delta[:, :] - alpha * dot(matrix(self.input.output_data_prop).transpose(), matrix(self.output.input_data_backprop))
+        #self.matrix[:, :] += self.delta
+        self.matrix[:, :] -= alpha * dot(matrix(self.input.output_data_prop).transpose(), matrix(self.output.input_data_backprop))
