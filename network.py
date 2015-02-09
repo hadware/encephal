@@ -61,10 +61,7 @@ class Network:
     def backpropagation(self):
         for i in reversed(range(1, len(self.sorted_node))):
             for node in self.sorted_node[i]:
-                if i==len(self.sorted_node)-1:
-                    node.backpropagation()
-                else:
-                    node.backpropagation()
+                node.backpropagation()
 
             for connexion in self.sorted_connexion[i-1]:
                 connexion.backpropagation()

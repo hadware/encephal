@@ -11,7 +11,7 @@ class InputLayer(Node):
         self.input_data_prop = vector
         self.output_data_prop = vector
         self.input_data_backprop = vector
-        self.output_data_backprop = vector
+        self.output_data_backprop = zeros(size)
 
     def propagation(self):
         pass
@@ -32,16 +32,18 @@ class PerceptronLayer(Node):
         #self.bias = zeros(size)
 
     def propagation(self):
-        self.output_data_prop[:] = self.activation_function.function(self.input_data_prop )#+ self.bias)
+        self.output_data_prop[:] = self.activation_function.function(self.input_data_prop + self.bias)
 
     def backpropagation(self):
         self.input_data_backprop[:] = self.activation_function.differential(self.output_data_prop) * self.output_data_backprop #TODO change differential name...
 
     def learn(self, alpha):
+        #pass
         self.bias[:] -= alpha * self.input_data_backprop
 
     def randomize(self):
-        self.bias[:] = 0.01*(random.random_sample(self.input_size)-0.05)
+        self.bias[:] = 0.01*(random.random_sample(self.input_size)-0.005)
+        #self.bias[:] = (random.random_sample(self.input_size))
         #TODO: make parameters
 
 
@@ -53,6 +55,7 @@ class OutputLayer(PerceptronLayer):
 
     def grad_error(self, expected):
         self.output_data_backprop[:] = self.error_function.differential(self.output_data_prop, expected)
+        #print(self.output_data_backprop[:])
 
     def error(self, expected):
         return sum(self.error_function.function(self.output_data_prop, expected))

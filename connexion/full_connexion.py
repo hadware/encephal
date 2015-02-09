@@ -11,7 +11,8 @@ class FullConnexion(connexion.connexion.Connexion):
         self.delta = zeros((self.input_size, self.output_size))
 
     def randomize(self):
-        self.matrix = 0.01*(random.random_sample((self.input_size, self.output_size)) - 0.05)
+        #self.matrix = random.random_sample((self.input_size, self.output_size))
+        self.matrix = 0.01*(random.random_sample((self.input_size, self.output_size)) - 0.005)
         #TODO: make parameters
 
     def propagation(self):
