@@ -50,13 +50,13 @@ class Network:
                     self.sorted_connexion[k-1].append(connexion)
                     no_level_nodes.remove(node)
 
-    def propagation(self):
+    def propagation(self, learning  = True):
         for i in range(1, len(self.sorted_node)):
             for connexion in self.sorted_connexion[i-1]:
                 connexion.propagation()
 
             for node in self.sorted_node[i]:
-                node.propagation()
+                node.propagation(learning)
 
     def backpropagation(self):
         for i in reversed(range(1, len(self.sorted_node))):

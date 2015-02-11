@@ -12,7 +12,7 @@ class TestLabeledDatabase:
         nb_ok = 0
         for data, label in self.database.database:
             self.network.input_layer.input_data_prop[:] = data
-            self.network.propagation()
+            self.network.propagation(False)
             result = self.encoder.decode(self.network.output_layer.output_data_prop)
             if print_result:
                 print(label, " :", self.network.output_layer.output_data_prop)

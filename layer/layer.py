@@ -13,7 +13,7 @@ class InputLayer(Node):
         self.input_data_backprop = vector
         self.output_data_backprop = zeros(size)
 
-    def propagation(self):
+    def propagation(self, learning = True):
         pass
 
 
@@ -31,7 +31,7 @@ class PerceptronLayer(Node):
 
         #self.bias = zeros(size)
 
-    def propagation(self):
+    def propagation(self, learning = True):
         self.output_data_prop[:] = self.activation_function.function(self.input_data_prop + self.bias)
 
     def backpropagation(self):
@@ -59,3 +59,29 @@ class OutputLayer(PerceptronLayer):
 
     def error(self, expected):
         return sum(self.error_function.function(self.output_data_prop, expected))
+
+
+class DropoutLayer(Node):
+
+    def __init__(self, size, p):
+        super().__init__(size, size)
+        self.input_data_prop = zeros(size)
+        self.output_data_prop = zeros(size)
+        self.input_data_backprop = zeros(size)
+        self.output_data_backprop = zeros(size)
+        self.filter = ones(size)
+        self.p = p
+
+    def propagation(self, learning = True):
+        if learning:
+            self.filter[:] = random.binomial(1, self.p, self.input_size)
+            self.output_data_prop[:] = self.input_data_prop * self.filter
+        else:
+            self.output_data_prop[:] = self.input_data_prop
+        #print(self.output_data_prop)
+
+    def backpropagation(self):
+        self.input_data_backprop[:] = self.output_data_backprop * self.filter
+
+    def learn(self, alpha):
+        pass
