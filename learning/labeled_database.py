@@ -17,7 +17,7 @@ class LearnLabeledDatabase:
             self.network.backpropagation()
             self.network.learn(alpha)
 
-    def conv_bacth_learn(self, epsilon, alpha, print_result):
+    def conv_batch_learn(self, epsilon, alpha, print_result):
         error = epsilon + 1
         i=0
         while error > epsilon:
