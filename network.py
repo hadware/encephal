@@ -43,7 +43,7 @@ class Network:
                     heappush(heap, connexion.output)
 
 
-        # this block takes care of building the priority lists
+        # this block takes care of building the priority lists for nodes and connections
         for node in no_level_nodes: # for each node, we set the level value to infinity
             node.level = float("inf")
 

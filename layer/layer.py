@@ -50,7 +50,7 @@ class PerceptronLayer(Node):
         self.bias[:] -= alpha * self.input_data_backprop
 
     def randomize(self):
-        """Initialiazises all the biases for each internal neuron to a random value"""
+        """Initialises all the biases for each internal neuron to a random value"""
         self.bias[:] = 0.01*(random.random_sample(self.input_size)-0.005)
         #TODO: make parameters
 
