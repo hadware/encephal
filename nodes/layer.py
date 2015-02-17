@@ -1,7 +1,9 @@
 __author__ = 'marechaux'
 
-from node import *
 from numpy import *
+
+from nodes.node import *
+
 
 class PerceptronLayer(Node):
     """

@@ -1,7 +1,7 @@
 __author__ = 'marechaux'
 
 
-class LearnLabeledDatabase:
+class TrainLabeledDatabase:
 
     def __init__(self, network, database, encoder, error_function):
         self.network = network

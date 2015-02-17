@@ -1,7 +1,9 @@
 __author__ = 'marechaux'
 
-from node import *
 from numpy import *
+
+from nodes.node import *
+
 
 class FullConnexion(Node):
     """ Basic connection type: all of the ouputs from the input node are connected to

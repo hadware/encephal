@@ -1,17 +1,15 @@
 __author__ = 'marechaux'
 
 from subnet.subnet import *
-from layer.layer import *
-from connexion.full_connexion import *
+from nodes.layer import *
+from nodes.full_connexion import *
 from subnet.network import *
-from math_function.math_function import *
-from numpy import *
-from database.logical_function import *
-from learning.labeled_database import *
-from testing.labeled_database import *
-from encoder.onehot import *
-from math_function.math_function import *
-from database.MNIST import *
+from datasets.logical_function import *
+from execution.training.labeled_database import *
+from execution.testing.labeled_database import *
+from datasets.encoder.onehot import *
+from nodes.math_function.math_function import *
+from datasets.MNIST import *
 
 s = Subnet()
 
@@ -46,10 +44,9 @@ learn_db = MNIST("training")
 test_db = MNIST("testing")
 encoder = Onehot(output_size)
 
-learning = LearnLabeledDatabase(n, learn_db, encoder, QuadraticError.differential)
+learning = TrainLabeledDatabase(n, learn_db, encoder, QuadraticError.differential)
 testing = TestLabeledDatabase(n, test_db, encoder)
 
-learning.online_learn(60000, 1)
-learning.online_learn(60000, 0.5)
-learning.online_learn(60000, 0.2)
+learning.online_learn(10000, 1)
+
 print(testing.test(True))

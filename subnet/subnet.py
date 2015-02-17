@@ -1,6 +1,6 @@
 __author__ = 'marechaux'
 
-from subnet.graph import *
+from subnet.graph_elements import *
 
 
 class Subnet:
