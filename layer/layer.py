@@ -3,7 +3,6 @@ __author__ = 'marechaux'
 from node import *
 from numpy import *
 
-
 class PerceptronLayer(Node):
     """
     A node representing a hidden layer of a perceptron network.
@@ -33,3 +32,28 @@ class PerceptronLayer(Node):
         """Initialiazises all the biases for each internal neuron to a random value"""
         self.bias[:] = 0.01*(random.random_sample(self.input_size)-0.5)
         #TODO: make parameters
+
+class DropoutLayer(Node):
+
+    def __init__(self, size, p):
+        super().__init__(size, size)
+        self.input_data_prop = zeros(size)
+        self.output_data_prop = zeros(size)
+        self.input_data_backprop = zeros(size)
+        self.output_data_backprop = zeros(size)
+        self.filter = ones(size)
+        self.p = p
+
+    def propagation(self, learning = True):
+        if learning:
+            self.filter[:] = random.binomial(1, self.p, self.input_size)
+            self.output_data_prop[:] = self.input_data_prop * self.filter
+        else:
+            self.output_data_prop[:] = self.input_data_prop
+        #print(self.output_data_prop)
+
+    def backpropagation(self):
+        self.input_data_backprop[:] = self.output_data_backprop * self.filter
+
+    def learn(self, alpha):
+        pass

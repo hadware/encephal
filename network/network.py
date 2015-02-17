@@ -77,6 +77,7 @@ class Network:
                     self.sorted_connexion[k-1].append(connexion)
                     no_level_nodes.remove(node)
 
+<<<<<<< HEAD:network.py
     def propagation(self):
         """"Using the priority list computed by the verify function, we ask each node and connection to compute
         and propagate the data, priority "layer" after priority "layer"."""
@@ -86,6 +87,15 @@ class Network:
 
             for node in self.sorted_node[i + 1]:
                 node.propagation()
+=======
+    def propagation(self, learning  = True):
+        for i in range(1, len(self.sorted_node)):
+            for connexion in self.sorted_connexion[i-1]:
+                connexion.propagation()
+
+            for node in self.sorted_node[i]:
+                node.propagation(learning)
+>>>>>>> pre-dev:network/network.py
 
     def backpropagation(self):
         """"Using the priority list computed by the verify function, we ask each node and connection to compute
