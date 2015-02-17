@@ -1,48 +1,55 @@
 __author__ = 'marechaux'
 
-
-import database.logical_function
-from database.MNIST import *
+from subnet.subnet import *
 from layer.layer import *
-from math_function.math_function import *
 from connexion.full_connexion import *
-from network import *
+from subnet.network import *
+from math_function.math_function import *
+from numpy import *
+from database.logical_function import *
 from learning.labeled_database import *
 from testing.labeled_database import *
-from encoder import *
+from encoder.onehot import *
+from math_function.math_function import *
+from database.MNIST import *
 
-db = database.logical_function.LogicalFunctionDatabase("xor")
+s = Subnet()
 
-encoder = onehot.Onehot(10)
+input_size = 784
 
-input_layer = InputLayer(784)
+hidden_size = 200
 
-hidden_layer = PerceptronLayer(200, Sigmoid)
-hidden_layer.randomize()
+output_size = 10
 
-output_layer = OutputLayer(10, Sigmoid, QuadraticError)
+output_layer = PerceptronLayer(output_size, Sigmoid)
 output_layer.randomize()
 
-connexion1 = FullConnexion(input_layer, hidden_layer)
-#connexion1 = FullConnexion(input_layer, output_layer)
+hidden_layer = PerceptronLayer(hidden_size, Sigmoid)
+hidden_layer.randomize()
+
+connexion1 = FullConnexion(input_size, hidden_size)
 connexion1.randomize()
 
-connexion2 = FullConnexion(hidden_layer, output_layer)
+connexion2 = FullConnexion(hidden_size, output_size)
 connexion2.randomize()
 
-network = Network(input_layer, output_layer)
-network.verify()
+i = s.add_input(input_size)
+o = s.add_output(output_layer)
+h = s.add_node(hidden_layer)
+s.add_node(connexion1, i, h)
+s.add_node(connexion2, h, o)
 
+n = Network(s)
 
+db = LogicalFunctionDatabase("xor")
 learn_db = MNIST("training")
 test_db = MNIST("testing")
+encoder = Onehot(output_size)
 
-learning = LearnLabeledDatabase(network, learn_db, encoder)
-learning.online_learn(600000, 0.005)
-#learning.conv_bacth_learn(1, 0.5, True)
+learning = LearnLabeledDatabase(n, learn_db, encoder, QuadraticError.differential)
+testing = TestLabeledDatabase(n, test_db, encoder)
 
-
-testing = TestLabeledDatabase(network, test_db, encoder)
+learning.online_learn(60000, 1)
+learning.online_learn(60000, 0.5)
+learning.online_learn(60000, 0.2)
 print(testing.test(True))
-
-

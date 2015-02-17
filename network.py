@@ -37,7 +37,7 @@ class Network:
             #for each connection linked to the "output pad" of the current_node,
             # - we add the connection's output node to the heap (i.e., the node connected to the output of the current node)
             # - we add the connextion to the "no_level_nodes" list
-            for connexion in current_node.output_connexion:
+            for connexion in current_node.output_connexions:
                 if connexion.output not in no_level_nodes:
                     no_level_nodes.add(connexion.output)
                     heappush(heap, connexion.output)
@@ -67,7 +67,7 @@ class Network:
                 candidate = True
 
                 #building the list of nodes and connection for each level
-                for connexion in node.input_connexion:
+                for connexion in node.input_connexions:
                     if connexion.input.level >= k:
                         candidate = False
 
