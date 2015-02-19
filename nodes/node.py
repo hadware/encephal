@@ -20,30 +20,20 @@ class Node:
     """
 
     def __init__(self, input_size, output_size):
-        self.input_connexions = []
-        self.output_connexions = []
-        self.input_data_prop = None
-        self.output_data_prop = None
-        self.input_data_backprop = None
-        self.output_data_backprop = None
         self.input_size = input_size
         self.output_size = output_size
 
-    def add_input_connexion(self, connexion):
-        """Adds an input connection to the node's connections"""
-        self.input_connexions.append(connexion)
-
-    def add_output_connexion(self, connexion):
-        """Adds an output conneciton to the node's connections"""
-        self.output_connexions.append(connexion)
-
-    def learn(self, alpha):
+    def learn(self, alpha, input_socket, output_socket):
         """
         Once the error has been computed for a node, this functions tells the node to change its internal values
         using the computed deltas.
 
         :param alpha: the learning coefficient
         """
+        pass
 
+    def propagation(self, input_socket, output_socket):
+        pass
 
+    def backpropagation(self, input_socket, output_socket):
         pass

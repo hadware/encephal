@@ -1,48 +1,52 @@
 __author__ = 'marechaux'
 
+from subnet.subnet import *
+from nodes.layer import *
+from nodes.full_connexion import *
+from subnet.network import *
+from datasets.logical_function import *
+from execution.training.labeled_database import *
+from execution.testing.labeled_database import *
+from datasets.encoder.onehot import *
+from nodes.math_function.math_function import *
+from datasets.MNIST import *
 
-import database.logical_function
-from database.MNIST import *
-from layer.layer import *
-from math_function.math_function import *
-from connexion.full_connexion import *
-from network import *
-from learning.labeled_database import *
-from testing.labeled_database import *
-from encoder import *
+s = Subnet()
 
-db = database.logical_function.LogicalFunctionDatabase("xor")
+input_size = 784
 
-encoder = onehot.Onehot(10)
+hidden_size = 200
 
-input_layer = InputLayer(784)
+output_size = 10
 
-hidden_layer = PerceptronLayer(200, Sigmoid)
-hidden_layer.randomize()
-
-output_layer = OutputLayer(10, Sigmoid, QuadraticError)
+output_layer = PerceptronLayer(output_size, Sigmoid)
 output_layer.randomize()
 
-connexion1 = FullConnexion(input_layer, hidden_layer)
-#connexion1 = FullConnexion(input_layer, output_layer)
+hidden_layer = PerceptronLayer(hidden_size, Sigmoid)
+hidden_layer.randomize()
+
+connexion1 = FullConnexion(input_size, hidden_size)
 connexion1.randomize()
 
-connexion2 = FullConnexion(hidden_layer, output_layer)
+connexion2 = FullConnexion(hidden_size, output_size)
 connexion2.randomize()
 
-network = Network(input_layer, output_layer)
-network.verify()
+i = s.add_input(input_size)
+o = s.add_output(output_layer)
+h = s.add_node(hidden_layer)
+s.add_node(connexion1, i, h)
+s.add_node(connexion2, h, o)
 
+n = Network(s)
 
+db = LogicalFunctionDatabase("xor")
 learn_db = MNIST("training")
 test_db = MNIST("testing")
+encoder = Onehot(output_size)
 
-learning = LearnLabeledDatabase(network, learn_db, encoder)
-learning.online_learn(600000, 0.005)
-#learning.conv_bacth_learn(1, 0.5, True)
+learning = TrainLabeledDatabase(n, learn_db, encoder, QuadraticError.differential)
+testing = TestLabeledDatabase(n, test_db, encoder)
 
+learning.online_learn(10000, 1)
 
-testing = TestLabeledDatabase(network, test_db, encoder)
 print(testing.test(True))
-
-

@@ -1,9 +1,11 @@
 __author__ = 'marechaux'
 
-import connexion.connexion
 from numpy import *
 
-class FullConnexion(connexion.connexion.Connexion):
+from nodes.node import *
+
+
+class FullConnexion(Node):
     """ Basic connection type: all of the ouputs from the input node are connected to
     all the inputs of the output node.
 
@@ -11,23 +13,23 @@ class FullConnexion(connexion.connexion.Connexion):
       matrix (numpy.darray): a matrix of the weights applied to the outputs from the intput node
     """
 
-    def __init__(self, input_node, output_node):
-        super().__init__(input_node, output_node)
+    def __init__(self, input_size, output_size):
+        super().__init__(input_size, output_size)
         self.matrix = zeros((self.input_size, self.output_size))
 
     def randomize(self):
         """Sets up a random value for all the connections, i.e., randomizes the weight matrix"""
-        self.matrix = 0.01*(random.random_sample((self.input_size, self.output_size)) - 0.005)
+        self.matrix = 0.01*(random.random_sample((self.input_size, self.output_size)) - 0.5)
         #TODO: make parameters
 
-    def propagation(self):
+    def propagation(self, input_socket, output_socket):
         """Propagates the input data from the input node to the next node, while """
-        self.output.input_data_prop[:] = dot(self.input.output_data_prop, self.matrix)
+        output_socket.prop_data[:] += dot(input_socket.prop_data, self.matrix)
 
-    def backpropagation(self):
+    def backpropagation(self, input_socket, output_socket):
         """Backpropagates the error gradient to the input node"""
-        self.input.output_data_backprop[:] = dot(self.matrix, self.output.input_data_backprop)
+        input_socket.backprop_data[:] += dot(self.matrix, output_socket.backprop_data)
 
-    def learn(self, alpha):
+    def learn(self, alpha, input_socket, output_socket):
         """Applies the calculated error to the matrix"""
-        self.matrix[:, :] -= alpha * dot(matrix(self.input.output_data_prop).transpose(), matrix(self.output.input_data_backprop))
+        self.matrix[:, :] -= alpha * dot(matrix(input_socket.prop_data).transpose(), matrix(output_socket.backprop_data))
