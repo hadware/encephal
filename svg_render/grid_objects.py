@@ -4,7 +4,6 @@ __author__ = 'hadware'
 from svg_render.network_elements import ElementType
 from enum import Enum
 from svg_render.cdata_patch import ET
-from math import sqrt
 
 DEFAULT_CSS_PATH = "graph_style.css"
 
@@ -58,15 +57,16 @@ class GraphObject(GridObject):
 
 class HorizontalArrow(GraphObject):
 
+    def __init__(self, object):
+        super().__init__(object)
+
     def insert_into_svg_tree(self, tree):
         grid_cell = ET.SubElement(tree, "g", transform="translate(0,%d)" % self.y_offset)
         graphical_symbol = ET.SubElement(grid_cell, "use", y=str(self.inner_shape_offset))
         graphical_symbol.set("xlink:href", "#horizontal_arrow")
 
-class Arrow(GridObject):
-    pass
 
-class ConnectorArrow(Arrow):
+class ConnectorArrow(GridObject):
 
     def __init__(self, object, from_index, to_index):
         super().__init__(object)
@@ -253,27 +253,28 @@ class GraphGrid:
             for element_index_in_column, svg_object in enumerate(self._previous_element_column().svg_object_list):
 
                 for current_element in svg_object.original_object_ref.connected_to:
-                    # if a svg_object (arrow or else) has already been added to the next colmun, we'll just to add the arrow
-                    # it points to
-                    svg_object_index_in_next_column = new_svg_objects_column.object_reference_index(current_element)
-
-                    if svg_object_index_in_next_column is None:
-                        # the index is none, so we actually have to add something
-
-                        # if the current_element is in the next row of the hierarchy tree it should be added to
-                        # the new column, else we just add an arrow
-                        if current_element in hierarchy_tree[i+1]:
-                            new_svg_objects_column.add_svg_object(GraphObject(current_element))
-                        else:
-                            new_svg_objects_column.add_svg_object(HorizontalArrow(current_element))
-
-                        #now the column index shouldn't be none, since we've added the elemnt to the column
+                    if current_element.hierarchy > i :
+                        # if a svg_object (arrow or else) has already been added to the next column, we'll just to add the
+                        # arrow it points to
                         svg_object_index_in_next_column = new_svg_objects_column.object_reference_index(current_element)
 
-                    # adding the arrow pointing to the new element in the intermediate "arrow" column
-                    new_arrow_column.add_svg_object(ConnectorArrow(object=current_element,
-                                                                   from_index=element_index_in_column,
-                                                                   to_index=svg_object_index_in_next_column))
+                        if svg_object_index_in_next_column is None:
+                            # the index is none, so we actually have to add something
+
+                            # if the current_element is in the next row of the hierarchy tree it should be added to
+                            # the new column, else we just add an arrow
+                            if current_element in hierarchy_tree[i+1]:
+                                new_svg_objects_column.add_svg_object(GraphObject(current_element))
+                                svg_object_index_in_next_column = new_svg_objects_column.object_reference_index(current_element)
+                            else:
+                                new_svg_objects_column.add_svg_object(HorizontalArrow(svg_object.original_object_ref))
+                                svg_object_index_in_next_column = new_svg_objects_column.object_reference_index(svg_object.original_object_ref)
+
+
+                        # adding the arrow pointing to the new element in the intermediate "arrow" column
+                        new_arrow_column.add_svg_object(ConnectorArrow(object=current_element,
+                                                                       from_index=element_index_in_column,
+                                                                       to_index=svg_object_index_in_next_column))
             self.columns += [new_arrow_column, new_svg_objects_column]
 
     def _previous_element_column(self):

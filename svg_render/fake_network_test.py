@@ -13,9 +13,10 @@ output_node = Element(ElementType.NODE, "output")
 #linking them
 input_node.add_connection(first_connections)
 
-for i in range(2):
+for i in range(1):
     first_connections[i].add_connection(hidden_nodes[i])
     hidden_nodes[i].add_connection(second_connections[i])
     second_connections[i].add_connection(output_node)
+first_connections[1].add_connection([output_node, hidden_nodes[0]])
 fake_network = Network(input_node, output_node)
 fake_network.build_graph("test.svg")
