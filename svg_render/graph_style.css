@@ -1,3 +1,8 @@
 line {
     stroke : #000000;
 }
+
+#node_rhombus {
+    stroke : #000000;
+    fill: #00cc00;
+}

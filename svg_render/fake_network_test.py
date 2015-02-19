@@ -5,7 +5,7 @@ from svg_render.fake_network import Network
 
 #creating the nodes
 input_node = Element(ElementType.NODE, "input")
-first_connections = [Element(ElementType.SUBNET, "c1"), Element(ElementType.SUBNET, "c2")]
+first_connections = [Element(ElementType.CONNEXION, "c1"), Element(ElementType.SUBNET, "c2")]
 hidden_nodes = [Element(ElementType.NODE, "n1"), Element(ElementType.NODE, "n2")]
 second_connections = [Element(ElementType.SUBNET, "c3"), Element(ElementType.SUBNET, "c4")]
 output_node = Element(ElementType.NODE, "output")

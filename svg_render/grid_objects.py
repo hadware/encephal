@@ -208,13 +208,12 @@ class SvgTree:
                                  width=str(self.grid_dimensions.column_width),
                                  height=str(self.grid_dimensions.graph_objects_height))
 
-        rhombus_side_length = self.grid_dimensions.graph_objects_height / sqrt(2)
-        def_rhombus= ET.SubElement(defs, "g", id="node_rhombus",
-                                   transform="scale(%d,1) rotate(45)"
-                                             % (self.grid_dimensions.graph_objects_height / rhombus_side_length))
-        inner_square = ET.SubElement(def_rhombus,"rect",
-                                     width=str(rhombus_side_length),
-                                     height=str(rhombus_side_length))
+        def_rhombus= ET.SubElement(defs, "polygon", id="node_rhombus",
+                                   points="%f, %f  %f,%f %f,%f %f,%f"
+                                          % (0, self.grid_dimensions.graph_objects_height/2,
+                                             self.grid_dimensions.column_width / 2, 0,
+                                             self.grid_dimensions.column_width, self.grid_dimensions.graph_objects_height / 2,
+                                             self.grid_dimensions.column_width /2, self.grid_dimensions.graph_objects_height))
 
         horizontal_arrow = ET.SubElement(defs, "g", id="horizontal_arrow")
         inner_line = ET.SubElement(horizontal_arrow, "line",
