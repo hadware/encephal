@@ -58,6 +58,7 @@ class Network:
         # finding out the grid's dimension using the hierarchy
 
         grid = grid_objects.GraphGrid(self.hierarchised_nodes)
+        grid.render_svg("test.svg", 400, 600)
 
 
 

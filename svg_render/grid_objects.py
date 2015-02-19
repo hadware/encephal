@@ -1,8 +1,17 @@
+
 __author__ = 'hadware'
 
-from svg_render.svg_objects import GridObjectType
 from svg_render.network_elements import ElementType
+from enum import Enum
+from svg_render.cdata_patch import ET
+from math import sqrt
 
+DEFAULT_CSS_PATH = "graph_style.css"
+
+class GridObjectType(Enum):
+    RECT = 1
+    ELLIPSE = 2
+    RHOMBUS = 3
 
 class GridObject:
 
@@ -22,23 +31,37 @@ class GraphObject(GridObject):
     @classmethod
     def translate_element_to_shape(cls, element):
         switch_dict = {ElementType.CONNEXION : GridObjectType.RHOMBUS,
-                       ElementType.NODE : GridObjectType.CIRCLE,
-                       ElementType.SUBNET : GridObjectType.SQUARE}
+                       ElementType.NODE : GridObjectType.ELLIPSE,
+                       ElementType.SUBNET : GridObjectType.RECT}
         return switch_dict[element.type]
 
-    def set_dimension(self, height, width):
+    def set_dimensions(self, height, width):
         self.height = height
         self.width = width
 
-    def set_offset(self, x_offset, y_offset):
-        self.x_offset = x_offset
+    def set_offset(self, y_offset):
         self.y_offset = y_offset
 
-    def get_left_side_middle_abs_coord(self):
-        return self.x_offset, self.y_offset + self.height / 2
+    def calc_inner_shape_offset(self, graph_objects_height):
+        self.inner_shape_offset = self.height / 2 - graph_objects_height / 2
 
-    def get_right_side_middle_abs_coord(self):
-        return self.x_offset + self.width, self.y_offset + self.height / 2
+    def insert_into_svg_tree(self, tree):
+        grid_cell = ET.SubElement(tree, "g", transform="translate(0,%d)" % self.y_offset)
+
+        switch_dict = {GridObjectType.RHOMBUS : "node_rhombus",
+                       GridObjectType.ELLIPSE : "node_ellipse",
+                       GridObjectType.RECT : "node_rect"}
+
+        graphical_symbol = ET.SubElement(grid_cell, "use", y=str(self.inner_shape_offset))
+        graphical_symbol.set("xlink:href", "#" + switch_dict[self.type])
+
+
+class HorizontalArrow(GraphObject):
+
+    def insert_into_svg_tree(self, tree):
+        grid_cell = ET.SubElement(tree, "g", transform="translate(0,%d)" % self.y_offset)
+        graphical_symbol = ET.SubElement(grid_cell, "use", y=str(self.inner_shape_offset))
+        graphical_symbol.set("xlink:href", "#horizontal_arrow")
 
 class Arrow(GridObject):
     pass
@@ -50,8 +73,18 @@ class ConnectorArrow(Arrow):
         self.from_index = from_index
         self.to_index = to_index
 
-class HoritontalArrow(GraphObject):
-    pass
+    def set_start_and_end(self, start_coord, end_coord):
+        self.start_coord = start_coord
+        self.end_coord = end_coord
+
+    def insert_into_svg_tree(self, tree):
+        arrow_tag = ET.SubElement(tree, "line",
+                                  x1=str(self.start_coord[0]),
+                                  y1=str(self.start_coord[1]),
+                                  x2=str(self.end_coord[0]),
+                                  y2=str(self.end_coord[1]))
+
+
 
 class GraphColumn:
     """A column in a graph, mainly a list of SvgObjects"""
@@ -66,9 +99,23 @@ class GraphColumn:
         """Adds an SVG object to the column"""
         self.svg_object_list.append(svg_object)
 
+    def insert_into_svg_tree(self, tree):
+        pass
+
+
 class ArrowColumn(GraphColumn):
     """A column containing arrows pointing to elements"""
-    pass
+
+    def set_elements_property(self, right_hand_column, left_hand_column):
+        for element in self.svg_object_list:
+            start_coord = list(right_hand_column.middle_coordinates_of_cell_right_side(element.from_index))
+            end_coord = list(left_hand_column.middle_coordinates_of_cell_left_side(element.to_index))
+            element.set_start_and_end(start_coord, end_coord)
+
+    def insert_into_svg_tree(self, tree):
+        for arrow in self.svg_object_list:
+            arrow.insert_into_svg_tree(tree)
+
 
 class ElementColumn(GraphColumn):
     """A column of elements, can be any type of svg object (geometrical objects or arrows) """
@@ -81,6 +128,110 @@ class ElementColumn(GraphColumn):
                 return i
 
         return None
+
+    def calc_cell_dimensions(self, graph_dimensions):
+        self.cell_height = graph_dimensions.graph_height / len(self.svg_object_list)
+        self.width = graph_dimensions.column_width
+
+    def set_column_offset(self, x_offset):
+        """Sets the x-offset for the whole column"""
+        self.x_offset = x_offset
+
+    def set_elements_property(self, graph_dimensions):
+        """Asks the column to set its element's positional properties (size and offset)"""
+        for i, element in enumerate(self.svg_object_list):
+            element.set_offset(self.cell_height * i)
+            element.set_dimensions(self.cell_height, self.width)
+            element.calc_inner_shape_offset(graph_dimensions.graph_objects_height)
+
+    def middle_coordinates_of_cell_left_side(self, cell_index):
+        return self.x_offset, self.svg_object_list[cell_index].y_offset + self.cell_height / 2
+
+    def middle_coordinates_of_cell_right_side(self, cell_index):
+        return self.x_offset + self.width, self.svg_object_list[cell_index].y_offset + self.cell_height / 2
+
+    def insert_into_svg_tree(self, tree):
+        column_group = ET.SubElement(tree, "g", transform="translate(%d,0)" % self.x_offset)
+        column_group.set("class", "element_column column")
+
+        for element in self.svg_object_list:
+            element.insert_into_svg_tree(column_group)
+
+
+class GridDimensions:
+    """Computes and stores most of the dimensions needed to render the graph svg file"""
+
+    def __init__(self, graph_width, graph_height, column_count, elements_per_column_max):
+        self.graph_height = graph_height
+        self.graph_width = graph_width
+        self.column_width = int(graph_width / column_count)
+        self.min_grid_cell_height = graph_height / elements_per_column_max
+        self.graph_objects_height = self.min_grid_cell_height/2
+        self.border = 30
+
+class SvgTree:
+    """Takes care of building the XML tree and rendering the actual file"""
+
+    def __init__(self, grid_dimensions):
+        self.grid_dimensions = grid_dimensions
+        self.root = ET.Element("svg",
+                               width=str(grid_dimensions.graph_width + grid_dimensions.border * 2),
+                               height=str(grid_dimensions.graph_height + grid_dimensions.border*2))
+        self.inner_svg = ET.SubElement(self.root, "svg",
+                                       width=str(grid_dimensions.graph_width),
+                                       heigh=str(grid_dimensions.graph_height),
+                                       x=str(grid_dimensions.border),
+                                       y=str(grid_dimensions.border))
+
+        self._add_style()
+        self._add_defs()
+
+    def _add_style(self):
+        """Adds the css style from an external css file directly intro the tree"""
+        style = ET.SubElement(self.inner_svg, "style", type="text/css")
+        cdata = ET.SubElement(style, '![CDATA[')
+        with open(DEFAULT_CSS_PATH, "r") as css_file:
+            cdata.text = css_file.read()
+
+    def _add_defs(self):
+        """Adds graphical element references in the tree for later 'use' by the GraphObject classes"""
+        defs = ET.SubElement(self.inner_svg, "defs")
+
+        #adding shape refs
+        def_ellipse = ET.SubElement(defs, "ellipse", id="node_ellipse",
+                                    cx=str(self.grid_dimensions.column_width/2),
+                                    cy=str(self.grid_dimensions.graph_objects_height/2),
+                                    rx=str(self.grid_dimensions.column_width/2),
+                                    ry=str(self.grid_dimensions.graph_objects_height/2))
+
+        def_rect = ET.SubElement(defs, "rect", id="node_rect",
+                                 width=str(self.grid_dimensions.column_width),
+                                 height=str(self.grid_dimensions.graph_objects_height))
+
+        rhombus_side_length = self.grid_dimensions.graph_objects_height / sqrt(2)
+        def_rhombus= ET.SubElement(defs, "g", id="node_rhombus",
+                                   transform="scale(%d,1) rotate(45)"
+                                             % (self.grid_dimensions.graph_objects_height / rhombus_side_length))
+        inner_square = ET.SubElement(def_rhombus,"rect",
+                                     width=str(rhombus_side_length),
+                                     height=str(rhombus_side_length))
+
+        horizontal_arrow = ET.SubElement(defs, "g", id="horizontal_arrow")
+        inner_line = ET.SubElement(horizontal_arrow, "line",
+                                   x1=str(0),
+                                   y1=str(self.grid_dimensions.graph_objects_height/2),
+                                   x2=str(self.grid_dimensions.column_width),
+                                   y2=str(self.grid_dimensions.graph_objects_height/2))
+
+
+    def get_grid_root(self):
+        """Returns the tree's node in which the grid elements will be inserted"""
+        return self.inner_svg
+
+    def write_svg_file(self, filename):
+        """Writes the SVG file"""
+        tree = ET.ElementTree(self.root)
+        tree.write(filename)
 
 class GraphGrid:
     """Stores the actual geometrical objects in a grid"""
@@ -115,7 +266,7 @@ class GraphGrid:
                         if current_element in hierarchy_tree[i+1]:
                             new_svg_objects_column.add_svg_object(GraphObject(current_element))
                         else:
-                            new_svg_objects_column.add_svg_object(HoritontalArrow(current_element))
+                            new_svg_objects_column.add_svg_object(HorizontalArrow(current_element))
 
                         #now the column index shouldn't be none, since we've added the elemnt to the column
                         svg_object_index_in_next_column = new_svg_objects_column.object_reference_index(current_element)
@@ -133,15 +284,35 @@ class GraphGrid:
 
         return None
 
-    def render_svg(self, graph_height, graph_length):
+    def _get_elements_columns(self):
+        return [column for column in self.columns if isinstance(column, ElementColumn)]
+
+    def render_svg(self, filename, graph_height, graph_length):
         """Renders the actual XML """
 
-        #computing dimensions for objects
-        column_length = graph_length / len(self.columns)
-        min_grid_cell_height = graph_height / max([len(column.svg_object_list) for column in self.columns if isinstance(column, ElementColumn)])
-        graph_objects_height = min_cell_height/2
+        graph_dimensions = GridDimensions(graph_height=graph_height,
+                                          graph_width=graph_length,
+                                          column_count=len(self.columns),
+                                          elements_per_column_max=max([len(column.svg_object_list) for column in self.columns if isinstance(column, ElementColumn)]))
+
 
         #telling each cell for each column its dimension and where it should be on the svg layout
+        for i, column in enumerate(self._get_elements_columns()):
+            column.calc_cell_dimensions(graph_dimensions)
+            column.set_column_offset(i * graph_dimensions.column_width * 2)
+            column.set_elements_property(graph_dimensions)
+
+        for i, column in enumerate(self.columns):
+            if isinstance(column, ArrowColumn):
+                column.set_elements_property(self.columns[i-1], self.columns[i+1])
 
 
+        # making the XML tree corresponding to the SVG file
+        svg_file = SvgTree(grid_dimensions=graph_dimensions)
+
+        #asks each column element to add itself to the svg tree
+        for column in self.columns:
+            column.insert_into_svg_tree(svg_file.get_grid_root())
+
+        svg_file.write_svg_file(filename)
 
