@@ -1,6 +1,6 @@
 __author__ = 'lrx'
 
-class Size:
+class SocketSize:
 
     #TODO add the number of channel in the socket
     """
