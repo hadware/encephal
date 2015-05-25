@@ -16,7 +16,7 @@ class PerceptronLayer(Node):
 
     def __init__(self, size, activation_function):
         super().__init__(size, size)
-        self.bias = zeros(size)
+        self.bias = zeros(size.total_size)
         self.activation_function = activation_function
 
     def propagation(self, input_socket, output_socket):
@@ -32,7 +32,7 @@ class PerceptronLayer(Node):
 
     def randomize(self):
         """Initialiazises all the biases for each internal neuron to a random value"""
-        self.bias[:] = 0.01*(random.random_sample(self.input_size)-0.5)
+        self.bias[:] = 0.01*(random.random_sample(self.input_size.total_size)-0.5)
         #TODO: make parameters
 
 class DropoutLayer(Node):

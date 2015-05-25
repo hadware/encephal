@@ -1,6 +1,7 @@
 __author__ = 'marechaux'
 
 from subnet.subnet import *
+from subnet.size import *
 from nodes.layer import *
 from nodes.full_connexion import *
 from subnet.network import *
@@ -13,11 +14,11 @@ from datasets.MNIST import *
 
 s = Subnet()
 
-input_size = 784
+input_size = Size([784])
 
-hidden_size = 200
+hidden_size = Size([200])
 
-output_size = 10
+output_size = Size([10])
 
 output_layer = PerceptronLayer(output_size, Sigmoid)
 output_layer.randomize()
