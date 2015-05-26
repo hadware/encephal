@@ -15,12 +15,14 @@ class Subnet:
         self.sockets = set()
 
     def add_input(self, size):
+        """Adds an input socket to the subnet, of a given size"""
         socket = self.new_socket(size)
         self.input_sockets.append(socket)
         self.input_sizes.append(size)
         return socket
 
     def add_output(self, node, input = None):
+        """Adds an output socket to the subnet"""
         input_socket, output_socket = self.add_node(node, input)
         self.output_sockets.append(output_socket)
         self.output_size.append(output_socket.size)
@@ -30,12 +32,12 @@ class Subnet:
         try:
             input = self.get_socket(input_socket, node.input_size, True)
         except InvalidSocket as e:
-            raise ValueError("input_socket must be Socket or (Socket, Socket) or [Socket]")
+            raise ValueError("input_socket must match types Socket or (Socket, Socket) or [Socket]")
 
         try:
             output = self.get_socket(output_socket, node.output_size, False)
         except InvalidSocket as e:
-            raise ValueError("output_socket must be Socket or (Socket, Socket) or [Socket]")
+            raise ValueError("output_socket match type Socket or (Socket, Socket) or [Socket]")
 
         self.nodes.add(GraphNode(node, input, output))
         return input, output
@@ -86,6 +88,7 @@ class Subnet:
             self.output_sockets.append(output.size)
 
     def get_socket(self, socket, size, is_input):
+        """ Returns an input or output socket  """
         #TODO : Check the socket exist in the subnet
         if socket is None:
             return self.new_socket(size)

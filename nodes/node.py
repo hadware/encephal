@@ -29,6 +29,8 @@ class Node:
         using the computed deltas.
 
         :param alpha: the learning coefficient
+        :param input_socket: the input socket, from the feedforward PoV
+        :param input_socket: the output socket, from the feedforward PoV
         """
         pass
 

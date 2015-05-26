@@ -11,7 +11,7 @@ from datasets.encoder.onehot import *
 from nodes.math_function.math_function import *
 from datasets.MNIST import *
 
-s = Subnet()
+test_subnet = Subnet()
 
 input_size = 784
 
@@ -31,13 +31,13 @@ connexion1.randomize()
 connexion2 = FullConnexion(hidden_size, output_size)
 connexion2.randomize()
 
-i = s.add_input(input_size)
-o = s.add_output(output_layer)
-h = s.add_node(hidden_layer)
-s.add_node(connexion1, i, h)
-s.add_node(connexion2, h, o)
+input_socket = test_subnet.add_input(input_size)
+output_socket = test_subnet.add_output(output_layer)
+h = test_subnet.add_node(hidden_layer)
+test_subnet.add_node(connexion1, input_socket, h)
+test_subnet.add_node(connexion2, h, output_socket)
 
-n = Network(s)
+n = Network(test_subnet)
 
 db = LogicalFunctionDatabase("xor")
 learn_db = MNIST("training")
