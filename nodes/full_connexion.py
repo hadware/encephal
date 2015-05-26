@@ -15,11 +15,11 @@ class FullConnexion(Node):
 
     def __init__(self, input_size, output_size):
         super().__init__(input_size, output_size)
-        self.matrix = zeros((self.input_size, self.output_size))
+        self.matrix = zeros((self.input_size.total_size, self.output_size.total_size))
 
     def randomize(self):
         """Sets up a random value for all the connections, i.e., randomizes the weight matrix"""
-        self.matrix = 0.01*(random.random_sample((self.input_size, self.output_size)) - 0.5)
+        self.matrix = 0.01*(random.random_sample((self.input_size.total_size, self.output_size.total_size)) - 0.5)
         #TODO: make parameters
 
     def propagation(self, input_socket, output_socket):

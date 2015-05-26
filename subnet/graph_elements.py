@@ -13,12 +13,15 @@ class Socket:
         self.output_nodes = []
 
     def init_data(self):
-        self.prop_data = zeros(self.size)
-        self.backprop_data = zeros(self.size)
+        self.prop_data = zeros(self.size.total_size)
+        self.backprop_data = zeros(self.size.total_size)
 
     def reinit_data(self):
-        self.prop_data[:] = zeros(self.size)
-        self.backprop_data[:] = zeros(self.size)
+        self.prop_data[:] = zeros(self.size.total_size)
+        self.backprop_data[:] = zeros(self.size.total_size)
+
+
+
 
 
 

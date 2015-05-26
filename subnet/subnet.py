@@ -14,6 +14,11 @@ class Subnet:
         self.subnets = set()
         self.sockets = set()
 
+    def new_socket(self, size):
+        socket = Socket(size)
+        self.sockets.add(socket)
+        return socket
+
     def add_input(self, size):
         """Adds an input socket to the subnet, of a given size"""
         socket = self.new_socket(size)
@@ -42,6 +47,28 @@ class Subnet:
         self.nodes.add(GraphNode(node, input, output))
         return input, output
 
+    def get_socket(self, socket, size, is_input):
+        #TODO : Check the socket exist in the subnet
+        if socket is None:
+            return self.new_socket(size)
+        elif type(socket) is tuple: #TODO : Check type in the tuple
+            if is_input:
+                return socket[1]
+            else:
+                return socket[0]
+        elif type(socket) is (list, list):
+            if is_input:
+                return self.get_socket(socket[1], is_input)
+            else:
+                return self.get_socket(socket[0], is_input)
+        elif type(socket) is Socket:
+            return socket
+        elif type(socket) is list and socket.size == 1 and type(socket[0]) is Socket:
+            return socket[0]
+        else:
+            print(type(socket))
+            raise InvalidSocket()
+
     def add_subnet(self, subnet, input_sockets = None, output_sockets = None):
         # TODO: check non recusive
         try:
@@ -58,10 +85,7 @@ class Subnet:
         self.subnets.add(graph_subnet)
         return input, output
 
-    def new_socket(self, size):
-        socket = Socket(size)
-        self.sockets.add(socket)
-        return socket
+
 
     def as_input(self, socket):
         if socket is None:
@@ -87,29 +111,6 @@ class Subnet:
             self.output_sockets.append(output)
             self.output_sockets.append(output.size)
 
-    def get_socket(self, socket, size, is_input):
-        """ Returns an input or output socket  """
-        #TODO : Check the socket exist in the subnet
-        if socket is None:
-            return self.new_socket(size)
-        elif type(socket) is tuple: #TODO : Check type in the tuple
-            if is_input:
-                return socket[1]
-            else:
-                return socket[0]
-        elif type(socket) is (list, list):
-            if is_input:
-                return self.get_socket(socket[1], is_input)
-            else:
-                return self.get_socket(socket[0], is_input)
-        elif type(socket) is Socket:
-            return socket
-        elif type(socket) is list and socket.size == 1 and type(socket[0]) is Socket:
-            return socket[0]
-        else:
-            print(type(socket))
-            raise InvalidSocket()
-
     def get_socket_list(self, sockets, sockets_signature, is_input):
         if sockets is None:
             result = []
@@ -126,7 +127,7 @@ class Subnet:
         else:
             raise InvalidSocket()
 
-    #Un type de copie , il vas y en avoir d'autres
+    #Un type de copie , il va  y en avoir d'autres
     def copy(self, input_translations = None, output_translations = None):
         clone = Subnet()
 
