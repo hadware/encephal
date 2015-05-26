@@ -3,8 +3,8 @@ __author__ = 'marechaux'
 
 class Encoder:
 
-    def __init__(self, datasync):
-        self.datasync = datasync
+    def __init__(self, datasink):
+        self.datasync = datasink
 
     def encode(self, label):
         pass

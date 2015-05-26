@@ -8,7 +8,7 @@ class Onehot(Encoder):
 
 
     def encode(self, label):
-        result = zeros(self.datasync.data.shape[0])
+        result = zeros(self.datasink.data.shape[0])
         result[label] = 1
         return result
 

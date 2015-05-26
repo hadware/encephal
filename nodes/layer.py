@@ -14,9 +14,9 @@ class PerceptronLayer(PipeNode):
       activation_function : the function the layer will use on the sum to compute the output value. Usually a sigmoid.
     """
 
-    def __init__(self, datasync, activation_function):
-        super().__init__(datasync.type, datasync.type)
-        self.bias = zeros(datasync.shape)
+    def __init__(self, datasink, activation_function):
+        super().__init__(datasink.type, datasink.type)
+        self.bias = zeros(datasink.shape)
         self.activation_function = activation_function
 
     def propagation(self, input_socket, output_socket):
@@ -37,8 +37,8 @@ class PerceptronLayer(PipeNode):
 
     def randomize(self):
         """Initialiazises all the biases for each internal neuron to a random value"""
-        self.bias[:] = 0.01*(random.random_sample(self.datasync.shape)-0.5)
-        #TODO: make parameters
+        self.bias[:] = 0.01*(random.random_sample(self.datasink.shape)-0.5)
+        #TODO: make parameterss
 
 class DropoutLayer(PipeNode):
     #TODO restructure this part of the code

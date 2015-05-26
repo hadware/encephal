@@ -9,7 +9,7 @@ class LabeledDatabase:
     def __init__(self):
         self.database = []
         self.encoder = None
-        self.datasync = None
+        self.datasink = None
         self.nb_input = 0
 
     def random_element(self):
