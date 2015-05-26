@@ -23,6 +23,9 @@ class Node:
         self.input_size = input_size
         self.output_size = output_size
 
+    def randomize(self):
+        pass
+
     def learn(self, alpha, input_socket, output_socket):
         """
         Once the error has been computed for a node, this functions tells the node to change its internal values

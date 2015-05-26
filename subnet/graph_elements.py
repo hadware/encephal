@@ -22,9 +22,6 @@ class Socket:
 
 
 
-
-
-
 class GraphSubnet:
 
     def __init__(self, subnet, input_sockets, output_sockets):
