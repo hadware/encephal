@@ -56,8 +56,7 @@ class Statistic:
         m=0
         for i in range(nb_values):
             res = self.test(n)
-            print('value' + str(i) + ':')
-            print(res)
+            print('value' + str(i) + ':' + str(res))
             m += res
         print("The average score value is:")
         print(m/nb_values)
