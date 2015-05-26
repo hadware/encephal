@@ -5,24 +5,30 @@ from numpy import *
 
 class Socket:
 
-    def __init__(self, size):
-        self.prop_data = None
-        self.backprop_data = None
-        self.size = size
-        self.input_nodes = []
-        self.output_nodes = []
+    def __init__(self, datasink_type):
+        self.input_nodes = [] # a list of OutputNodeSocket
+        self.output_nodes = [] # a list of IntputNodeSocket
 
-    def init_data(self):
-        self.prop_data = zeros(self.size.total_size)
-        self.backprop_data = zeros(self.size.total_size)
+        #new instance of a datasink
+        self.prob_datasink = datasink_type()
+        self.backprob_datasink = datasink_type()
 
-    def reinit_data(self):
-        self.prop_data[:] = zeros(self.size.total_size)
-        self.backprop_data[:] = zeros(self.size.total_size)
+    def add_output_node(self, node):
+        self.output_nodes.append(node)
 
+    def add_input_node(self, node):
+        self.input_nodes.append(node)
 
+    def get_datatype(self):
+        return self.datasink.type
 
+    @property
+    def prop_data(self):
+        return self.datasink.data
 
+    @property
+    def backprop_data(self):
+        return self.datasink.data
 
 
 class GraphSubnet:
