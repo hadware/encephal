@@ -5,7 +5,7 @@ from numpy import *
 from nodes.node import *
 
 
-class FullConnexion(Node):
+class FullConnexion(PipeNode):
     """ Basic connection type: all of the ouputs from the input node are connected to
     all the inputs of the output node.
 
@@ -14,7 +14,7 @@ class FullConnexion(Node):
     """
 
     def __init__(self, input_size, output_size):
-        super().__init__(input_size, output_size)
+        super().__init__(Vector(float, input_size), Vector(float, output_size))
         self.matrix = zeros((self.input_size.total_size, self.output_size.total_size))
 
     def randomize(self):

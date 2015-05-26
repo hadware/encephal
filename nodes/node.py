@@ -1,6 +1,40 @@
 __author__ = 'marechaux'
 
-from numpy import *
+from .datatype import *
+
+class WrongSocketDataType(DataTypeError):
+    pass
+
+class NodeSocket:
+    """A node socket on which sockets will connect, helpful for datatype checks"""
+    def __init__(self, datatype):
+        self.connected_socket = None
+        self.type = datatype #socket the nodesocket will connect to
+
+    def connect_socket(self, socket):
+        pass
+
+class InputNodeSocket(NodeSocket):
+    """An input node socket has a set of socket datatypes it accepts"""
+
+    def connect_socket(self, socket):
+        if socket.type.matches(self.type):
+            self.connected_socket = socket
+            socket.add_output_node(self)
+        else:
+            raise WrongSocketDataType()
+
+
+class OutputNodeSocket(NodeSocket):
+
+    def connect_socket(self, socket):
+        """Checks if the datatype going out of the node matches the datatype
+        of the socket it will go to"""
+        if socket.type.matches(self.type):
+            self.connected_socket = socket
+            socket.add_input_node(self)
+        else:
+            raise WrongSocketDataType()
 
 
 class Node:
@@ -19,9 +53,9 @@ class Node:
       output_size (int): size of the  vector the node outputs
     """
 
-    def __init__(self, input_size, output_size):
-        self.input_size = input_size
-        self.output_size = output_size
+    def __init__(self):
+        self.input_node_sockets = []
+        self.output_node_sockets = []
 
     def randomize(self):
         pass
@@ -42,3 +76,20 @@ class Node:
 
     def backpropagation(self, input_socket, output_socket):
         pass
+
+
+class PipeNode(Node):
+    """A simpler node, with only one input socket, and one output socket, it's
+    a parent to most of the conventional RN nodes"""
+
+    def __init__(self, input_datatype, output_datatype):
+        self.input_node_sockets = [InputNodeSocket(input_datatype)]
+        self.output_node_sockets = [OutputNodeSocket(output_datatype)]
+        self.output_socket = self.output_node_sockets[0].connected_socket
+        self.input_socket = self.input_node_sockets[0].connected_socket
+
+    def connect_to_input(self, socket):
+        self.input_node_sockets[0].connect_socket(socket)
+
+    def connect_to_output(self, socket):
+        self.output_node_sockets[0].connect_socket(socket)

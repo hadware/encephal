@@ -1,15 +1,15 @@
 __author__ = 'marechaux'
 
 from subnet.graph_elements import *
+from .node import *
 
-
-class Subnet:
+class Subnet(Node):
 
     def __init__(self):
-        self.input_sockets = []
-        self.output_sockets = []
-        self.input_sizes = []
-        self.output_size = []
+        # self.input_sockets = []
+        # self.output_sockets = []
+        # self.input_sizes = []
+        # self.output_size = []
         self.nodes = set()
         self.subnets = set()
         self.sockets = set()
@@ -22,14 +22,14 @@ class Subnet:
     def add_input(self, size):
         """Adds an input socket to the subnet, of a given size"""
         socket = self.new_socket(size)
-        self.input_sockets.append(socket)
+        self.input_node_sockets.append(socket)
         self.input_sizes.append(size)
         return socket
 
     def add_output(self, node, input = None):
         """Adds an output socket to the subnet"""
         input_socket, output_socket = self.add_node(node, input)
-        self.output_sockets.append(output_socket)
+        self.output_node_sockets.append(output_socket)
         self.output_size.append(output_socket.size)
         return input_socket
 
@@ -92,11 +92,11 @@ class Subnet:
             raise ValueError("socket must be not null")
         elif socket not in self.sockets:
             raise ValueError("socket must be already in the subnet")
-        elif socket in self.input_sockets:
+        elif socket in self.input_node_sockets:
             raise ValueError("socket must not be already in the subnet outputs")
         else:
             input = self.get_socket(socket, None, False)
-            self.input_sockets.append(input)
+            self.input_node_sockets.append(input)
             self.input_sizes.append(input.size)
 
     def as_output(self, socket):
@@ -104,12 +104,12 @@ class Subnet:
             raise ValueError("socket must be not null")
         elif socket not in self.sockets:
             raise ValueError("socket must be already in the subnet")
-        elif socket in self.output_sockets:
+        elif socket in self.output_node_sockets:
             raise ValueError("socket must not be already in the subnet inputs")
         else:
             output = self.get_socket(socket, None, False)
-            self.output_sockets.append(output)
-            self.output_sockets.append(output.size)
+            self.output_node_sockets.append(output)
+            self.output_node_sockets.append(output.size)
 
     def get_socket_list(self, sockets, sockets_signature, is_input):
         if sockets is None:
@@ -135,23 +135,23 @@ class Subnet:
 
         if input_translations is not None:
             for i, input_socket in enumerate(input_translations):
-                socket_translator[self.input_sockets[i]] = input_socket
+                socket_translator[self.input_node_sockets[i]] = input_socket
         else:
-            for input_socket in self.input_sockets:
+            for input_socket in self.input_node_sockets:
                 new_input_socket = Socket(input_socket.size)
                 socket_translator[input_socket] = new_input_socket
                 clone.sockets.add(new_input_socket)
-                clone.input_sockets.append(new_input_socket)
+                clone.input_node_sockets.append(new_input_socket)
 
         if output_translations is not None:
             for i, output_socket in enumerate(output_translations):
-                socket_translator[self.output_sockets[i]] = output_socket
+                socket_translator[self.output_node_sockets[i]] = output_socket
         else:
-            for output_socket in self.output_sockets:
+            for output_socket in self.output_node_sockets:
                 new_output_socket = Socket(output_socket.size)
                 socket_translator[output_socket] = new_output_socket
                 clone.sockets.add(new_output_socket)
-                clone.output_sockets.append(new_output_socket)
+                clone.output_node_sockets.append(new_output_socket)
 
 
         for socket in self.sockets:

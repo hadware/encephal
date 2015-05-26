@@ -1,7 +1,9 @@
 __author__ = 'hadware'
 
-
 """Describes the data types sent and received by sockets and nodes"""
+
+class DataTypeError(Exception):
+    pass
 
 class DataType:
 
@@ -40,6 +42,7 @@ class TimeSeries(DataType):
     def matches(self, data_structure):
         pass
         #TODO : overload this one
+
 
 
 if __name__ == "__main__":

@@ -1,6 +1,6 @@
 __author__ = 'marechaux'
 
-from subnet.subnet import *
+from nodes.subnet import *
 from subnet.network import *
 from datasets.logical_function import *
 from datasets.encoder.onehot import *
