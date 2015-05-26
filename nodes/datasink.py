@@ -12,7 +12,11 @@ class DataSink:
     def reinit_data(self):
         pass
 
-class FloatGrid(DataSink):
+    @property
+    def shape(self):
+        self.data.shape()
+
+class Float2D(DataSink):
 
     def __init__(self, width, height):
         super().__init__()
@@ -30,7 +34,7 @@ class FloatGrid(DataSink):
     def reinit_data(self):
         self.data[:] = zeros((self.height, self.width))
 
-class UnidimensionalFloatVector(DataSink):
+class Float1D(DataSink):
 
     def __init__(self, length):
         super().__init__()
