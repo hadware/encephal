@@ -14,22 +14,22 @@ class FullConnexion(PipeNode):
     """
 
     def __init__(self, input_datasink, output_datasink):
-        super().__init__(input_datasink.type, output_datasink.type)
-        self.matrix = zeros((self.input_node_sockets[0].total_size, self.output_node_sockets[0].total_size))
+        super().__init__(input_datasink, output_datasink)
+        self.matrix = zeros((self.input_total_size, self.output_total_size))
 
     def randomize(self):
         """Sets up a random value for all the connections, i.e., randomizes the weight matrix"""
-        self.matrix = 0.01*(random.random_sample((self.input_size.total_size, self.output_size.total_size)) - 0.5)
+        self.matrix = 0.01*(random.random_sample((self.input_total_size, self.output_total_size)) - 0.5)
         #TODO: make parameters
 
     def propagation(self, input_socket, output_socket):
         """Propagates the input data from the input node to the next node, while """
-        output_socket.prop_data[:] += dot(input_socket.prop_data, self.matrix)
+        output_socket.prop_data[:] += dot((input_socket.prop_data).reshape(self.input_total_size), self.matrix).reshape(self.output_shape)
 
     def backpropagation(self, input_socket, output_socket):
         """Backpropagates the error gradient to the input node"""
-        input_socket.backprop_data[:] += dot(self.matrix, output_socket.backprop_data)
+        input_socket.backprop_data[:] += dot(self.matrix, (output_socket.backprop_data).reshape(self.output_total_size)).reshape(self.input_shape)
 
     def learn(self, alpha, input_socket, output_socket):
         """Applies the calculated error to the matrix"""
-        self.matrix[:, :] -= alpha * dot(matrix(input_socket.prop_data).transpose(), matrix(output_socket.backprop_data))
+        self.matrix[:, :] -= alpha * dot(matrix((input_socket.prop_data).reshape(self.input_total_size)).transpose(), matrix((output_socket.backprop_data).reshape(self.output_total_size)))

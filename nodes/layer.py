@@ -15,8 +15,8 @@ class PerceptronLayer(PipeNode):
     """
 
     def __init__(self, datasink, activation_function):
-        super().__init__(datasink.type, datasink.type)
-        self.bias = zeros(datasink.shape)
+        super().__init__(datasink, datasink)
+        self.bias = zeros(self.input_shape)
         self.activation_function = activation_function
 
     def propagation(self, input_socket, output_socket):
@@ -32,7 +32,7 @@ class PerceptronLayer(PipeNode):
 
     def randomize(self):
         """Initialiazises all the biases for each internal neuron to a random value"""
-        self.bias[:] = 0.01*(random.random_sample(self.datasink.shape)-0.5)
+        self.bias[:] = 0.01*(random.random_sample(self.input_shape)-0.5)
         #TODO: make parameterss
 
 class DropoutLayer(PipeNode):
