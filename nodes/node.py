@@ -72,6 +72,10 @@ class PipeNode(Node):
         return self.input_node_sockets[0].connected_socket
 
     @property
+    def output_socket(self):
+        return self.output_node_sockets[0].connected_socket
+
+    @property
     def input_node_socket(self):
         return self.input_node_sockets[0]
 

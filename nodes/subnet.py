@@ -5,15 +5,16 @@ from .node import *
 
 class Subnet(Node):
     """
-    Represent a subnet which is a node with multiple input and outputs
+    Represent a subnet which is a a space of storage with multiple input_node_sockets and output_node_sockets.
 
     Attributes:
+    nodes (list node): Set of nodes present in the Subnet
+    sockets (list sockets): Set of sockets present in the Socket
     """
 
     def __init__(self):
         super().__init__()
         self.nodes = set()
-        self.subnets = set()
         self.sockets = set()
 
     def create_Pipe_input(self,input_node):

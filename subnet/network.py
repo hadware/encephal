@@ -2,11 +2,12 @@ __author__ = 'marechaux'
 
 from sys import maxsize
 
+#TODO: check validity of the graph for complex case
 
 class Network:
 
     def __init__(self, subnet):
-        #TODO: check validity of the graph
+
         #self.subnet = subnet.copy()
         self.subnet = subnet
         self.sorted_node = None
