@@ -14,10 +14,11 @@ class NodeSocket:
         self.type = datatype #socket the nodesocket will connect to
 
     def connect_socket(self, socket):
+        """Checks if the datatype going out of the node matches the datatype
+        of the socket it will go to"""
         pass
 
 class InputNodeSocket(NodeSocket):
-    """An input node socket has a set of socket datatypes it accepts"""
 
     def connect_socket(self, socket):
         if socket.type.matches(self.type):
@@ -30,8 +31,6 @@ class InputNodeSocket(NodeSocket):
 class OutputNodeSocket(NodeSocket):
 
     def connect_socket(self, socket):
-        """Checks if the datatype going out of the node matches the datatype
-        of the socket it will go to"""
         if socket.type.matches(self.type):
             self.connected_socket = socket
             socket.add_input_node(self)
@@ -84,6 +83,7 @@ class PipeNode(Node):
     """A simpler node, with only one input socket, and one output socket, it's
     a parent to most of the conventional NN nodes"""
 
+
     def __init__(self, input_datasink, output_datasink):
 
         self.input_node_sockets = [InputNodeSocket(self,input_datasink.type)]
@@ -99,8 +99,17 @@ class PipeNode(Node):
 
     def connect_to_input(self, socket):
         self.input_node_sockets[0].connect_socket(socket)
-        self.input_socket = self.input_node_sockets[0].connected_socket
+
 
     def connect_to_output(self, socket):
         self.output_node_sockets[0].connect_socket(socket)
-        self.output_socket = self.output_node_sockets[0].connected_socket
+
+    @property
+    def output_socket(self):
+        """Shortcut reference to the output socket"""
+        return self.output_node_sockets[0].connected_socket
+
+    @property
+    def input_socket(self):
+        """Shortcut reference to the input socket"""
+        return self.input_node_sockets[0].connected_socket

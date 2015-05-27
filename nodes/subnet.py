@@ -6,6 +6,7 @@ from .node import *
 class Subnet(Node):
 
     def __init__(self):
+        super().__init__()
         self.nodes = set()
         self.subnets = set()
         self.sockets = set()
@@ -61,7 +62,7 @@ class Subnet(Node):
 
 
 
-    def add_input(self, size):
+    def add_input(self, datatype):
         """Adds an input socket to the subnet, of a given size"""
         socket = self.new_socket(size)
         self.input_node_sockets.append(socket)
