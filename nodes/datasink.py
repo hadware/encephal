@@ -14,7 +14,15 @@ class DataSink:
 
     @property
     def shape(self):
-        self.data.shape()
+        return self.data.shape
+
+    @property
+    def total_size(self):
+        sum=1
+        for d in self.data.shape:
+            sum *= d
+        return d
+
 
 class Float2D(DataSink):
 
@@ -40,6 +48,7 @@ class Float1D(DataSink):
         super().__init__()
         self.type = Vector(float, length)
         self.data = zeros(length)
+
 
     @property
     def length(self):

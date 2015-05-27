@@ -13,9 +13,9 @@ class FullConnexion(PipeNode):
       matrix (numpy.darray): a matrix of the weights applied to the outputs from the intput node
     """
 
-    def __init__(self, input_datasync, output_datasync):
-        super().__init__(input_datasync.type, output_datasync.type)
-        self.matrix = zeros((self.input_size.total_size, self.output_size.total_size))
+    def __init__(self, input_datasink, output_datasink):
+        super().__init__(input_datasink.type, output_datasink.type)
+        self.matrix = zeros((self.input_node_sockets[0].total_size, self.output_node_sockets[0].total_size))
 
     def randomize(self):
         """Sets up a random value for all the connections, i.e., randomizes the weight matrix"""

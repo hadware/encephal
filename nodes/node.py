@@ -8,7 +8,8 @@ class WrongSocketDataType(DataTypeError):
 
 class NodeSocket:
     """A node socket on which sockets will connect, helpful for datatype checks"""
-    def __init__(self, datatype):
+    def __init__(self, node, datatype):
+        self.node=node
         self.connected_socket = None
         self.type = datatype #socket the nodesocket will connect to
 
@@ -96,6 +97,7 @@ class PipeNode(Node):
         """Shortcut reference to the input socket"""
         return self.input_node_sockets[0].connected_socket
 
+    #à modifier avec la version de titeux
     def connect_to_input(self, socket):
         self.input_node_sockets[0].connect_socket(socket)
 

@@ -7,18 +7,60 @@ class Subnet(Node):
 
     def __init__(self):
         super().__init__()
-        # self.input_sockets = []
-        # self.output_sockets = []
-        # self.input_sizes = []
-        # self.output_size = []
         self.nodes = set()
         self.subnets = set()
         self.sockets = set()
 
-    def new_socket(self, size):
-        socket = Socket(size)
-        self.sockets.add(socket)
-        return socket
+    def create_input(self,input_node):
+        #add the node
+        self.nodes.add(input_node)
+        #creation of the socket
+        input_node_socket=input_node.input_node_sockets[0]
+        socket=Socket(input_node_socket)
+        input_node_socket.connect_socket(socket)
+        #Linking
+        socket.add_input_node(input_node_socket)
+        self.input_node_sockets.append(socket)
+
+    def create_output(self,output_node):
+        #add the node
+        self.nodes.add(output_node)
+        #creation of the socket
+        output_node_socket=output_node.output_node_sockets[0]
+        socket=Socket(output_node_socket)
+        output_node_socket.connect_socket(socket)
+        #Linking
+        socket.add_output_node(output_node_socket)
+        self.input_node_sockets.append(socket)
+
+    def connect_Pipe_nodes(self,left_node,right_node):
+        self.connect_node_sockets(left_node.output_node_sockets[0],right_node.input_node_sockets[0])
+        #add the node
+        self.nodes.add(left_node)
+        self.nodes.add(right_node)
+
+    def connect_node_sockets(self,output_node_socket,input_node_socket):
+        if output_node_socket.connected_socket == None and input_node_socket.connected_socket == None:
+            #creation of one socket between the 2 node sockets
+            socket=Socket(output_node_socket)
+            socket.add_input_node(output_node_socket)
+            socket.add_output_node(input_node_socket)
+            self.sockets.add(socket)
+            #add the socket to parameters of node_sockets
+            output_node_socket.connect_socket(socket)
+            input_node_socket.connect_socket(socket)
+
+        elif output_node_socket.connected_socket == None and input_node_socket.connected_socket != None:
+            output_node_socket.connect_socket(input_node_socket.connected_socket)
+
+        elif output_node_socket.connected_socket != None  and input_node_socket.connected_socket == None:
+            input_node_socket.connect(output_node_socket.connected_socket)
+
+        else:#they already have a socket between them, we have to merge
+            print("merge")
+            pass
+
+
 
     def add_input(self, datatype):
         """Adds an input socket to the subnet, of a given size"""
@@ -86,32 +128,6 @@ class Subnet(Node):
         self.subnets.add(graph_subnet)
         return input, output
 
-
-
-    def as_input(self, socket):
-        if socket is None:
-            raise ValueError("socket must be not null")
-        elif socket not in self.sockets:
-            raise ValueError("socket must be already in the subnet")
-        elif socket in self.input_node_sockets:
-            raise ValueError("socket must not be already in the subnet outputs")
-        else:
-            input = self.get_socket(socket, None, False)
-            self.input_node_sockets.append(input)
-            self.input_sizes.append(input.size)
-
-    def as_output(self, socket):
-        if socket is None:
-            raise ValueError("socket must be not null")
-        elif socket not in self.sockets:
-            raise ValueError("socket must be already in the subnet")
-        elif socket in self.output_node_sockets:
-            raise ValueError("socket must not be already in the subnet inputs")
-        else:
-            output = self.get_socket(socket, None, False)
-            self.output_node_sockets.append(output)
-            self.output_node_sockets.append(output.size)
-
     def get_socket_list(self, sockets, sockets_signature, is_input):
         if sockets is None:
             result = []
@@ -178,7 +194,7 @@ class Subnet(Node):
 
     def randomize(self):
         for node in self.nodes:
-            node.node.randomize()
+            node.randomize()
 
 
 
