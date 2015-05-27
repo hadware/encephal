@@ -15,14 +15,8 @@ class Socket:
     def __init__(self, datasink):
         self.input_node_sockets = []
         self.output_node_sockets = []
-        self.socket_datasink = datasink.new_datasink()
-
-    @property
-    def input_nodes(self):
-        l=[]
-        for node_socket in self.input_node_sockets:
-            l.append(node_socket.node)
-        return l
+        self.socket_datasink = type(datasink)(datasink.shape_data)
+        print(type(self.socket_datasink))
 
     @property
     def prop_data(self):
@@ -37,3 +31,10 @@ class Socket:
 
     def add_input_node_socket(self, node):
         self.input_node_sockets.append(node)
+
+    @property
+    def input_nodes(self):
+        l=[]
+        for node_socket in self.input_node_sockets:
+            l.append(node_socket.node)
+        return l
