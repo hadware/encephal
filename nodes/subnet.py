@@ -12,7 +12,7 @@ class Subnet(Node):
         self.sockets = set()
 
     def create_input(self,input_node):
-        #add the node
+        #Add the node
         self.nodes.add(input_node)
         #creation of the socket
         input_node_socket=input_node.input_node_sockets[0]
@@ -23,7 +23,7 @@ class Subnet(Node):
         self.input_node_sockets.append(socket)
 
     def create_output(self,output_node):
-        #add the node
+        #Add the node
         self.nodes.add(output_node)
         #creation of the socket
         output_node_socket=output_node.output_node_sockets[0]
@@ -34,10 +34,11 @@ class Subnet(Node):
         self.input_node_sockets.append(socket)
 
     def connect_Pipe_nodes(self,left_node,right_node):
-        self.connect_node_sockets(left_node.output_node_sockets[0],right_node.input_node_sockets[0])
-        #add the node
+        #Add nodes
         self.nodes.add(left_node)
         self.nodes.add(right_node)
+        self.connect_node_sockets(left_node.output_node_sockets[0],right_node.input_node_sockets[0])
+
 
     def connect_node_sockets(self,output_node_socket,input_node_socket):
         if output_node_socket.connected_socket == None and input_node_socket.connected_socket == None:

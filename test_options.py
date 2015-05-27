@@ -16,7 +16,6 @@ class FillSubnet:
     @staticmethod
     def MLP(subnet,input_datasink,output_datasink):
 
-
         #Define the datasink
         hidden_datasink = Float1D(200)
 

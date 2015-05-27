@@ -1,42 +1,7 @@
 __author__ = 'marechaux'
 
 
-from .datasink import *
-
-class WrongSocketDataType(DataTypeError):
-    pass
-
-class NodeSocket:
-    """A node socket on which sockets will connect, helpful for datatype checks"""
-    def __init__(self, node, datatype):
-        self.node=node
-        self.connected_socket = None
-        self.type = datatype #socket the nodesocket will connect to
-
-    def connect_socket(self, socket):
-        """Checks if the datatype going out of the node matches the datatype
-        of the socket it will go to"""
-        pass
-
-class InputNodeSocket(NodeSocket):
-
-    def connect_socket(self, socket):
-        if socket.type.matches(self.type):
-            self.connected_socket = socket
-            socket.add_output_node(self)
-        else:
-            raise WrongSocketDataType()
-
-
-class OutputNodeSocket(NodeSocket):
-
-    def connect_socket(self, socket):
-        if socket.type.matches(self.type):
-            self.connected_socket = socket
-            socket.add_input_node(self)
-        else:
-            raise WrongSocketDataType()
-
+from .node_socket import *
 
 class Node:
     """
@@ -85,29 +50,36 @@ class PipeNode(Node):
 
 
     def __init__(self, input_datasink, output_datasink):
+        #Only one node socket on each side
+        self.input_node_sockets = [InputNodeSocket(self,input_datasink)]
+        self.output_node_sockets = [OutputNodeSocket(self,output_datasink)]
 
-        #One node socket on each side
-        self.input_node_sockets = [InputNodeSocket(self,input_datasink.type)]
-        self.output_node_sockets = [OutputNodeSocket(self,output_datasink.type)]
+    @property
+    def input_shape(self):
+        return self.input_node_sockets[0].datasink.shape_data
 
-        #shape and total_size of the data: used for initialization and reshape
-        self.input_shape = input_datasink.shape_data
-        self.output_shape = output_datasink.shape_data
-        self.input_total_size = input_datasink.total_size()
-        self.output_total_size = output_datasink.total_size()
+    @property
+    def output_shape(self):
+        return self.output_node_sockets[0].datasink.shape_data
+
+    @property
+    def input_total_size(self):
+        return self.input_node_sockets[0].datasink.total_size
+
+    @property
+    def output_total_size(self):
+        return self.output_node_sockets[0].datasink.total_size
+
+    @property
+    def input_socket(self):
+        return self.input_node_sockets[0].connected_socket
+
+    @property
+    def output_socket(self):
+        return self.output_node_sockets[0].connected_socket
 
     def connect_to_input(self, socket):
         self.input_node_sockets[0].connect_socket(socket)
 
     def connect_to_output(self, socket):
         self.output_node_sockets[0].connect_socket(socket)
-
-    @property
-    def output_socket(self):
-        """Shortcut reference to the output socket"""
-        return self.output_node_sockets[0].connected_socket
-
-    @property
-    def input_socket(self):
-        """Shortcut reference to the input socket"""
-        return self.input_node_sockets[0].connected_socket
