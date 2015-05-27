@@ -86,12 +86,11 @@ class PipeNode(Node):
 
     def __init__(self, input_datasink, output_datasink):
 
+        #One node socket on each side
         self.input_node_sockets = [InputNodeSocket(self,input_datasink.type)]
         self.output_node_sockets = [OutputNodeSocket(self,output_datasink.type)]
 
-        self.output_socket = self.output_node_sockets[0].connected_socket
-        self.input_socket = self.input_node_sockets[0].connected_socket
-
+        #shape and total_size of the data: used for initialization and reshape
         self.input_shape = input_datasink.shape_data
         self.output_shape = output_datasink.shape_data
         self.input_total_size = input_datasink.total_size()
@@ -99,7 +98,6 @@ class PipeNode(Node):
 
     def connect_to_input(self, socket):
         self.input_node_sockets[0].connect_socket(socket)
-
 
     def connect_to_output(self, socket):
         self.output_node_sockets[0].connect_socket(socket)
