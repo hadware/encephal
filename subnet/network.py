@@ -68,4 +68,4 @@ class Network:
 
     def init_buffer(self):
         for socket in self.subnet.sockets:
-            socket.reinit_data()
+            socket.socket_datasink.reinit_data()

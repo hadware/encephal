@@ -21,12 +21,6 @@ class DataSink:
     def init_data(self):
         pass
 
-    def new_datasink(self):
-        datasink=DataSink()
-        datasink.type=self.type
-        datasink.shape_data=self.shape_data
-        return datasink
-
     def reinit_data(self):
         pass
 
@@ -40,32 +34,32 @@ class DataSink:
 
 class Float1D(DataSink):
 
-    def __init__(self, length):
+    def __init__(self, shape):
         super().__init__()
-        self.type = Vector(float, length)
-        self.shape_data=[length]
+        self.type = Vector(float, shape[0])
+        self.shape_data=shape
 
     def init_data(self):
         self.prop_data = zeros(self.shape_data)
         self.backprop_data = zeros(self.shape_data)
 
     def reinit_data(self):
-        self.data[:] = zeros(self.shape_data)
+        self.prop_data[:] = zeros(self.shape_data)
         self.backprop_data[:] = zeros(self.shape_data)
 
 class Float2D(DataSink):
 
-    def __init__(self, width, height):
+    def __init__(self, shape):
         super().__init__()
-        self.type = Vector(Vector(float, width), height)
-        self.shape_data=[height, width]
+        self.type = Vector(Vector(float, shape[0]), shape[1])
+        self.shape_data=shape
 
     def init_data(self):
         self.prop_data = zeros(self.shape_data)
         self.backprop_data = zeros(self.shape_data)
 
     def reinit_data(self):
-        self.data[:] = zeros(self.shape_data)
+        self.prop_data[:] = zeros(self.shape_data)
         self.backprop_data[:] = zeros(self.shape_data)
 
 

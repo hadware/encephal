@@ -9,12 +9,11 @@ from test_options import *
 
 
 test_subnet = Subnet()
-input_datasink = Float2D(28,28)
-output_datasink = Float1D(10)
+input_datasink = Float2D([28,28])
+output_datasink = Float1D([10])
 FillSubnet.MLP(test_subnet,input_datasink,output_datasink)
 
 n = Network(test_subnet)
-
 
 db = LogicalFunctionDatabase("xor")
 learn_db = MNIST("training")

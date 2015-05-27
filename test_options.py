@@ -17,7 +17,7 @@ class FillSubnet:
     def MLP(subnet,input_datasink,output_datasink):
 
         #Define the datasink
-        hidden_datasink = Float1D(200)
+        hidden_datasink = Float1D([200])
 
         #Create the pipe nodes
         output_layer = PerceptronLayer(output_datasink, Sigmoid)
