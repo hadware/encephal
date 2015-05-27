@@ -7,15 +7,16 @@ class Network:
 
     def __init__(self, subnet):
         #TODO: check validity of the graph
-        self.subnet = subnet.copy()
+        #self.subnet = subnet.copy()
+        self.subnet = subnet
         self.sorted_node = None
         self.schedule()
 
         for socket in self.subnet.sockets:
-            socket.init_data()
+            socket.socket_datasink.init_data()
 
-        self.input_layer = self.subnet.input_sockets[0]
-        self.output_layer = self.subnet.output_sockets[0]
+        self.input_layer = self.subnet.input_node_sockets[0].connected_socket
+        self.output_layer = self.subnet.output_node_sockets[0].connected_socket
 
     def schedule(self):
         unscheduled_sockets = list(self.subnet.sockets)
@@ -47,20 +48,20 @@ class Network:
     def propagation(self):
         for node_list in self.sorted_node:
             for node in node_list:
-                node.node.propagation(node.input_socket, node.output_socket)
+                node.propagation(node.input_socket, node.output_socket)
 
     def backpropagation(self):
         """"Using the priority list computed by the verify function, we ask each node and connection to compute
         and backpropagate the error gradient, priority "layer" after priority "layer", all in reverse order."""
         for node_list in reversed(self.sorted_node):
             for node in node_list:
-                node.node.backpropagation(node.input_socket, node.output_socket)
+                node.backpropagation(node.input_socket, node.output_socket)
 
     def learn(self, alpha):
         """Asks all the elements in the network to "apply" the learning deltas they computed"""
         for node_list in self.sorted_node:
             for node in node_list:
-                node.node.learn(alpha, node.input_socket, node.output_socket)
+                node.learn(alpha, node.input_socket, node.output_socket)
 
     def randomize(self):
         self.subnet.randomize()

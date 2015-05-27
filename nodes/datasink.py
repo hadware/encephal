@@ -21,6 +21,12 @@ class DataSink:
     def init_data(self):
         pass
 
+    def new_datasink(self):
+        datasink=DataSink()
+        datasink.type=self.type
+        datasink.shape_data=self.shape_data
+        return datasink
+
     def reinit_data(self):
         pass
 

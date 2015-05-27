@@ -12,10 +12,17 @@ class Socket:
         socket_datasink (datasink):
     """
 
-    def __init__(self, datasink_class):
+    def __init__(self, datasink):
         self.input_node_sockets = []
         self.output_node_sockets = []
-        self.socket_datasink = datasink_class()
+        self.socket_datasink = datasink.new_datasink()
+
+    @property
+    def input_nodes(self):
+        l=[]
+        for node_socket in self.input_node_sockets:
+            l.append(node_socket.node)
+        return l
 
     @property
     def prop_data(self):

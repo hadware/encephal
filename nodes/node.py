@@ -68,12 +68,16 @@ class PipeNode(Node):
         return self.output_node_sockets[0].datasink.total_size
 
     @property
-    def input_node_socket(self):
+    def input_socket(self):
         return self.input_node_sockets[0].connected_socket
 
     @property
+    def input_node_socket(self):
+        return self.input_node_sockets[0]
+
+    @property
     def output_node_socket(self):
-        return self.output_node_sockets[0].connected_socket
+        return self.output_node_sockets[0]
 
     def connect_to_input(self, socket):
         self.input_node_sockets[0].connect_socket(socket)

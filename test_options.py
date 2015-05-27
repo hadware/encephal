@@ -31,8 +31,8 @@ class FillSubnet:
         subnet.connect_Pipe_nodes(connexion2,output_layer)
 
         #Create the input and output
-        subnet.create_input(connexion1)
-        subnet.create_output(output_layer)
+        subnet.create_Pipe_input(connexion1)
+        subnet.create_Pipe_output(output_layer)
 
 """
 Class to calculate statistics on the performance of a network.

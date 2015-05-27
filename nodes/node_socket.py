@@ -25,9 +25,9 @@ class NodeSocket:
 class InputNodeSocket(NodeSocket):
 
     def connect_socket(self, socket):
-        if socket.type.matches(self.datasink.type):
+        if socket.socket_datasink.type.matches(self.datasink.type):
             self.connected_socket = socket
-            socket.add_output_node(self)
+            socket.add_output_node_socket(self)
         else:
             raise WrongSocketDataType()
 
@@ -35,9 +35,9 @@ class InputNodeSocket(NodeSocket):
 class OutputNodeSocket(NodeSocket):
 
     def connect_socket(self, socket):
-        if socket.type.matches(self.datasink.type):
+        if socket.socket_datasink.type.matches(self.datasink.type):
             self.connected_socket = socket
-            socket.add_input_node(self)
+            socket.add_input_node_socket(self)
         else:
             raise WrongSocketDataType()
 
