@@ -47,10 +47,7 @@ class Node:
 class PipeNode(Node):
     """A simpler node, with only one input socket, and one output socket, it's
     a parent to most of the conventional NN nodes"""
-
-
     def __init__(self, input_datasink, output_datasink):
-        #Only one node socket on each side
         self.input_node_sockets = [InputNodeSocket(self,input_datasink)]
         self.output_node_sockets = [OutputNodeSocket(self,output_datasink)]
 
@@ -71,11 +68,11 @@ class PipeNode(Node):
         return self.output_node_sockets[0].datasink.total_size
 
     @property
-    def input_socket(self):
+    def input_node_socket(self):
         return self.input_node_sockets[0].connected_socket
 
     @property
-    def output_socket(self):
+    def output_node_socket(self):
         return self.output_node_sockets[0].connected_socket
 
     def connect_to_input(self, socket):
