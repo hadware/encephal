@@ -6,6 +6,7 @@ from nodes.full_connexion import *
 from nodes.math_function.math_function import *
 from execution.training.labeled_database import *
 from execution.testing.labeled_database import *
+from nodes.datasink import *
 
 """
 Class to choose how to fill a subnet with a given input_size and output size
@@ -14,19 +15,19 @@ Make it possible to test easily different and new implementations
 class FillSubnet:
 
     @staticmethod
-    def MLP(subnet,input_size,output_size):
+    def MLP(subnet,input_datasink,output_datasink):
 
-        hidden_size = SocketSize([200])
+        hidden_datasink = Float1D(200)
 
-        output_layer = PerceptronLayer(output_size, Sigmoid)
+        output_layer = PerceptronLayer(output_datasink, Sigmoid)
 
-        hidden_layer = PerceptronLayer(hidden_size, Sigmoid)
+        hidden_layer = PerceptronLayer(hidden_datasink, Sigmoid)
 
-        connexion1 = FullConnexion(input_size, hidden_size)
+        connexion1 = FullConnexion(input_datasink, hidden_datasink)
 
-        connexion2 = FullConnexion(hidden_size, output_size)
+        connexion2 = FullConnexion(hidden_datasink, output_datasink)
 
-        i = subnet.add_input(input_size)
+        i = subnet.add_input(input_datasink)
         o = subnet.add_output(output_layer)
         h = subnet.add_node(hidden_layer)
         subnet.add_node(connexion1, i, h)

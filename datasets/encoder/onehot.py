@@ -1,13 +1,14 @@
 __author__ = 'marechaux'
 
 
-from . import encoder
+from .encoder import *
 from numpy import *
 
-class Onehot(encoder.Encoder):
+class Onehot(Encoder):
+
 
     def encode(self, label):
-        result = zeros(self.size.total_size)
+        result = zeros(self.datasink.data.shape[0])
         result[label] = 1
         return result
 

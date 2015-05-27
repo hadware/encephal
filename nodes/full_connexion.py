@@ -13,8 +13,8 @@ class FullConnexion(PipeNode):
       matrix (numpy.darray): a matrix of the weights applied to the outputs from the intput node
     """
 
-    def __init__(self, input_size, output_size):
-        super().__init__(Vector(float, input_size), Vector(float, output_size))
+    def __init__(self, input_datasync, output_datasync):
+        super().__init__(input_datasync.type, output_datasync.type)
         self.matrix = zeros((self.input_size.total_size, self.output_size.total_size))
 
     def randomize(self):

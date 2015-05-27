@@ -3,21 +3,21 @@ __author__ = 'marechaux'
 import os
 import struct
 from numpy import *
-from . import labeled_database
+from datasets.labeled_database import *
 
-class MNIST(labeled_database.LabeledDatabase):
+class MNIST(LabeledDatabase):
 
     def __init__(self, database):
         super().__init__()
         data, labels = self.read(database)
 
-        self.input_size = 784
+        self.datasink=Float2D(28,28)
         self.nb_input = labels.size
 
         for i in range(0, labels.size):
-            self.database.append((data[i].reshape((784))/255, labels[i]))
+            self.database.append((data[i]/255, labels[i]))
 
-#TODO : make path more usable
+    #TODO : make path more usable
     def read(self, dataset="training", path="./MNIST"):
         """
         Python function for importing the MNIST data set.  It returns an iterator

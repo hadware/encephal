@@ -5,13 +5,13 @@ from numpy import *
 
 class Socket:
 
-    def __init__(self, datasink_type):
+    def __init__(self, datasink_class):
         self.input_nodes = [] # a list of OutputNodeSocket
         self.output_nodes = [] # a list of IntputNodeSocket
 
         #new instance of a datasink
-        self.prob_datasink = datasink_type()
-        self.backprob_datasink = datasink_type()
+        self.prob_datasink = datasink_class()
+        self.backprob_datasink = datasink_class()
 
     def add_output_node(self, node):
         self.output_nodes.append(node)

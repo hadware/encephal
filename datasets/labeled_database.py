@@ -1,6 +1,7 @@
 __author__ = 'marechaux'
 
 from random import *
+from nodes.datasink import *
 
 
 class LabeledDatabase:
@@ -8,7 +9,7 @@ class LabeledDatabase:
     def __init__(self):
         self.database = []
         self.encoder = None
-        self.input_size = 0
+        self.datasink = None
         self.nb_input = 0
 
     def random_element(self):

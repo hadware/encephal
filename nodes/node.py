@@ -1,6 +1,7 @@
 __author__ = 'marechaux'
 
-from .datatype import *
+
+from .datasink import *
 
 class WrongSocketDataType(DataTypeError):
     pass
