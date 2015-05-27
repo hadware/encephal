@@ -22,7 +22,6 @@ test_db = MNIST("testing")
 encoder = Onehot(output_datasink)
 
 statistic=Statistic(learn_db,test_db,encoder)
-#statistic.test(n)
 statistic.mean(n,1)
 
 
