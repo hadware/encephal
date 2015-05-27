@@ -62,6 +62,9 @@ class Network:
             for node in node_list:
                 node.node.learn(alpha, node.input_socket, node.output_socket)
 
+    def randomize(self):
+        self.subnet.randomize()
+
     def init_buffer(self):
         for socket in self.subnet.sockets:
             socket.reinit_data()

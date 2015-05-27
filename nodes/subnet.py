@@ -175,6 +175,10 @@ class Subnet(Node):
 
         return clone
 
+    def randomize(self):
+        for node in self.nodes:
+            node.node.randomize()
+
 
 
 class InvalidSocket(Exception):

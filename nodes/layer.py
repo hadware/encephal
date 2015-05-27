@@ -24,7 +24,12 @@ class PerceptronLayer(PipeNode):
 
     def backpropagation(self, input_socket, output_socket):
         """Computes the propagated error gradient for the hidden perceptron layer"""
+        #marechaux way
         input_socket.backprop_data[:] += self.activation_function.differential(output_socket.prop_data) * output_socket.backprop_data #TODO change differential name...
+
+        #lrx way
+        #input_socket.backprop_data[:] += self.activation_function.differential(input_socket.prop_data + self.bias)
+        #input_socket.backprop_data[:] += output_socket.prop_data* (1-output_socket.prop_data)* output_socket.backprop_data
 
     def learn(self, alpha, input_socket, output_socket):
         """Modifies the bias array using the computed (and propagated) error gradient"""

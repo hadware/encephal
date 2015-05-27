@@ -57,6 +57,9 @@ class Node:
         self.input_node_sockets = []
         self.output_node_sockets = []
 
+    def randomize(self):
+        pass
+
     def learn(self, alpha, input_socket, output_socket):
         """
         Once the error has been computed for a node, this functions tells the node to change its internal values

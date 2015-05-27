@@ -19,17 +19,13 @@ class Socket:
     def add_input_node(self, node):
         self.input_nodes.append(node)
 
-    def get_datatype(self):
-        return self.datasink.type
-
     @property
     def prop_data(self):
-        return self.datasink.data
+        return self.prob_datasink.data
 
     @property
     def backprop_data(self):
-        return self.datasink.data
-
+        return self.backprob_datasink.data
 
 class GraphSubnet:
 

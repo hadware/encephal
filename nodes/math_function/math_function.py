@@ -3,7 +3,6 @@ __author__ = 'marechaux'
 
 from numpy import *
 
-#TODO : Add softmax...
 
 class Sigmoid:
 
@@ -15,6 +14,18 @@ class Sigmoid:
     def differential(y):
         return y*(1-y)
 
+class Softmax:
+
+    @staticmethod
+    def function(x_list):
+        sum=0
+        for x in x_list:
+            x=exp(x)
+            sum +=x
+        return x_list/sum
+
+
+    #TODO : Add softmax derivative which produce a matrix
 
 class Nothing:
 
