@@ -1,52 +1,43 @@
 __author__ = 'marechaux'
 
-from subnet.graph_elements import *
+from nodes.socket import *
 from .node import *
+
+class SubnetSocket:
+    def __init__(self):
+        self.internal_node_sockets = [] #a list of intput/output nodesockets
+
+    def add_nodesocket(self, node_socket):
+        self.internal_node_sockets.append(node_socket)
+
+class InputSubnetSocket(InputNodeSocket, SubnetSocket):
+    pass
+
+class OutputSubnetSocket(OutputNodeSocket, SubnetSocket):
+    pass
 
 class Subnet(Node):
 
     def __init__(self):
         super().__init__()
-        # self.input_sockets = []
-        # self.output_sockets = []
-        # self.input_sizes = []
-        # self.output_size = []
         self.nodes = set()
         self.subnets = set()
         self.sockets = set()
 
-    def new_socket(self, size):
-        socket = Socket(size)
-        self.sockets.add(socket)
-        return socket
-
     def add_input(self, datatype):
-        """Adds an input socket to the subnet, of a given size"""
-        socket = self.new_socket(size)
-        self.input_node_sockets.append(socket)
-        self.input_sizes.append(size)
-        return socket
+        """Adds an input node socket to the subnet, of a given datatype"""
+        node_socket = InputSubnetSocket(datatype)
+        self.input_node_sockets.add(node_socket)
+        return node_socket
 
-    def add_output(self, node, input = None):
-        """Adds an output socket to the subnet"""
-        input_socket, output_socket = self.add_node(node, input)
-        self.output_node_sockets.append(output_socket)
-        self.output_size.append(output_socket.size)
-        return input_socket
+    def add_ouput(self, datatype):
+        """Adds an output node socket to the subnet, of a given datatype"""
+        node_socket = OutputSubnetSocket(datatype)
+        self.output_node_sockets.add(node_socket)
+        return node_socket
 
     def add_node(self, node, input_socket = None, output_socket = None):
-        try:
-            input = self.get_socket(input_socket, node.input_size, True)
-        except InvalidSocket as e:
-            raise ValueError("input_socket must match types Socket or (Socket, Socket) or [Socket]")
-
-        try:
-            output = self.get_socket(output_socket, node.output_size, False)
-        except InvalidSocket as e:
-            raise ValueError("output_socket match type Socket or (Socket, Socket) or [Socket]")
-
-        self.nodes.add(GraphNode(node, input, output))
-        return input, output
+        if
 
     def get_socket(self, socket, size, is_input):
         #TODO : Check the socket exist in the subnet

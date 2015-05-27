@@ -26,20 +26,3 @@ class Socket:
     @property
     def backprop_data(self):
         return self.backprob_datasink.data
-
-class GraphSubnet:
-
-    def __init__(self, subnet, input_sockets, output_sockets):
-        self.input_sockets = input_sockets
-        self.output_sockets = output_sockets
-        self.subnet = subnet
-
-
-class GraphNode:
-
-    def __init__(self, node, input_socket, output_socket):
-        self.node = node
-        self.input_socket = input_socket
-        self.output_socket = output_socket
-        input_socket.output_nodes.append(self)
-        output_socket.input_nodes.append(self)

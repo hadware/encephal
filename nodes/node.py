@@ -2,6 +2,7 @@ __author__ = 'marechaux'
 
 
 from .datasink import *
+from .socket import Socket
 
 class WrongSocketDataType(DataTypeError):
     pass
@@ -9,8 +10,16 @@ class WrongSocketDataType(DataTypeError):
 class NodeSocket:
     """A node socket on which sockets will connect, helpful for datatype checks"""
     def __init__(self, datatype):
-        self.connected_socket = None
+        self.outgoing_socket = None
         self.type = datatype #socket the nodesocket will connect to
+
+    @property
+    def connected_socket(self):
+        if isinstance(self.outgoing_socket, Socket):
+            return self.outgoing_socket
+        else: #it's a SubnetSocket
+            return self.outgoing_socket.connected_socket
+
 
     def connect_socket(self, socket):
         """Checks if the datatype going out of the node matches the datatype
@@ -21,7 +30,7 @@ class InputNodeSocket(NodeSocket):
 
     def connect_socket(self, socket):
         if socket.type.matches(self.type):
-            self.connected_socket = socket
+            self.outgoing_socket = socket
             socket.add_output_node(self)
         else:
             raise WrongSocketDataType()
@@ -31,8 +40,12 @@ class OutputNodeSocket(NodeSocket):
 
     def connect_socket(self, socket):
         if socket.type.matches(self.type):
-            self.connected_socket = socket
-            socket.add_input_node(self)
+            if isinstance(socket, Socket):
+                socket.add_input_node(self)
+            else: #it's a SubnetSocket
+                socket.add_nodesocket(self)
+
+            self.outgoing_socket = socket
         else:
             raise WrongSocketDataType()
 
