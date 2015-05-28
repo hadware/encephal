@@ -18,7 +18,6 @@ class Vector(DataType):
         self.child_datatype = child_datatype
 
     def matches(self, data_structure):
-
         #first, checking if the two data_structure really is a vector
         if isinstance(data_structure, Vector):
             if type(self.child_datatype) == type(data_structure.child_datatype) and self.dim == data_structure.dim:

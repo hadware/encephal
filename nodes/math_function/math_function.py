@@ -11,7 +11,7 @@ class Sigmoid:
         return 1/(1+exp(-x))
 
     @staticmethod
-    def differential(y):
+    def differential_auxiliary(y):
         return y*(1-y)
 
 class Softmax:
