@@ -1,8 +1,5 @@
 __author__ = 'marechaux'
 
-
-from numpy import *
-
 class Socket:
     """
     Represent a socket which is the main element for element's storage
@@ -16,7 +13,6 @@ class Socket:
         self.input_node_sockets = []
         self.output_node_sockets = []
         self.socket_datasink = type(datasink)(datasink.shape_data)
-        print(type(self.socket_datasink))
 
     @property
     def prop_data(self):

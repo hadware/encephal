@@ -1,8 +1,7 @@
 __author__ = 'marechaux'
 
 from random import *
-from nodes.datasink import *
-
+from datasink.datasink import *
 
 class LabeledDatabase:
 

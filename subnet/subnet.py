@@ -1,7 +1,7 @@
 __author__ = 'marechaux'
 
-from subnet.socket import *
-from .node import *
+from datasink.socket import *
+from nodes.node import *
 
 class Subnet(Node):
     """

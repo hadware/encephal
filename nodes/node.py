@@ -1,7 +1,7 @@
 __author__ = 'marechaux'
 
 
-from .node_socket import *
+from datasink.node_socket import *
 
 class Node:
     """

@@ -1,11 +1,11 @@
 __author__ = 'lrx'
 
 from nodes.layer import *
-from nodes.full_connexion import *
+from nodes.connexion import *
 from nodes.math_function.math_function import *
 from execution.training.labeled_database import *
 from execution.testing.labeled_database import *
-from nodes.datasink import *
+from datasink.datasink import *
 
 """
 Class to choose how to fill a subnet with a given input_datasink and output_datasink

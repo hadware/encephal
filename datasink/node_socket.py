@@ -1,6 +1,6 @@
 __author__ = 'lrx'
 
-from .datasink import *
+from datasink.datasink import *
 
 
 class NodeSocket:

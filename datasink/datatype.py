@@ -22,7 +22,6 @@ class Vector(DataType):
         #first, checking if the two data_structure really is a vector
         if isinstance(data_structure, Vector):
             if type(self.child_datatype) == type(data_structure.child_datatype) and self.dim == data_structure.dim:
-                print("here")
                 if self.child_datatype in (float, int, bool):
                     #its a "leaf" type, no need to recurse anymore
                     return True

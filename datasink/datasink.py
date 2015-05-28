@@ -1,6 +1,8 @@
 __author__ = 'hadware'
-from .datatype import *
 from numpy import zeros
+
+from datasink.datatype import *
+
 
 class DataSink:
     """
