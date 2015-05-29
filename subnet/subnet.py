@@ -54,9 +54,14 @@ class Subnet(Node):
         self.nodes.add(left_node)
         self.nodes.add(right_node)
         #Connect the node sockets
-        """ for left_node_socket, right_node_socket in left_node.output_node_sockets, right_node.input_node_sockets:
-            self.connect_node_sockets(left_node_socket,right_node_socket)"""
-        self.connect_node_sockets(left_node.output_node_socket,right_node.input_node_socket)
+        if len(left_node.output_node_sockets) == 1:
+            self.connect_node_sockets(left_node.output_node_socket,right_node.input_node_socket)
+        else:
+            for left_node_socket, right_node_socket in left_node.output_node_sockets, right_node.input_node_sockets:
+                self.connect_node_sockets(left_node_socket,right_node_socket)
+        #TODO: Add the way nodes can connect between themselves
+        #TODO: CLEAN: the double loop couldn't be used for 2 list of length = 1. So the code isn't that clean
+
 
     def connect_node_sockets(self,output_node_socket,input_node_socket):
         if output_node_socket.connected_socket == None and input_node_socket.connected_socket == None:
