@@ -26,7 +26,7 @@ class Node:
     def randomize(self):
         pass
 
-    def learn(self, alpha, input_socket, output_socket):
+    def learn(self, alpha):
         """
         Once the error has been computed for a node, this functions tells the node to change its internal values
         using the computed deltas.
@@ -37,10 +37,10 @@ class Node:
         """
         pass
 
-    def propagation(self, input_socket, output_socket):
+    def propagation(self, learning):
         pass
 
-    def backpropagation(self, input_socket, output_socket):
+    def backpropagation(self):
         pass
 
 

@@ -23,17 +23,17 @@ class FullConnexion(PipeNode):
         self.matrix = 0.01*(random.random_sample((self.input_total_size, self.output_total_size)) - 0.5)
         #TODO: make parameters for the randomize
 
-    def propagation(self, input_socket, output_socket):
+    def propagation(self, learning):
         """Propagates the input data from the input node to the next node, while """
-        output_socket.prop_data[:] += dot((input_socket.prop_data).reshape(self.input_total_size), self.matrix).reshape(self.output_shape)
+        self.output_socket.prop_data[:] += dot((self.input_socket.prop_data).reshape(self.input_total_size), self.matrix).reshape(self.output_shape)
 
-    def backpropagation(self, input_socket, output_socket):
+    def backpropagation(self):
         """Backpropagates the error gradient to the input node"""
-        input_socket.backprop_data[:] += dot(self.matrix, (output_socket.backprop_data).reshape(self.output_total_size)).reshape(self.input_shape)
+        self.input_socket.backprop_data[:] += dot(self.matrix, (self.output_socket.backprop_data).reshape(self.output_total_size)).reshape(self.input_shape)
 
-    def learn(self, alpha, input_socket, output_socket):
+    def learn(self, alpha):
         """Applies the calculated error to the matrix"""
-        self.matrix[:, :] -= alpha * dot(matrix((input_socket.prop_data).reshape(self.input_total_size)).transpose(), matrix((output_socket.backprop_data).reshape(self.output_total_size)))
+        self.matrix[:, :] -= alpha * dot(matrix((self.input_socket.prop_data).reshape(self.input_total_size)).transpose(), matrix((self.output_socket.backprop_data).reshape(self.output_total_size)))
 
 class Convolutional(PipeNode):
     """
@@ -74,17 +74,17 @@ class Convolutional(PipeNode):
         self.kernel = 0.01*(random.random_sample(self.kernel_shape) - 0.5)
         #TODO: make parameters for the randomize
 
-    def propagation(self, input_socket, output_socket):
+    def propagation(self, learning):
         '''Propagates the input data with the convolution to the next node
         FFT is generally much faster than convolve for large arrays (n > ~500), but can be slower when only a few output values are needed
         or we could use: output_socket.prop_data[:] += convolve(self.input_socket.prop_data, self.kernel, mode=self.zero_padding)
         or with more options there is also:
         output_socket.prop_data[:] += convolve(self.input_socket.prop_data, self.kernel, mode='constant', cval=0.0)'''
-        output_socket.prop_data[:] += fftconvolve(self.input_socket.prop_data, self.kernel, mode=self.zero_padding)
+        self.output_socket.prop_data[:] += fftconvolve(self.input_socket.prop_data, self.kernel, mode=self.zero_padding)
 
-    def backpropagation(self, input_socket, output_socket):
+    def backpropagation(self):
         """Backpropagates the error gradient to the input node"""
-        input_socket.backprop_data[:] += dot(self.matrix, (output_socket.backprop_data).reshape(self.output_total_size)).reshape(self.input_shape)
+        self.input_socket.backprop_data[:] += dot(self.matrix, (self.output_socket.backprop_data).reshape(self.output_total_size)).reshape(self.input_shape)
 
-    def learn(self, alpha, input_socket, output_socket):
+    def learn(self, alpha):
         pass

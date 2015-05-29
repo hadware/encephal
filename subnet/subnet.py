@@ -20,30 +20,42 @@ class Subnet(Node):
     def create_Pipe_input(self,input_node):
         #Add nodes
         self.nodes.add(input_node)
+        for input_node_socket in input_node.input_node_sockets:
+            self.create_node_socket_input(input_node_socket)
+
+    def create_node_socket_input(self,input_node_socket):
         #Creation of the socket
-        socket=Socket(input_node.input_node_socket.datasink)
-        self.sockets.add(socket)
-        #Linking after check
-        (input_node.input_node_socket).connect_socket(socket)
+        if input_node_socket.connected_socket == None:
+            socket = Socket(input_node_socket.datasink)
+            self.sockets.add(socket)
+            #Linking after check
+            input_node_socket.connect_socket(socket)
         #Add one input_node_socket for the subnet
-        self.input_node_sockets.append(input_node.input_node_socket)
+        self.input_node_sockets.append(input_node_socket)
 
     def create_Pipe_output(self,output_node):
         #Add nodes
         self.nodes.add(output_node)
+        for output_node_socket in output_node.output_node_sockets:
+            self.create_node_socket_output(output_node_socket)
+
+    def create_node_socket_output(self,output_node_socket):
         #Creation of the socket and connexion with the node_socket
-        socket=Socket(output_node.output_node_socket.datasink)
-        self.sockets.add(socket)
-        #Linking after check
-        (output_node.output_node_socket).connect_socket(socket)
+        if output_node_socket.connected_socket == None:
+            socket=Socket(output_node_socket.datasink)
+            self.sockets.add(socket)
+            #Linking after check
+            output_node_socket.connect_socket(socket)
         #Add one output_node_socket for the subnet
-        self.output_node_sockets.append(output_node.output_node_socket)
+        self.output_node_sockets.append(output_node_socket)
 
     def connect_Pipe_nodes(self,left_node,right_node):
         #Add nodes
         self.nodes.add(left_node)
         self.nodes.add(right_node)
         #Connect the node sockets
+        """ for left_node_socket, right_node_socket in left_node.output_node_sockets, right_node.input_node_sockets:
+            self.connect_node_sockets(left_node_socket,right_node_socket)"""
         self.connect_node_sockets(left_node.output_node_socket,right_node.input_node_socket)
 
     def connect_node_sockets(self,output_node_socket,input_node_socket):
@@ -64,6 +76,15 @@ class Subnet(Node):
         else:#they already have a socket between them, we have to merge
             print("merge")
             pass
+
+
+
+
+
+
+
+
+
 
     #Un type de copie , il va  y en avoir d'autres
     def copy(self, input_translations = None, output_translations = None):
