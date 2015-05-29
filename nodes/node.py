@@ -48,8 +48,9 @@ class PipeNode(Node):
     """A simpler node, with only one input socket, and one output socket, it's
     a parent to most of the conventional NN nodes"""
     def __init__(self, input_datasink, output_datasink):
-        self.input_node_sockets = [InputNodeSocket(self,input_datasink)]
-        self.output_node_sockets = [OutputNodeSocket(self,output_datasink)]
+        super().__init__()
+        self.input_node_sockets.append(InputNodeSocket(self,input_datasink))
+        self.output_node_sockets.append(OutputNodeSocket(self,output_datasink))
 
     @property
     def input_shape(self):

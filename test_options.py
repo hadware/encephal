@@ -19,14 +19,14 @@ class FillSubnet:
         #Define the datasink
         hidden_datasink = Float1D([200])
         #Define the subnets
-        s1=Subnet()
+        s1 = Subnet()
+        s2 = Subnet()
         FillSubnet.subnet_connexion_perceptron(s1,input_datasink,hidden_datasink)
-        s2=Subnet()
         FillSubnet.subnet_connexion_perceptron(s2,hidden_datasink,output_datasink)
         #Connect the subnets
-        subnet.connect_Subnet(s1,s2)
-        subnet.create_subnet_input(s1)
-        subnet.create_subnet_output(s2)
+        subnet.connect_nodes(s1,s2)
+        subnet.create_input(s1)
+        subnet.create_output(s2)
 
 
     @staticmethod
@@ -35,10 +35,10 @@ class FillSubnet:
         connexion = FullConnexion(input_datasink, output_datasink)
         layer = PerceptronLayer(output_datasink, Sigmoid)
         #Connecting the nodes
-        subnet.connect_Pipe_nodes(connexion,layer)
+        subnet.connect_nodes(connexion,layer)
         #Create the input and output
-        subnet.create_Pipe_input(connexion)
-        subnet.create_Pipe_output(layer)
+        subnet.create_input(connexion)
+        subnet.create_output(layer)
 
     @staticmethod
     def MLP(subnet,input_datasink,output_datasink):
@@ -50,12 +50,12 @@ class FillSubnet:
         connexion1 = FullConnexion(input_datasink, hidden_datasink)
         connexion2 = FullConnexion(hidden_datasink, output_datasink)
         #Connect the pipe nodes
-        subnet.connect_Pipe_nodes(connexion1,hidden_layer)
-        subnet.connect_Pipe_nodes(hidden_layer,connexion2)
-        subnet.connect_Pipe_nodes(connexion2,output_layer)
+        subnet.connect_nodes(connexion1,hidden_layer)
+        subnet.connect_nodes(hidden_layer,connexion2)
+        subnet.connect_nodes(connexion2,output_layer)
         #Create the input and output
-        subnet.create_Pipe_input(connexion1)
-        subnet.create_Pipe_output(output_layer)
+        subnet.create_input(connexion1)
+        subnet.create_output(output_layer)
 
     @staticmethod
     def Dropout(subnet,input_datasink,output_datasink,p):
@@ -69,14 +69,14 @@ class FillSubnet:
         dropout1 = DropoutLayer(input_datasink,p)
         dropout2 = DropoutLayer(hidden_datasink,p)
         #Connect the pipe nodes
-        subnet.connect_Pipe_nodes(dropout1,connexion1)
-        subnet.connect_Pipe_nodes(connexion1,hidden_layer)
-        subnet.connect_Pipe_nodes(hidden_layer,dropout2)
-        subnet.connect_Pipe_nodes(dropout2,connexion2)
-        subnet.connect_Pipe_nodes(connexion2,output_layer)
+        subnet.connect_nodes(dropout1,connexion1)
+        subnet.connect_nodes(connexion1,hidden_layer)
+        subnet.connect_nodes(hidden_layer,dropout2)
+        subnet.connect_nodes(dropout2,connexion2)
+        subnet.connect_nodes(connexion2,output_layer)
         #Create the input and output
-        subnet.create_Pipe_input(dropout1)
-        subnet.create_Pipe_output(output_layer)
+        subnet.create_input(dropout1)
+        subnet.create_output(output_layer)
 
 """
 Class to calculate statistics on the performance of a network.
