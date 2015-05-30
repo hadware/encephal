@@ -11,7 +11,7 @@ test_subnet = Subnet()
 input_datasink = Float2D([28,28])
 output_datasink = Float1D([10])
 
-FillSubnet.MLP2(test_subnet,input_datasink,output_datasink)
+FillSubnet.MLP(test_subnet,input_datasink,output_datasink)
 #FillSubnet.Dropout(test_subnet,input_datasink,output_datasink,0.8)
 
 n = Network(test_subnet)
