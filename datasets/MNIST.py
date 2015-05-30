@@ -11,7 +11,8 @@ class MNIST(LabeledDatabase):
         super().__init__()
         data, labels = self.read(database)
 
-        self.datasink=Float2D([28,28])
+        self.input_datasink = Float2D([28,28])
+        self.output_datasink = Float1D([10])
         self.nb_input = labels.size
 
         for i in range(0, labels.size):

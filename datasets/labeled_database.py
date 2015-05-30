@@ -8,7 +8,8 @@ class LabeledDatabase:
     def __init__(self):
         self.database = []
         self.encoder = None
-        self.datasink = None
+        self.input_datasink = None
+        self.output_datasink = None
         self.nb_input = 0
 
     def random_element(self):
