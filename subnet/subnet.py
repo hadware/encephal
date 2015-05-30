@@ -12,39 +12,60 @@ class Subnet(Node):
     sockets (list sockets): Set of sockets present in the Socket
     """
 
+    #TODO: si tout est recursif, vu quel es constructions se font dans l'ordre on peut se permettre
+    #de n'aller chercher les infos qu'à letage d en dessous
+
     def __init__(self):
         super().__init__()
         self.nodes = set()
         self.sockets = set()
 
+    def is_subnet(self,node):
+        return type(self) == type(node)
+
+    def add_recursive_node(self,node):
+        print(not self.is_subnet(node))
+        if not self.is_subnet(node):
+            self.nodes.add(node)
+        else:
+            for intern_socket in node.sockets:
+                self.sockets.add(intern_socket)
+            for intern_node in node.nodes:
+                self.add_recursive_node(intern_node)
+
+    """ Functions on node, filling nodes attribut """
+
     def create_input(self,input_node):
         #Add nodes
-        self.nodes.add(input_node)
+        self.add_recursive_node(input_node)
         for input_node_socket in input_node.input_node_sockets:
             self.create_node_socket_input(input_node_socket)
 
     def create_output(self,output_node):
         #Add nodes
-        self.nodes.add(output_node)
+        self.add_recursive_node(output_node)
         for output_node_socket in output_node.output_node_sockets:
             self.create_node_socket_output(output_node_socket)
 
     def connect_nodes(self,left_node,right_node):
-        #Add nodes
-        self.nodes.add(left_node)
-        self.nodes.add(right_node)
-        #Connect the node sockets
-        for i in range(len(left_node.output_node_sockets)):
-            self.connect_node_sockets(left_node.output_node_sockets[i],right_node.input_node_sockets[i])
-        #TODO: Add the way nodes can connect between themselves
-        #TODO: CLEAN: an iterator is preferable to a simple index
+        if self.is_subnet(left_node) == self.is_subnet(right_node):
+            #Add nodes
+            self.add_recursive_node(left_node)
+            self.add_recursive_node(right_node)
+            #Connect the node sockets
+            for i in range(len(left_node.output_node_sockets)):
+                self.connect_node_sockets(left_node.output_node_sockets[i],right_node.input_node_sockets[i])
+        else:
+            print('Probleme: Impossible de connecter un node et un subne')
 
 
-    """ Functions on node_socket """
+    """ Functions on node_socket, filling sockets attribut """
 
     def create_node_socket_input(self,input_node_socket):
-        #Creation of the socket
-        if input_node_socket.connected_socket == None:
+        if not input_node_socket.connected_socket == None:
+            #Just add the existing socket
+            self.sockets.add(input_node_socket.connected_socket)
+        else:
             socket = Socket(input_node_socket.datasink)
             self.sockets.add(socket)
             #Linking after check
@@ -53,8 +74,11 @@ class Subnet(Node):
         self.input_node_sockets.append(input_node_socket)
 
     def create_node_socket_output(self,output_node_socket):
-        #Creation of the socket and connexion with the node_socket
-        if output_node_socket.connected_socket == None:
+        if not output_node_socket.connected_socket == None:
+            #Just add the existing socket
+            self.sockets.add(output_node_socket.connected_socket)
+        else:
+            #Creation of the socket and add it
             socket=Socket(output_node_socket.datasink)
             self.sockets.add(socket)
             #Linking after check
@@ -79,6 +103,7 @@ class Subnet(Node):
 
         else:#they already have a socket between them, we have to merge
             print("merge")
+            output_node_socket.connect_socket(input_node_socket.connected_socket)
             pass
 
 
