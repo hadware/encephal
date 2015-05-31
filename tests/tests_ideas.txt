@@ -1,0 +1,26 @@
+__author__ = 'lrx'
+
+List of all the things we are eager to test, to verify or to have:
+
+
+    test if the copy are well realized
+    Topologie to test:
+    -Ajout des input et des output fonctionnel
+    -Connexions complexes avec des subnets ou non
+    -Connexions de type faux lance bien la bonne exception
+    -La copie est bien faite
+
+
+    L'étendue et les tests qui vont nous permettre de verifier que tout est bien créer:
+
+
+    Les exceptions que l'on veut pouvoir lancer:
+
+    Toutes ces verifications seront effectuées sur des subnets. Par induction, on sait alors que le subnet final est stable.
+
+        -Il y a trou dans le graphe: tels noeuds ne sont pas reliés à l'entrée du graphe
+            on test quels noeuds sont à maxsize dans l'ordonnancement du graphe
+
+        -Il n y a pas d'entrée ou de sortie definie pour le Network, il faut en créer une!
+
+        -Il y a un problème de synchronisation des types lors d'une connexion
