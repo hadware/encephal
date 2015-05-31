@@ -2,30 +2,19 @@ __author__ = 'lrx'
 
 import unittest
 from subnet.subnet import *
-from subnet.network import *
 from nodes.layer import *
 from nodes.math_function.math_function import *
 
 
-
-
-class ConstructionTest(unittest.TestCase):
-    """Test case utilisé pour tester la construction de Subnets avec des topologies variées"""
+class InConstructionTest(unittest.TestCase):
+    """Test case used to check that during the construction of a subnet, everything is going well """
 
     def setUp(self):
         """Initialisation des tests."""
         self.test_subnet = Subnet()
 
-"""    def tearDown(self):
-        Network(self.test_subnet)
 
-    def complete_graph(self):
-
-    def incomplete_graph(self):"""
-
-
-
-class ConstructionTestPipeNode(ConstructionTest):
+class InConstructionTestPipeNode(InConstructionTest):
 
     def test_input(self):
         datasink = Float1D([10])
