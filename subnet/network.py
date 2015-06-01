@@ -1,50 +1,22 @@
 __author__ = 'marechaux'
 
-from sys import maxsize
-
-#TODO: check validity of the graph for complex case
-
 class Network:
 
     def __init__(self, subnet):
 
-        #self.subnet = subnet.copy()
+        #TODO: realize different type of copies
+        # self.subnet = subnet.copy()
         self.subnet = subnet
-        self.sorted_node = None
-        self.schedule()
+
+        self.sorted_node = self.subnet.schedule()
 
         for socket in self.subnet.sockets:
             socket.socket_datasink.init_data()
 
+        #Defining the input and output layer
         self.input_layer = self.subnet.input_node_sockets[0].connected_socket
         self.output_layer = self.subnet.output_node_sockets[0].connected_socket
 
-    def schedule(self):
-        unscheduled_sockets = list(self.subnet.sockets)
-
-        for socket in unscheduled_sockets:
-            socket.level = maxsize
-
-        k = -1
-        print("début")
-        while unscheduled_sockets:
-            k += 1
-            for socket in unscheduled_sockets:
-                candidate = True
-                for node in socket.input_nodes:
-                    if node.input_socket.level >= k:
-                        candidate = False
-                if candidate:
-                    socket.level = k
-                    unscheduled_sockets.remove(socket)
-
-        self.sorted_node = []
-
-        for i in range(k):
-            self.sorted_node.append([])
-
-        for node in self.subnet.nodes:
-            self.sorted_node[node.input_socket.level].append(node)
 
     def propagation(self,learning = True):
         for node_list in self.sorted_node:

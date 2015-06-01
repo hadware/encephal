@@ -2,6 +2,7 @@ __author__ = 'marechaux'
 
 from datasink.socket import *
 from nodes.node import *
+from sys import maxsize
 
 class Subnet(Node):
     """
@@ -12,8 +13,8 @@ class Subnet(Node):
     sockets (list sockets): Set of sockets present in the Socket
     """
 
-    #TODO: si tout est recursif, vu quel es constructions se font dans l'ordre on peut se permettre
-    #de n'aller chercher les infos qu'à letage d en dessous
+    #TODO: si tout est recursif, vu que les constructions se font dans l'ordre on peut se permettre
+    #TODO: de n'aller chercher les infos qu'à letage d en dessous
 
     def __init__(self):
         super().__init__()
@@ -24,7 +25,6 @@ class Subnet(Node):
         return type(self) == type(node)
 
     def add_recursive_node(self,node):
-        print(not self.is_subnet(node))
         if not self.is_subnet(node):
             self.nodes.add(node)
         else:
@@ -56,14 +56,13 @@ class Subnet(Node):
             for i in range(len(left_node.output_node_sockets)):
                 self.connect_node_sockets(left_node.output_node_sockets[i],right_node.input_node_sockets[i])
         else:
-            print('Probleme: Impossible de connecter un node et un subne')
-
+            print('Probleme: Impossible de connecter un Pipe_node et un subnet')
 
     """ Functions on node_socket, filling sockets attribut """
 
     def create_node_socket_input(self,input_node_socket):
         if not input_node_socket.connected_socket == None:
-            #Just add the existing socket
+            #Add the existing socket
             self.sockets.add(input_node_socket.connected_socket)
         else:
             socket = Socket(input_node_socket.datasink)
@@ -75,7 +74,7 @@ class Subnet(Node):
 
     def create_node_socket_output(self,output_node_socket):
         if not output_node_socket.connected_socket == None:
-            #Just add the existing socket
+            #Add the existing socket
             self.sockets.add(output_node_socket.connected_socket)
         else:
             #Creation of the socket and add it
@@ -94,25 +93,54 @@ class Subnet(Node):
             #Linking after check
             output_node_socket.connect_socket(socket)
             input_node_socket.connect_socket(socket)
-
         elif output_node_socket.connected_socket == None and input_node_socket.connected_socket != None:
+            #Linking after check
             output_node_socket.connect_socket(input_node_socket.connected_socket)
-
         elif output_node_socket.connected_socket != None  and input_node_socket.connected_socket == None:
+            #Linking after check
             input_node_socket.connect_socket(output_node_socket.connected_socket)
-
-        else:#they already have a socket between them, we have to merge
+        else:
+        #they already have a socket between them, we have to merge
+        #verifier que cela ne laisse pas un socket dans le vide ou quelque chose comme ca
+        #(au pire celui qui n est pas garder est jeter par le garbage collector)
             print("merge")
             output_node_socket.connect_socket(input_node_socket.connected_socket)
             pass
 
 
+    """ Scheduling """
 
 
+    #TODO: check validity of the graph for complex case
 
+    def schedule(self):
+        unscheduled_sockets = list(self.sockets)
 
+        for socket in unscheduled_sockets:
+            socket.level = maxsize
 
+        k = -1
+        print("Verification")
+        while unscheduled_sockets:
+            k += 1
+            for socket in unscheduled_sockets:
+                candidate = True
+                for node in socket.input_nodes:
+                    if node.input_socket.level >= k:
+                        candidate = False
+                if candidate:
+                    socket.level = k
+                    unscheduled_sockets.remove(socket)
 
+        self.sorted_node = []
+
+        for i in range(k):
+            self.sorted_node.append([])
+
+        for node in self.nodes:
+            self.sorted_node[node.input_socket.level].append(node)
+
+        return self.sorted_node
 
 
     #Un type de copie , il va  y en avoir d'autres
