@@ -1,6 +1,5 @@
 __author__ = 'marechaux'
 
-
 from datasink.node_socket import *
 
 class Node:
@@ -9,14 +8,8 @@ class Node:
     and as many as desired on the output.
 
     Attributes:
-      input_connexions (list): list of connexions from which the Node will receive a data array
-      output_connexions (list): list of connexions to which the Node will output the data array it processed
-      input_data_prop (numpy.ndarray): matrix representing the data the node *receives* before processing it
-      output_data_prop (numpy.ndarray): matrix representing the data the node has processed
-      input_data_backprop (numpy.ndarray): matrix of the error gradient the node receives
-      output_data_backprop (numpy.ndarray): matrix of the error gradient the node computed
-      input_size (int): size of the input vector the node receives
-      output_size (int): size of the  vector the node outputs
+      input_node_sockets (list): list of InputNodeSockets reprensenting the "input" plugs from this node
+      output_node_sockets (list): list of OutputNodeSockets reprensenting the "output" plugs from this node
     """
 
     def __init__(self):
@@ -51,6 +44,17 @@ class PipeNode(Node):
         super().__init__()
         self.input_node_sockets.append(InputNodeSocket(self,input_datasink))
         self.output_node_sockets.append(OutputNodeSocket(self,output_datasink))
+
+    def to_protobuf_message(self, protobuf_message, index):
+        """Fills a PipeNode message with the data from the pipenode"""
+        protobuf_message.index = index
+        self.input_node_socket.datasink.to_protobuff_message(protobuf_message.input_datatype)
+        self.output_node_socket.datasink.to_protobuff_message(protobuf_message.output_datatype)
+        self._set_protobuff_pipenode_data(protobuf_message)
+
+    def _set_protobuff_pipenode_data(self, pipenode_protobuf_message):
+        """Node-specific definition of the pipenodedata"""
+        pass
 
     @property
     def input_shape(self):

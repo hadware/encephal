@@ -3,13 +3,13 @@ package encephal_alpha;
 
 // A datatype, used to indicate which kind of data goes through nodes and buffer (and the size of the buffer)
 message DataType{
-    repeated uint32 dimensions = 1;
     enum NumericType {
         FLOAT = 1;
         INT32 = 2;
         INT64 = 3;
         BOOL = 4;
     }
+    repeated uint32 dimensions = 1;
     required NumericType type = 2;
 }
 
@@ -57,9 +57,9 @@ message PipeNode{
     }
 
     required uint32 index = 1;
-    required PipeNodeType node_type = 2;
-    required DataType input_datatype = 3;
-    required DataType ouput_datatype = 4;
+    required DataType input_datatype = 2;
+    required DataType ouput_datatype = 3;
+    required PipeNodeType node_type = 4;
     required PipeNodeData data = 5;
 }
 

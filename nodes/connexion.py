@@ -4,7 +4,7 @@ from numpy import *
 from scipy.ndimage import *
 from scipy.signal import *
 from nodes.node import *
-
+from execution import protobuf
 
 class FullConnexion(PipeNode):
     """ Basic connection type: all of the ouputs from the input node are connected to
@@ -24,16 +24,19 @@ class FullConnexion(PipeNode):
         #TODO: make parameters for the randomize
 
     def propagation(self, learning):
-        """Propagates the input data from the input node to the next node, while """
+        """Propagates the input data from the input node to the next socket """
         self.output_socket.prop_data[:] += dot((self.input_socket.prop_data).reshape(self.input_total_size), self.matrix).reshape(self.output_shape)
 
     def backpropagation(self):
-        """Backpropagates the error gradient to the input node"""
+        """Backpropagates the error gradient to the input socket"""
         self.input_socket.backprop_data[:] += dot(self.matrix, (self.output_socket.backprop_data).reshape(self.output_total_size)).reshape(self.input_shape)
 
     def learn(self, alpha):
         """Applies the calculated error to the matrix"""
         self.matrix[:, :] -= alpha * dot(matrix((self.input_socket.prop_data).reshape(self.input_total_size)).transpose(), matrix((self.output_socket.backprop_data).reshape(self.output_total_size)))
+
+    def _set_protobuff_pipenode_data(self, pipenode_protobuf_message):
+        pipenode_protobuf_message.node_type = protobuf.PipeNode.FULL_CONNEXION
 
 class Convolutional(PipeNode):
     """
@@ -41,7 +44,7 @@ class Convolutional(PipeNode):
 
     Attributes:
     kernel (nparray): n dimensional kernel we desire to apply
-    kernel_shape (list): shape of the kernel
+    kernel_shape (list): int's, representing shape of the kernel
     zero_padding (str): type of  zero padding we desire to apply for the convolution
     """
 
@@ -72,7 +75,7 @@ class Convolutional(PipeNode):
     def randomize(self):
         """Sets up a random value for all the parameters of the kernel"""
         self.kernel = 0.01*(random.random_sample(self.kernel_shape) - 0.5)
-        #TODO: make parameters for the randomize
+        # TODO: make parameters for the randomization
 
     def propagation(self, learning):
         '''Propagates the input data with the convolution to the next node
@@ -88,3 +91,9 @@ class Convolutional(PipeNode):
 
     def learn(self, alpha):
         pass
+
+    def _set_protobuff_pipenode_data(self, pipenode_protobuf_message):
+        pipenode_protobuf_message.node_type = protobuf.PipeNode.CONVOLUTIONAL_LAYER
+        # TODO: use enum to render the  zero padding type
+        pipenode_protobuf_message.data.zero_padding = protobuf.ConvolutionalLayerData.FULL
+        pipenode_protobuf_message.data.kernel_shape.extend(self.kernel_shape)

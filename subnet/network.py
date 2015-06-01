@@ -42,3 +42,7 @@ class Network:
     def init_buffer(self):
         for socket in self.subnet.sockets:
             socket.socket_datasink.reinit_data()
+
+    def to_protobuf_messageg(self):
+        """Uses the scheduled nodes and sockets to build the protobuf graph sent to CUDA"""
+        pass

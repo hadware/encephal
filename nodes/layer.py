@@ -2,7 +2,7 @@ __author__ = 'marechaux'
 
 from numpy import *
 from nodes.node import *
-
+from execution import protobuf
 
 class PerceptronLayer(PipeNode):
     """
@@ -33,6 +33,10 @@ class PerceptronLayer(PipeNode):
         """Initialiazises all the biases for each internal neuron to a random value"""
         self.bias[:] = 0.01*(random.random_sample(self.input_shape)-0.5)
 
+    def _set_protobuff_pipenode_data(self, pipenode_protobuf_message):
+        pipenode_protobuf_message.node_type = protobuf.PipeNode.PERCEPTRON_LAYER
+        pipenode_protobuf_message.data.perceptron_layer.activation_function = self.activation_function.to_protobuf_message()
+
 class DropoutLayer(PipeNode):
     """
     A node representing a hidden layer of a Droupout.
@@ -58,3 +62,6 @@ class DropoutLayer(PipeNode):
 
     def learn(self, alpha):
         pass
+
+    def _set_protobuff_pipenode_data(self, pipenode_protobuf_message):
+        pipenode_protobuf_message.node_type = protobuf.PipeNode.DROPOUT_LAYER
