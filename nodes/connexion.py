@@ -51,7 +51,7 @@ class Convolutional(PipeNode):
         self.kernel = zeros((self.input_total_size, self.output_total_size))
         output_datasink = type(input_datasink)(self.compute_output_shape(input_datasink.shape_data))
         super().__init__(input_datasink, output_datasink)
-
+        #TODO : Use an enum instead of strings for the the zero_padding
 
     #Computing the output_shape knowing the input_shape, kernel_shape and zero_padding
     def compute_output_shape(self,input_shape):

@@ -1,0 +1,93 @@
+syntax = "proto2";
+package encephal_alpha;
+
+// A datatype, used to indicate which kind of data goes through nodes and buffer (and the size of the buffer)
+message DataType{
+    repeated uint32 dimensions = 1;
+    enum NumericType {
+        FLOAT = 1;
+        INT32 = 2;
+        INT64 = 3;
+        BOOL = 4;
+    }
+    required NumericType type = 2;
+}
+
+enum ActivationFunction{
+    NOTHING = 1;
+    SIGMOID = 2;
+    SOFTMAX = 3;
+}
+
+message PerceptronLayerData{
+    required ActivationFunction activation_function = 1;
+}
+
+message ConvolutionalLayerData{
+    enum ZeroPaddingType{
+        VALID = 1;
+        SAME = 2;
+        FULL = 3;
+    }
+    required ZeroPaddingType zero_padding = 1;
+    repeated uint32 kernel_shape = 2;
+}
+
+message DropoutLayerData{
+}
+
+message FullConnexionLayerData{
+}
+
+// A node with only one input and one output
+message PipeNode{
+
+    enum PipeNodeType{
+        FULL_CONNEXION = 1;
+        DROPOUT_LAYER = 2;
+        PERCEPTRON_LAYER = 3;
+        CONVOLUTIONAL_LAYER = 4;
+    }
+
+    message PipeNodeData {
+        optional FullConnexionLayerData full_connexion = 1;
+        optional DropoutLayerData dropout_layer = 2;
+        optional PerceptronLayerData perceptron_layer = 3;
+        optional ConvolutionalLayerData convolutional_layer = 4;
+    }
+
+    required uint32 index = 1;
+    required PipeNodeType node_type = 2;
+    required DataType input_datatype = 3;
+    required DataType ouput_datatype = 4;
+    required PipeNodeData data = 5;
+}
+
+//A connection between a node and a socket (or a socket and a node)
+message Connection{
+    required uint32 input = 1;
+    required uint32 output = 2;
+}
+
+// Message for a socket object
+message Socket{
+    required uint32 index = 1;
+    required DataType datatype = 2;
+}
+
+// A layer (list) of nodes, grouped together in a layer by the scheduler
+message SchedulerNodeLayer{
+    repeated PipeNode nodes = 1;
+}
+
+// A layer (list) of sockets, between two scheduled layers of nodes
+message SchedulerSocketLayer{
+    repeated Socket sockets = 1;
+}
+
+// Whole graph, with nodes already scheduled, in layers
+message Graph{
+    repeated SchedulerNodeLayer nodes = 1;
+    repeated SchedulerSocketLayer sockets = 2;
+    repeated Connection connections = 3;
+}
