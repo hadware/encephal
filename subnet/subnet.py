@@ -143,8 +143,12 @@ class Subnet(Node):
         return self.sorted_node
 
 
+    #TODO: realize different type of copies
+    def copy_reference(self):
+        return self;
+
     #Un type de copie , il va  y en avoir d'autres
-    def copy(self, input_translations = None, output_translations = None):
+    def copy2(self, input_translations = None, output_translations = None):
         clone = Subnet()
 
         socket_translator = {}

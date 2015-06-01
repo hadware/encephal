@@ -4,18 +4,16 @@ class Network:
 
     def __init__(self, subnet):
 
-        #TODO: realize different type of copies
-        # self.subnet = subnet.copy()
-        self.subnet = subnet
-
+        self.subnet = subnet.copy_reference()
+        #Scheduling
         self.sorted_node = self.subnet.schedule()
-
+        #Initialisation
         for socket in self.subnet.sockets:
             socket.socket_datasink.init_data()
-
         #Defining the input and output layer
         self.input_layer = self.subnet.input_node_sockets[0].connected_socket
         self.output_layer = self.subnet.output_node_sockets[0].connected_socket
+
 
 
     def propagation(self,learning = True):

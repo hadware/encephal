@@ -23,6 +23,10 @@ All the tests will classified in different sections:
     -Check if the subnet is empty
 
     TODO:
+    -Check if there is no subnet
+        with isInstance: otherwise send the name of the subnet to search the mistake
+
+    TODO:
     -Check if there is at least an input
 
     TODO:

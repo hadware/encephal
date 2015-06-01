@@ -35,9 +35,9 @@ class FullConnexion(PipeNode):
         """Applies the calculated error to the matrix"""
         self.matrix[:, :] -= alpha * dot(matrix((self.input_socket.prop_data).reshape(self.input_total_size)).transpose(), matrix((self.output_socket.backprop_data).reshape(self.output_total_size)))
 
-class Convolutional(PipeNode):
+class ConvolutionalConnexion(PipeNode):
     """
-    Convolutional connexion, a kernel
+    Convolutional connexion, a kernel is convolved with the input_data
 
     Attributes:
     kernel (nparray): n dimensional kernel we desire to apply
@@ -88,3 +88,11 @@ class Convolutional(PipeNode):
 
     def learn(self, alpha):
         pass
+
+class PoolingConnexion(PipeNode):
+    """
+    Convolutional connexion, a kernel
+
+    Attributes:
+
+    """
