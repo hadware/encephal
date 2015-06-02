@@ -3,15 +3,17 @@ package encephal_alpha;
 
 // A datatype, used to indicate which kind of data goes through nodes and buffer (and the size of the buffer)
 message DataType{
-    repeated uint32 dimensions = 1;
     enum NumericType {
         FLOAT = 1;
         INT32 = 2;
         INT64 = 3;
         BOOL = 4;
     }
+    repeated uint32 dimensions = 1;
     required NumericType type = 2;
 }
+
+// ================== Used to exchange the network structure ==================
 
 enum ActivationFunction{
     NOTHING = 1;
@@ -34,6 +36,7 @@ message ConvolutionalLayerData{
 }
 
 message DropoutLayerData{
+    required float p = 1;
 }
 
 message FullConnexionLayerData{
@@ -57,16 +60,18 @@ message PipeNode{
     }
 
     required uint32 index = 1;
-    required PipeNodeType node_type = 2;
-    required DataType input_datatype = 3;
-    required DataType ouput_datatype = 4;
-    required PipeNodeData data = 5;
+    required DataType input_datatype = 2;
+    required DataType output_datatype = 3;
+    required uint32 input_socket_index = 4;
+    required uint32 output_socket_index = 5;
+    required PipeNodeType node_type = 6;
+    required PipeNodeData data = 7;
 }
 
 //A connection between a node and a socket (or a socket and a node)
 message Connection{
-    required uint32 input = 1;
-    required uint32 output = 2;
+    required uint32 socket_index = 1;
+    required uint32 node_index = 2;
 }
 
 // Message for a socket object
@@ -80,14 +85,33 @@ message SchedulerNodeLayer{
     repeated PipeNode nodes = 1;
 }
 
-// A layer (list) of sockets, between two scheduled layers of nodes
-message SchedulerSocketLayer{
-    repeated Socket sockets = 1;
-}
-
 // Whole graph, with nodes already scheduled, in layers
 message Graph{
-    repeated SchedulerNodeLayer nodes = 1;
-    repeated SchedulerSocketLayer sockets = 2;
-    repeated Connection connections = 3;
+    repeated SchedulerNodeLayer node_layers = 1;
+    repeated Socket sockets = 2;
+    //repeated Connection connections = 3;
+}
+
+// ================== Used to exchange data vectors ==================
+
+message DataArray{
+    repeated float float_vector = 1;
+    repeated uint32 uint32_vector =2;
+    repeated uint64 uint64_vector = 3;
+    repeated bool bool_vector = 4;
+}
+
+message TrainingDataset{
+    required DataType input_datatype = 1;
+    required DataType output_datatype = 2;
+    message TrainingEntry{
+        required DataArray input = 1;
+        required DataArray label = 2;
+    }
+    repeated TrainingEntry entries = 3;
+}
+
+message TestingDataset {
+    required DataType input_datatype = 1;
+    repeated DataArray entries = 2;
 }

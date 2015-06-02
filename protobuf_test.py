@@ -1,4 +1,4 @@
-__author__ = 'marechaux'
+__author__ = 'hadware'
 
 from subnet.network import *
 from datasets.encoder.onehot import *
@@ -12,17 +12,6 @@ input_datasink = learn_db.input_datasink
 output_datasink = learn_db.output_datasink
 
 test_subnet = Subnet()
-FillSubnet.MLP2(test_subnet,input_datasink,output_datasink)
+FillSubnet.MLP2(test_subnet, input_datasink, output_datasink)
 n = Network(test_subnet)
-
-encoder = Onehot(output_datasink)
-execute=Execute(learn_db,test_db,encoder)
-execute.mean(n,1)
-
-
-
-
-
-
-
-
+print(n.to_protobuf_message())

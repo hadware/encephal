@@ -1,12 +1,13 @@
 __author__ = 'hadware'
 from numpy import zeros
-
+from execution import protobuf
 from datasink.datatype import *
 
 
 class DataSink:
     """
-    Describe the data we are handling.
+    Describe the data sockets can store and nodes can handle.
+
     Attributes:
         type (Datatype)
         shape_data (list):
@@ -34,12 +35,16 @@ class DataSink:
             sum *= elm
         return sum
 
+    def to_protobuff_message(self, datatype_message):
+        datatype_message.dimensions.extend(self.shape_data)
+
+
 class Float1D(DataSink):
 
     def __init__(self, shape):
         super().__init__()
         self.type = Vector(float, shape[0])
-        self.shape_data=shape
+        self.shape_data = shape
 
     def init_data(self):
         self.prop_data = zeros(self.shape_data)
@@ -48,6 +53,10 @@ class Float1D(DataSink):
     def reinit_data(self):
         self.prop_data[:] = zeros(self.shape_data)
         self.backprop_data[:] = zeros(self.shape_data)
+
+    def to_protobuff_message(self, datatype_message):
+        super().to_protobuff_message(datatype_message)
+        datatype_message.type = protobuf.DataType.FLOAT
 
 class Float2D(DataSink):
 
@@ -64,4 +73,6 @@ class Float2D(DataSink):
         self.prop_data[:] = zeros(self.shape_data)
         self.backprop_data[:] = zeros(self.shape_data)
 
-
+    def to_protobuff_message(self, datatype_message):
+        super().to_protobuff_message(datatype_message)
+        datatype_message.type = protobuf.DataType.FLOAT

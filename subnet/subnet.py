@@ -149,12 +149,12 @@ class Subnet(Node):
     def schedule(self):
         self.tests_before_scheduling()
 
-        print("Beginning scheduling")
         unscheduled_sockets = list(self.sockets)
         for socket in unscheduled_sockets:
             socket.level = maxsize
 
         k = -1
+        print("Verifying the network structure and assembling the full graph")
         while unscheduled_sockets:
             k += 1
             for socket in unscheduled_sockets:
@@ -168,10 +168,8 @@ class Subnet(Node):
         self.tests_after_scheduling()
 
 
-        self.sorted_node = []
-
-        for i in range(k):
-            self.sorted_node.append([])
+        # creating a list of empty lists to store the node by scheduling priority
+        self.sorted_node = [list() for i in range(k)]
 
         for node in self.nodes:
             self.sorted_node[node.input_socket.level].append(node)
