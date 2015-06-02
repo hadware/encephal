@@ -8,6 +8,9 @@ All the tests will classified in different sections:
 1)In construction, low level checks
 
     TODO:
+    -Check if a node_pipe is not connected with himself
+
+    TODO:
     -Check if all the python object are well created (detail all the part tested)
 
     TODO:
@@ -15,26 +18,46 @@ All the tests will classified in different sections:
         Send the 2 nodes that are not connecting well
 
     TODO:
-    -Define and check how to sockets can
+    -Define and check how to sockets can connect between themself
+
+    TODO:
+    -Exception when we really desire an input_socket or output_socket and there is a None
 
 2)After construction, high level checks
 
-    TODO:
+    Before Schedule:
+
+    DONE:
     -Check if the subnet is empty
+
+    DONE:
+    -Check if there is at least an input
+
+    DONE:
+     -Check is there is at least an output
+
+    TODO:
+    -Check other thing about the number of nodes and sockets
+    if there is a minimum of one node? check the minimum parameters
 
     TODO:
     -Check if there is no subnet
-        with isInstance: otherwise send the name of the subnet to search the mistake
+        Send the name of the subnet to search the mistake
+
+    DONE:
+    -Check if before Scheduling every node as an input socket
+
+    During Schedule:
+
+    After Schedule:
 
     TODO:
-    -Check if there is at least an input
+    -Find where the maxSize error came from.
+    because if every node has not input_socket then we should had been stopped before
 
     TODO:
     -Check if the subnet is connexe:
         Send the last node encountered coming from the begining.
-
-    TODO:
-     -Check is there is at least an output
 
      TODO:
      -Check if the copy of subnet is well realized

@@ -1,8 +1,11 @@
 __author__ = 'marechaux'
 
+from sys import maxsize
+
 from datasink.socket import *
 from nodes.node import *
-from sys import maxsize
+from tests.construction_exception import *
+
 
 class Subnet(Node):
     """
@@ -109,18 +112,40 @@ class Subnet(Node):
 
 
     """ Scheduling """
-
-
     #TODO: check validity of the graph for complex case
 
-    def schedule(self):
-        unscheduled_sockets = list(self.sockets)
+    def tests_before_scheduling(self):
+        if self.nodes == set()  and self.sockets == set():
+            raise EmptySubnetError
 
+        if self.input_node_sockets == []:
+            raise NoInputError
+
+        if self.output_node_sockets == []:
+            raise NoOutputError
+
+        for node in self.nodes:
+            if type(node) == type(self):
+                raise SubnetPresenceError
+
+        for node in self.nodes:
+            if node.input_socket == None:
+                raise NoInputSocketForEachNode
+
+    def tests_after_scheduling(self):
+        pass
+        """if unscheduled_sockets != []:
+            raise NoConvexError"""
+
+    def schedule(self):
+        self.tests_before_scheduling()
+
+        print("Beginning scheduling")
+        unscheduled_sockets = list(self.sockets)
         for socket in unscheduled_sockets:
             socket.level = maxsize
 
         k = -1
-        print("Verification")
         while unscheduled_sockets:
             k += 1
             for socket in unscheduled_sockets:
@@ -131,6 +156,8 @@ class Subnet(Node):
                 if candidate:
                     socket.level = k
                     unscheduled_sockets.remove(socket)
+        self.tests_after_scheduling()
+
 
         self.sorted_node = []
 
@@ -141,7 +168,6 @@ class Subnet(Node):
             self.sorted_node[node.input_socket.level].append(node)
 
         return self.sorted_node
-
 
     #TODO: realize different type of copies
     def copy_reference(self):
