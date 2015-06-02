@@ -61,9 +61,11 @@ message PipeNode{
 
     required uint32 index = 1;
     required DataType input_datatype = 2;
-    required DataType ouput_datatype = 3;
-    required PipeNodeType node_type = 4;
-    required PipeNodeData data = 5;
+    required DataType output_datatype = 3;
+    required uint32 input_socket_index = 4;
+    required uint32 output_socket_index = 5;
+    required PipeNodeType node_type = 6;
+    required PipeNodeData data = 7;
 }
 
 //A connection between a node and a socket (or a socket and a node)
@@ -85,9 +87,9 @@ message SchedulerNodeLayer{
 
 // Whole graph, with nodes already scheduled, in layers
 message Graph{
-    repeated SchedulerNodeLayer nodes = 1;
+    repeated SchedulerNodeLayer node_layers = 1;
     repeated Socket sockets = 2;
-    repeated Connection connections = 3;
+    //repeated Connection connections = 3;
 }
 
 // ================== Used to exchange data vectors ==================

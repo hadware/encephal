@@ -50,9 +50,12 @@ class PipeNode(Node):
         """Builds and fills a PipeNode message with the data from the pipenode"""
         protobuf_message = protobuf.PipeNode()
         protobuf_message.index = index
+        protobuf_message.input_socket_index = self.input_socket.index
+        protobuf_message.output_socket_index = self.output_socket.index
         self.input_node_socket.datasink.to_protobuff_message(protobuf_message.input_datatype)
         self.output_node_socket.datasink.to_protobuff_message(protobuf_message.output_datatype)
         self._set_protobuff_pipenode_data(protobuf_message)
+        return protobuf_message
 
     def _set_protobuff_pipenode_data(self, pipenode_protobuf_message):
         """Node-specific definition of the pipenodedata"""

@@ -57,21 +57,21 @@ class Network:
         # then we add the scheduled nodes, layer by layer, and add the connections in the mean time
         i = 0
         for scheduled_layer in self.sorted_node:
-            layer_msg = scheduled_graph_msg.nodes.add()
+            layer_msg = scheduled_graph_msg.node_layers.add()
 
             for node in scheduled_layer:
                 node.index = i
 
                 # adding the node to scheduled layer
-                layer_msg.extend([node.to_protobuf_message(i)])
+                layer_msg.nodes.extend([node.to_protobuf_message(i)])
 
                 # adding the two connections from this nodes to the connection list
-                input_connection, output_connection = protobuf.Connection(), protobuf.Connection()
-                input_connection.node_index = i
-                input_connection.socket_index = node.input_socket.index
-                output_connection.node_index = i
-                output_connection.socket_index = node.output_socket.index
-                scheduled_graph_msg.connections.extend([input_connection, output_connection])
+                # input_connection, output_connection = protobuf.Connection(), protobuf.Connection()
+                # input_connection.node_index = i
+                # input_connection.socket_index = node.input_socket.index
+                # output_connection.node_index = i
+                # output_connection.socket_index = node.output_socket.index
+                # scheduled_graph_msg.connections.extend([input_connection, output_connection])
 
                 i += 1
 

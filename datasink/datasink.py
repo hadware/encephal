@@ -73,4 +73,6 @@ class Float2D(DataSink):
         self.prop_data[:] = zeros(self.shape_data)
         self.backprop_data[:] = zeros(self.shape_data)
 
-
+    def to_protobuff_message(self, datatype_message):
+        super().to_protobuff_message(datatype_message)
+        datatype_message.type = protobuf.DataType.FLOAT
