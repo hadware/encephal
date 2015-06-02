@@ -52,6 +52,15 @@ class PipeNode(Node):
         self.input_node_sockets.append(InputNodeSocket(self,input_datasink))
         self.output_node_sockets.append(OutputNodeSocket(self,output_datasink))
 
+
+    @property
+    def input_datasink(self):
+        return self.input_node_sockets[0].datasink
+
+    @property
+    def output_datasink(self):
+        return self.output_node_sockets[0].datasink
+
     @property
     def input_shape(self):
         return self.input_node_sockets[0].datasink.shape_data

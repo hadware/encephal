@@ -16,7 +16,7 @@ class AfterConstructionError(Exception):
 class EmptySubnetError(AfterConstructionError):
     pass
 
-class SubnetPresenceError(AfterConstructionError):
+class NoNodeError(AfterConstructionError):
     pass
 
 class NoInputError(AfterConstructionError):
@@ -25,7 +25,13 @@ class NoInputError(AfterConstructionError):
 class NoOutputError(AfterConstructionError):
     pass
 
+class SubnetPresenceError(AfterConstructionError):
+    pass
+
 class NoInputSocketForEachNode(AfterConstructionError):
+    pass
+
+class NodeConnectedToItself(AfterConstructionError):
     pass
 
 class NoConvexError(AfterConstructionError):

@@ -27,3 +27,10 @@ class InConstructionTestPipeNode(InConstructionTest):
         node = PerceptronLayer(datasink,Sigmoid)
         self.test_subnet.create_output(node)
         self.assertIn(node.output_node_socket,self.test_subnet.output_node_sockets)
+
+    def test_nodeConnectOnItself(self):
+        datasink = Float1D([10])
+        node1 = PerceptronLayer(datasink,Sigmoid)
+        node2 = PerceptronLayer(datasink,Sigmoid)
+        self.test_subnet.connect_nodes(node1,node2)
+

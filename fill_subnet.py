@@ -1,12 +1,6 @@
 __author__ = 'lrx'
 
-from nodes.layer import *
-from nodes.connexion import *
-from nodes.math_function.math_function import *
-from subnet.subnet import *
-
-    #TODO implement clear exemple AND to prepare some classique structure
-    #Convo layer with a length, number of channels and type of pooling
+from classic_subnet import *
 
 """
 Class to choose how to fill a subnet with a given input_datasink and output_datasink
@@ -19,26 +13,12 @@ class FillSubnet:
         #Define the datasink
         hidden_datasink = Float1D([200])
         #Define the subnets
-        s1 = Subnet()
-        s2 = Subnet()
-        FillSubnet.subnet_FullConnexion_PerceptronLayer(s1,input_datasink,hidden_datasink)
-        FillSubnet.subnet_FullConnexion_PerceptronLayer(s2,hidden_datasink,output_datasink)
+        s1 = ClassicSubnet.FullConnexion_PerceptronLayer(input_datasink,hidden_datasink)
+        s2 = ClassicSubnet.FullConnexion_PerceptronLayer(hidden_datasink,output_datasink)
         #Connect the subnets
         subnet.connect_nodes(s1,s2)
         subnet.create_input(s1)
         subnet.create_output(s2)
-
-
-    @staticmethod
-    def subnet_FullConnexion_PerceptronLayer(subnet,input_datasink,output_datasink):
-        #Creating the node
-        connexion = FullConnexion(input_datasink, output_datasink)
-        layer = PerceptronLayer(output_datasink, Sigmoid)
-        #Connecting the nodes
-        subnet.connect_nodes(connexion,layer)
-        #Create the input and output
-        subnet.create_input(connexion)
-        subnet.create_output(layer)
 
     @staticmethod
     def MLP(subnet,input_datasink,output_datasink):
@@ -77,3 +57,11 @@ class FillSubnet:
         #Create the input and output
         subnet.create_input(dropout1)
         subnet.create_output(output_layer)
+
+    @staticmethod
+    def Convo(subnet,input_datasink,output_datasink,channel_nb):
+        #Create the pipe nodes
+        convo_shape = (3,3)
+        convo = []
+        for i in range(channel_nb):
+            convo.append(ConvolutionalConnexion(input_datasink,convo_shape,ZeroPadding.valid))

@@ -6,6 +6,13 @@ from datasink.socket import *
 from nodes.node import *
 from tests.construction_exception import *
 
+"""
+Warning: we decided firstly to implement subnet with only one input and one output
+The generalisation will be easy and using only loop on sockets such as:
+
+        for input_node_socket in input_node.input_node_sockets:
+            self.create_node_socket_input(input_node_socket)
+"""
 
 class Subnet(Node):
     """
@@ -16,9 +23,6 @@ class Subnet(Node):
     sockets (list sockets): Set of sockets present in the Socket
     """
 
-    #TODO: si tout est recursif, vu que les constructions se font dans l'ordre on peut se permettre
-    #TODO: de n'aller chercher les infos qu'à letage d en dessous
-
     def __init__(self):
         super().__init__()
         self.nodes = set()
@@ -27,6 +31,8 @@ class Subnet(Node):
     def is_subnet(self,node):
         return type(self) == type(node)
 
+    #TODO: si tout est recursif, vu que les constructions se font dans l'ordre on peut se permettre
+    #TODO: de n'aller chercher les infos qu'à letage d en dessous
     def add_recursive_node(self,node):
         if not self.is_subnet(node):
             self.nodes.add(node)
@@ -50,7 +56,10 @@ class Subnet(Node):
         for output_node_socket in output_node.output_node_sockets:
             self.create_node_socket_output(output_node_socket)
 
+
     def connect_nodes(self,left_node,right_node):
+        if left_node == right_node:
+            raise NodeConnectedToItself
         if self.is_subnet(left_node) == self.is_subnet(right_node):
             #Add nodes
             self.add_recursive_node(left_node)
@@ -171,7 +180,7 @@ class Subnet(Node):
 
     #TODO: realize different type of copies
     def copy_reference(self):
-        return self;
+        return self
 
     #Un type de copie , il va  y en avoir d'autres
     def copy2(self, input_translations = None, output_translations = None):

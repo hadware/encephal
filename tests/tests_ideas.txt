@@ -7,11 +7,15 @@ All the tests will classified in different sections:
 
 1)In construction, low level checks
 
-    TODO:
+    DONE:
     -Check if a node_pipe is not connected with himself
 
     TODO:
+    -Check that a node_pipe has only one input_node_socket and one output_node_socket
+
+    TODO:
     -Check if all the python object are well created (detail all the part tested)
+    -For the moment test the add to list for node sockets. Useful?
 
     TODO:
     -Check for connexion that the datasink is corresponding
@@ -47,7 +51,10 @@ All the tests will classified in different sections:
     DONE:
     -Check if before Scheduling every node as an input socket
 
+
     During Schedule:
+
+
 
     After Schedule:
 
@@ -58,6 +65,7 @@ All the tests will classified in different sections:
     TODO:
     -Check if the subnet is connexe:
         Send the last node encountered coming from the begining.
+        Understand the bug we are having
 
      TODO:
      -Check if the copy of subnet is well realized
