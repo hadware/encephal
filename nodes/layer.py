@@ -65,3 +65,4 @@ class DropoutLayer(PipeNode):
 
     def _set_protobuff_pipenode_data(self, pipenode_protobuf_message):
         pipenode_protobuf_message.node_type = protobuf.PipeNode.DROPOUT_LAYER
+        pipenode_protobuf_message.data.dropout_layer.p = self.p

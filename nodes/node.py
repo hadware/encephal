@@ -1,6 +1,7 @@
 __author__ = 'marechaux'
 
 from datasink.node_socket import *
+from execution import protobuf
 
 class Node:
     """
@@ -45,8 +46,9 @@ class PipeNode(Node):
         self.input_node_sockets.append(InputNodeSocket(self,input_datasink))
         self.output_node_sockets.append(OutputNodeSocket(self,output_datasink))
 
-    def to_protobuf_message(self, protobuf_message, index):
-        """Fills a PipeNode message with the data from the pipenode"""
+    def to_protobuf_message(self, index):
+        """Builds and fills a PipeNode message with the data from the pipenode"""
+        protobuf_message = protobuf.PipeNode()
         protobuf_message.index = index
         self.input_node_socket.datasink.to_protobuff_message(protobuf_message.input_datatype)
         self.output_node_socket.datasink.to_protobuff_message(protobuf_message.output_datatype)

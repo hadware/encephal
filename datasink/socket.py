@@ -1,5 +1,7 @@
 __author__ = 'marechaux'
 
+from execution import protobuf
+
 class Socket:
     """
     Represent a socket which is the main element for element's storage
@@ -13,6 +15,12 @@ class Socket:
         self.input_node_sockets = []
         self.output_node_sockets = []
         self.socket_datasink = type(datasink)(datasink.shape_data)
+
+    def to_protobuf_message(self, index):
+        socket_message = protobuf.Socket()
+        socket_message.index = index
+        self.socket_datasink.to_protobuff_message(socket_message.datatype)
+        return socket_message
 
     @property
     def prop_data(self):
