@@ -2,6 +2,7 @@ __author__ = 'marechaux'
 
 from datasink.node_socket import *
 from execution import protobuf
+from tests.instantation.test_instantation_exception import *
 
 class Node:
     """
@@ -100,3 +101,7 @@ class PipeNode(Node):
     @property
     def output_node_socket(self):
         return self.output_node_sockets[0]
+
+    def check_shape(self,input_datasink, shape_to_test):
+        if input_datasink.shape_data.__len__() != shape_to_test.__len__():
+            raise IncompatibleShape

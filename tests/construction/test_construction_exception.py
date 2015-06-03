@@ -7,6 +7,8 @@ __author__ = 'lrx'
 class InConstructionError(Exception):
     pass
 
+class NodeConnectedToItself(InConstructionError):
+    pass
 
 """ After construction Exception """
 
@@ -29,9 +31,6 @@ class SubnetPresenceError(AfterConstructionError):
     pass
 
 class NoInputSocketForEachNode(AfterConstructionError):
-    pass
-
-class NodeConnectedToItself(AfterConstructionError):
     pass
 
 class NoConvexError(AfterConstructionError):

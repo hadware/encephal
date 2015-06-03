@@ -1,11 +1,12 @@
 __author__ = 'lrx'
 
 import unittest
+
 from subnet.subnet import *
 from nodes.layer import *
 from nodes.math_function.math_function import *
 from datasink.node_socket import *
-from tests.construction_exception import *
+from tests.construction.test_construction_exception import *
 
 
 class AfterConstructionTest(unittest.TestCase):

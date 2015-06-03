@@ -58,10 +58,3 @@ class FillSubnet:
         subnet.create_input(dropout1)
         subnet.create_output(output_layer)
 
-    @staticmethod
-    def Convo(subnet,input_datasink,output_datasink,channel_nb):
-        #Create the pipe nodes
-        convo_shape = (3,3)
-        convo = []
-        for i in range(channel_nb):
-            convo.append(ConvolutionalConnexion(input_datasink,convo_shape,ZeroPadding.valid))

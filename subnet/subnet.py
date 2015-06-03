@@ -4,7 +4,7 @@ from sys import maxsize
 
 from datasink.socket import *
 from nodes.node import *
-from tests.construction_exception import *
+from tests.construction.test_construction_exception import *
 
 """
 Warning: we decided firstly to implement subnet with only one input and one output
@@ -56,6 +56,11 @@ class Subnet(Node):
         for output_node_socket in output_node.output_node_sockets:
             self.create_node_socket_output(output_node_socket)
 
+    def add_right_node(self,node,node_to_add):
+        self.connect_nodes(node,node_to_add)
+
+    def add_left_node(self,node,node_to_add):
+        self.connect_nodes(node_to_add,node)
 
     def connect_nodes(self,left_node,right_node):
         if left_node == right_node:
@@ -68,7 +73,14 @@ class Subnet(Node):
             for i in range(len(left_node.output_node_sockets)):
                 self.connect_node_sockets(left_node.output_node_sockets[i],right_node.input_node_sockets[i])
         else:
-            print('Probleme: Impossible de connecter un Pipe_node et un subnet')
+            #Connecting a pipe_node and a subnet, possible here because we suppose there is one entry for the subnet
+            print('Connecting a Pipe_node  and a subnet')
+            #Add nodes
+            self.add_recursive_node(left_node)
+            self.add_recursive_node(right_node)
+            #Connect the node sockets
+            for i in range(len(left_node.output_node_sockets)):
+                self.connect_node_sockets(left_node.output_node_sockets[i],right_node.input_node_sockets[i])
 
     """ Functions on node_socket, filling sockets attribut """
 

@@ -6,6 +6,7 @@ from scipy.signal import *
 from nodes.node import *
 from enum import Enum
 from execution import protobuf
+from nodes.math_function.pooling_function import *
 
 
 class FullConnexion(PipeNode):
@@ -52,11 +53,15 @@ class ConvolutionalConnexion(PipeNode):
     """
 
     def __init__(self, input_datasink, kernel_shape, zero_padding):
+
+        self.check_shape(input_datasink, kernel_shape)
+
         self.kernel_shape = kernel_shape
         self.zero_padding = zero_padding
         self.kernel = zeros(self.kernel_shape)
         output_datasink = type(input_datasink)(self.compute_output_shape(input_datasink.shape_data))
         super().__init__(input_datasink, output_datasink)
+
 
     #Computing the output_shape knowing the input_shape, kernel_shape and zero_padding
     def compute_output_shape(self,input_shape):
@@ -97,12 +102,33 @@ class ConvolutionalConnexion(PipeNode):
 
 class PoolingConnexion(PipeNode):
     """
-    Convolutional connexion, a kernel
+    Pooling Connexion that intervene in a convolutional layer. This a Sub Sampling Layer
 
     Attributes:
-
+    pooling_function : the function we will use to pool
+    pooling_shape :
+    stride :
     """
-    pass
+    def __init__(self, input_datasink, pooling_function, pooling_shape, stride_shape):
+
+        self.check_shape(input_datasink, pooling_shape)
+        self.check_shape(input_datasink, stride_shape)
+
+        self.pooling_function = pooling_function
+        self.pooling_shape = pooling_shape
+        self.stride_shape = stride_shape
+        output_datasink = type(input_datasink)(self.compute_output_shape(input_datasink.shape_data))
+        super().__init__(input_datasink, output_datasink)
+
+
+    #Computing the output_shape knowing the input_shape, kernel_shape and zero_padding
+    def compute_output_shape(self,input_shape):
+        output_shape=[]
+        #Filling the output_shape list
+        for m , k in self.input_shape, self.kernel_shape:
+            output_shape.append(m + self.zero_padding[0]*(k-1))
+        return output_shape
+
 
 class ZeroPadding(Enum):
     """ Enum type to caracterize of zero padding type as a tuple
