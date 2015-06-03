@@ -62,6 +62,10 @@ class ConvolutionalConnexion(PipeNode):
         output_datasink = type(input_datasink)(self.compute_output_shape(input_datasink.shape_data))
         super().__init__(input_datasink, output_datasink)
 
+    @property
+    def kernel_flipped(self):
+        pass
+
 
     #Computing the output_shape knowing the input_shape, kernel_shape and zero_padding
     def compute_output_shape(self,input_shape):
@@ -80,25 +84,30 @@ class ConvolutionalConnexion(PipeNode):
         '''Propagates the input data with the convolution to the next node
         FFT is generally much faster than convolve for large arrays (n > ~500), but can be slower when only a few output values are needed
         or we could use: output_socket.prop_data[:] += convolve(self.input_socket.prop_data, self.kernel, mode=self.zero_padding)
-        or with more options there is also:
-        output_socket.prop_data[:] += convolve(self.input_socket.prop_data, self.kernel, mode='constant', cval=0.0)'''
+        or with more options there is also:output_socket.prop_data[:] += convolve(self.input_socket.prop_data, self.kernel, mode='constant', cval=0.0)
+        WARNING: fftconvolve require the largest ndarray as the first parameter '''
         self.output_socket.prop_data[:] += fftconvolve(self.input_socket.prop_data, self.kernel, mode=self.zero_padding[1])
 
     def backpropagation(self):
         """Backpropagates the error gradient to the input node"""
-        self.input_socket.backprop_data[:] += dot(self.matrix, (self.output_socket.backprop_data).reshape(self.output_total_size)).reshape(self.input_shape)
+        self.input_socket.backprop_data[:] += fftconvolve(self.output_socket.backprop_data, self.kernel_flipped, mode=self.zero_padding[1])
+
 
     def learn(self, alpha):
-        #fftconvolve require the largest ndarray as the first parameter
-        if self.zero_padding == ZeroPadding.full:
-            self.kernel [:] += fftconvolve(self.output_socket.backprop_data,self.input_socket.prop_data, mode=self.zero_padding[1])
-        else:
-            self.kernel[:] += fftconvolve(self.input_socket.prop_data,self.output_socket.backprop_data, mode=self.zero_padding[1])
+        self.kernel[:] += fftconvolve(self.input_socket.prop_data,self.output_socket.backprop_data, mode=self.zero_padding[1])
 
     def _set_protobuff_pipenode_data(self, pipenode_protobuf_message):
         pipenode_protobuf_message.node_type = protobuf.PipeNode.CONVOLUTIONAL_LAYER
         pipenode_protobuf_message.data.zero_padding = protobuf.ConvolutionalLayerData.FULL
         pipenode_protobuf_message.data.kernel_shape.extend(self.kernel_shape)
+
+class ZeroPadding(Enum):
+    """ Enum type to caracterize of zero padding type as a tuple
+    tuple[0] is a coefficient to find the output_shape knowing the input_shape and the kernel's size.
+    tuple[1] is a string corresponding to the zero padding type """
+    valid = (-1,'valid')
+    same  = (0,'same')
+    full  = (1,'full')
 
 class PoolingConnexion(PipeNode):
     """
@@ -107,10 +116,9 @@ class PoolingConnexion(PipeNode):
     Attributes:
     pooling_function : the function we will use to pool
     pooling_shape :
-    stride :
+    stride_shape :
     """
     def __init__(self, input_datasink, pooling_function, pooling_shape, stride_shape):
-
         self.check_shape(input_datasink, pooling_shape)
         self.check_shape(input_datasink, stride_shape)
 
@@ -121,22 +129,26 @@ class PoolingConnexion(PipeNode):
         super().__init__(input_datasink, output_datasink)
 
 
-    #Computing the output_shape knowing the input_shape, kernel_shape and zero_padding
+    #Computing the output_shape knowing the input_shape, pooling_shape and stride_shape
     def compute_output_shape(self,input_shape):
-        output_shape=[]
+        output_shape = []
         #Filling the output_shape list
-        for m , k in self.input_shape, self.kernel_shape:
-            output_shape.append(m + self.zero_padding[0]*(k-1))
+        for i in range(input_shape.__len__()):
+            #The pooling can be not on the entire input depending on the parameters, to check
+            output_shape.append(((input_shape[i]-self.pooling_shape[i])//self.stride_shape[i])+1)
         return output_shape
 
+    def propagation(self, learning):
+        self.output_socket.prop_data[:] += self.pooling_function.pool(self.input_socket.prop_data)
 
-class ZeroPadding(Enum):
-    """ Enum type to caracterize of zero padding type as a tuple
-    tuple[0] is a coefficient to find the output_shape knowing the input_shape and the kernel's size.
-    tuple[1] is a string corresponding to the zero padding type """
-    valid = (-1,'valid')
-    same  = (0,'same')
-    full  = (1,'full')
+    def backpropagation(self):
+        self.input_socket.backprop_data[:] += self.pooling_function.pool_back(self.output_socket.backprop_data)
+
+    def learn(self, alpha):
+        pass
+
+
+
 
 
 
