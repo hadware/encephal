@@ -1,6 +1,5 @@
 __author__ = 'lrx'
 
-
 List of all the things we are eager to test, to verify or to have when Initializing objects.
 So that the user have clear explanation during the execution
 

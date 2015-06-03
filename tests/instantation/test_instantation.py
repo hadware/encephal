@@ -10,7 +10,6 @@ class InstantationTest(unittest.TestCase):
     def setUp(self):
         self.input_datasink = Float2D([1,1])
 
-
     def test_nodes_shape(self):
         #Convolutional
         kernel_shape = [1]
