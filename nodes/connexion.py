@@ -92,7 +92,7 @@ class ConvolutionalConnexion(PipeNode):
         """Backpropagates the error gradient to the input node"""
         self.input_socket.backprop_data[:] += fftconvolve(self.output_socket.backprop_data, self.kernel_flipped, mode=self.zero_padding[1])
 
-
+    #fliprl permet de flipper un np array
     def learn(self, alpha):
         self.kernel[:] += fftconvolve(self.input_socket.prop_data,self.output_socket.backprop_data, mode=self.zero_padding[1])
 
