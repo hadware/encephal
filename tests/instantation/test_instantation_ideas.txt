@@ -1,0 +1,18 @@
+__author__ = 'lrx'
+
+List of all the things we are eager to test, to verify or to have when Initializing objects.
+So that the user have clear explanation during the execution
+
+1)Nodes
+    TODO:
+    -Check if the dimension of the shape of some objects is corresponding to the input_datasink
+        (kernel_shape, pooling_shape, stride_shape)
+
+    TODO:
+    -Check if the number in a shape in parameter are adapted (not null, not negative, not superior to some number)
+
+2)Datasink
+
+    TODO:
+    -Check if the argument is a shape and that the dimension of this shape is corresponding with the dimension of the object
+    we want to initialize

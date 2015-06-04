@@ -1,0 +1,117 @@
+syntax = "proto2";
+package encephal_alpha;
+
+// A datatype, used to indicate which kind of data goes through nodes and buffer (and the size of the buffer)
+message DataType{
+    enum NumericType {
+        FLOAT = 1;
+        INT32 = 2;
+        INT64 = 3;
+        BOOL = 4;
+    }
+    repeated uint32 dimensions = 1;
+    required NumericType type = 2;
+}
+
+// ================== Used to exchange the network structure ==================
+
+enum ActivationFunction{
+    NOTHING = 1;
+    SIGMOID = 2;
+    SOFTMAX = 3;
+}
+
+message PerceptronLayerData{
+    required ActivationFunction activation_function = 1;
+}
+
+message ConvolutionalLayerData{
+    enum ZeroPaddingType{
+        VALID = 1;
+        SAME = 2;
+        FULL = 3;
+    }
+    required ZeroPaddingType zero_padding = 1;
+    repeated uint32 kernel_shape = 2;
+}
+
+message DropoutLayerData{
+    required float p = 1;
+}
+
+message FullConnexionLayerData{
+}
+
+// A node with only one input and one output
+message PipeNode{
+
+    enum PipeNodeType{
+        FULL_CONNEXION = 1;
+        DROPOUT_LAYER = 2;
+        PERCEPTRON_LAYER = 3;
+        CONVOLUTIONAL_LAYER = 4;
+    }
+
+    message PipeNodeData {
+        optional FullConnexionLayerData full_connexion = 1;
+        optional DropoutLayerData dropout_layer = 2;
+        optional PerceptronLayerData perceptron_layer = 3;
+        optional ConvolutionalLayerData convolutional_layer = 4;
+    }
+
+    required uint32 index = 1;
+    required DataType input_datatype = 2;
+    required DataType output_datatype = 3;
+    required uint32 input_socket_index = 4;
+    required uint32 output_socket_index = 5;
+    required PipeNodeType node_type = 6;
+    required PipeNodeData data = 7;
+}
+
+//A connection between a node and a socket (or a socket and a node)
+message Connection{
+    required uint32 socket_index = 1;
+    required uint32 node_index = 2;
+}
+
+// Message for a socket object
+message Socket{
+    required uint32 index = 1;
+    required DataType datatype = 2;
+}
+
+// A layer (list) of nodes, grouped together in a layer by the scheduler
+message SchedulerNodeLayer{
+    repeated PipeNode nodes = 1;
+}
+
+// Whole graph, with nodes already scheduled, in layers
+message Graph{
+    repeated SchedulerNodeLayer node_layers = 1;
+    repeated Socket sockets = 2;
+    //repeated Connection connections = 3;
+}
+
+// ================== Used to exchange data vectors ==================
+
+message DataArray{
+    repeated float float_vector = 1;
+    repeated uint32 uint32_vector =2;
+    repeated uint64 uint64_vector = 3;
+    repeated bool bool_vector = 4;
+}
+
+message TrainingDataset{
+    required DataType input_datatype = 1;
+    required DataType output_datatype = 2;
+    message TrainingEntry{
+        required DataArray input = 1;
+        required DataArray label = 2;
+    }
+    repeated TrainingEntry entries = 3;
+}
+
+message TestingDataset {
+    required DataType input_datatype = 1;
+    repeated DataArray entries = 2;
+}

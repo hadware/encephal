@@ -1,0 +1,10 @@
+<svg height="460" width="660"><svg heigh="400" width="600" x="30" y="30"><style type="text/css">
+<![CDATA[line {
+    stroke : #000000;
+}
+
+#node_rhombus {
+    stroke : #000000;
+    fill: #00cc00;
+}]]>
+</style><defs><ellipse cx="33.0" cy="50.0" id="node_ellipse" rx="33.0" ry="50.0" /><rect height="100.0" id="node_rect" width="66" /><polygon id="node_rhombus" points="0.000000, 50.000000  33.000000,0.000000 66.000000,50.000000 33.000000,100.000000" /><g id="horizontal_arrow"><line x1="0" x2="66" y1="50.0" y2="50.0" /></g></defs><g class="element_column column" transform="translate(0,0)"><g transform="translate(0,0)"><use xlink:href="#node_ellipse" y="150.0" /></g></g><line x1="66" x2="132" y1="200.0" y2="100.0" /><line x1="66" x2="132" y1="200.0" y2="300.0" /><g class="element_column column" transform="translate(132,0)"><g transform="translate(0,0)"><use xlink:href="#node_rhombus" y="50.0" /></g><g transform="translate(0,200)"><use xlink:href="#node_rect" y="50.0" /></g></g><line x1="198" x2="264" y1="100.0" y2="100.0" /><line x1="198" x2="264" y1="300.0" y2="300.0" /><line x1="198" x2="264" y1="300.0" y2="100.0" /><g class="element_column column" transform="translate(264,0)"><g transform="translate(0,0)"><use xlink:href="#node_ellipse" y="50.0" /></g><g transform="translate(0,200)"><use xlink:href="#horizontal_arrow" y="50.0" /></g></g><line x1="330" x2="396" y1="100.0" y2="100.0" /><line x1="330" x2="396" y1="300.0" y2="300.0" /><g class="element_column column" transform="translate(396,0)"><g transform="translate(0,0)"><use xlink:href="#node_rect" y="50.0" /></g><g transform="translate(0,200)"><use xlink:href="#horizontal_arrow" y="50.0" /></g></g><line x1="462" x2="528" y1="100.0" y2="200.0" /><line x1="462" x2="528" y1="300.0" y2="200.0" /><g class="element_column column" transform="translate(528,0)"><g transform="translate(0,0)"><use xlink:href="#node_ellipse" y="150.0" /></g></g></svg></svg>

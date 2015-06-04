@@ -55,7 +55,6 @@ class Network:
                     self.hierarchised_nodes[current_level].append(current_node)
                     remaining_nodes.remove(current_node)
 
-        # finding out the grid's dimension using the hierarchy
 
         grid = grid_objects.GraphGrid(self.hierarchised_nodes)
         grid.render_svg("test.svg", 400, 600)

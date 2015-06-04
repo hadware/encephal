@@ -1,9 +1,8 @@
 __author__ = 'marechaux'
 
-
+from execution import protobuf
 from numpy import *
 
-#TODO : Add softmax...
 
 class Sigmoid:
 
@@ -12,9 +11,28 @@ class Sigmoid:
         return 1/(1+exp(-x))
 
     @staticmethod
-    def differential(y):
+    def differential_auxiliary(y):
         return y*(1-y)
 
+    @staticmethod
+    def to_protobuf_message():
+        return protobuf.SIGMOID
+
+class Softmax:
+
+    @staticmethod
+    def function(x_list):
+        sum=0
+        for x in x_list:
+            x=exp(x)
+            sum +=x
+        return x_list/sum
+
+    @staticmethod
+    def to_protobuf_message():
+        return protobuf.SOFTMAX
+
+    #TODO : Add softmax derivative which produce a matrix
 
 class Nothing:
 
@@ -25,6 +43,10 @@ class Nothing:
     @staticmethod
     def differential(y):
         return 1
+
+    @staticmethod
+    def to_protobuf_message():
+        return protobuf.NOTHING
 
 class LinearError:
 

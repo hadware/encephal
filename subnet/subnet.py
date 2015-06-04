@@ -1,157 +1,223 @@
 __author__ = 'marechaux'
 
-from subnet.graph_elements import *
+from sys import maxsize
 
+from datasink.socket import *
+from nodes.node import *
+from tests.construction.test_construction_exception import *
 
-class Subnet:
+"""
+Warning: we decided firstly to implement subnet with only one input and one output
+The generalisation will be easy and using only loop on sockets such as:
+
+        for input_node_socket in input_node.input_node_sockets:
+            self.create_node_socket_input(input_node_socket)
+"""
+
+class Subnet(Node):
+    """
+    Represent a subnet which is a a space of storage with multiple input_node_sockets and output_node_sockets.
+
+    Attributes:
+    nodes (list node): Set of nodes present in the Subnet
+    sockets (list sockets): Set of sockets present in the Socket
+    """
 
     def __init__(self):
-        self.input_sockets = []
-        self.output_sockets = []
-        self.input_sizes = []
-        self.output_size = []
+        super().__init__()
         self.nodes = set()
-        self.subnets = set()
         self.sockets = set()
 
-    def new_socket(self, size):
-        socket = Socket(size)
-        self.sockets.add(socket)
-        return socket
+    def is_subnet(self,node):
+        return type(self) == type(node)
 
-    def add_input(self, size):
-        socket = self.new_socket(size)
-        self.input_sockets.append(socket)
-        self.input_sizes.append(size)
-        return socket
-
-    def add_output(self, node, input = None):
-        input_socket, output_socket = self.add_node(node, input)
-        self.output_sockets.append(output_socket)
-        self.output_size.append(output_socket.size)
-        return input_socket
-
-    def add_node(self, node, input_socket = None, output_socket = None):
-        try:
-            input = self.get_socket(input_socket, node.input_size, True)
-        except InvalidSocket as e:
-            raise ValueError("input_socket must be Socket or (Socket, Socket) or [Socket]")
-
-        try:
-            output = self.get_socket(output_socket, node.output_size, False)
-        except InvalidSocket as e:
-            raise ValueError("output_socket must be Socket or (Socket, Socket) or [Socket]")
-
-        self.nodes.add(GraphNode(node, input, output))
-        return input, output
-
-    def get_socket(self, socket, size, is_input):
-        #TODO : Check the socket exist in the subnet
-        if socket is None:
-            return self.new_socket(size)
-        elif type(socket) is tuple: #TODO : Check type in the tuple
-            if is_input:
-                return socket[1]
-            else:
-                return socket[0]
-        elif type(socket) is (list, list):
-            if is_input:
-                return self.get_socket(socket[1], is_input)
-            else:
-                return self.get_socket(socket[0], is_input)
-        elif type(socket) is Socket:
-            return socket
-        elif type(socket) is list and socket.size == 1 and type(socket[0]) is Socket:
-            return socket[0]
+    #TODO: si tout est recursif, vu que les constructions se font dans l'ordre on peut se permettre
+    #TODO: de n'aller chercher les infos qu'à letage d en dessous
+    def add_recursive_node(self,node):
+        if not self.is_subnet(node):
+            self.nodes.add(node)
         else:
-            print(type(socket))
-            raise InvalidSocket()
+            for intern_socket in node.sockets:
+                self.sockets.add(intern_socket)
+            for intern_node in node.nodes:
+                self.add_recursive_node(intern_node)
 
-    def add_subnet(self, subnet, input_sockets = None, output_sockets = None):
-        # TODO: check non recusive
-        try:
-            input = self.get_socket_list(input_sockets, subnet.input_sizes, True)
-        except InvalidSocket as e:
-            raise ValueError("input_sockets must be ....")
+    """ Functions on node, filling nodes attribut """
 
-        try:
-            output = self.get_socket_list(output_sockets, subnet.output_sizes, False)
-        except InvalidSocket as e:
-            raise ValueError("output_sockets must be ....")
+    def create_input(self,input_node):
+        #Add nodes
+        self.add_recursive_node(input_node)
+        for input_node_socket in input_node.input_node_sockets:
+            self.create_node_socket_input(input_node_socket)
 
-        graph_subnet = GraphSubnet(subnet, input, output)
-        self.subnets.add(graph_subnet)
-        return input, output
+    def create_output(self,output_node):
+        #Add nodes
+        self.add_recursive_node(output_node)
+        for output_node_socket in output_node.output_node_sockets:
+            self.create_node_socket_output(output_node_socket)
 
+    def add_right_node(self,node,node_to_add):
+        self.connect_nodes(node,node_to_add)
 
+    def add_left_node(self,node,node_to_add):
+        self.connect_nodes(node_to_add,node)
 
-    def as_input(self, socket):
-        if socket is None:
-            raise ValueError("socket must be not null")
-        elif socket not in self.sockets:
-            raise ValueError("socket must be already in the subnet")
-        elif socket in self.input_sockets:
-            raise ValueError("socket must not be already in the subnet outputs")
+    def connect_nodes(self,left_node,right_node):
+        if left_node == right_node:
+            raise NodeConnectedToItself
+        if self.is_subnet(left_node) == self.is_subnet(right_node):
+            #Add nodes
+            self.add_recursive_node(left_node)
+            self.add_recursive_node(right_node)
+            #Connect the node sockets
+            for i in range(len(left_node.output_node_sockets)):
+                self.connect_node_sockets(left_node.output_node_sockets[i],right_node.input_node_sockets[i])
         else:
-            input = self.get_socket(socket, None, False)
-            self.input_sockets.append(input)
-            self.input_sizes.append(input.size)
+            #Connecting a pipe_node and a subnet, possible here because we suppose there is one entry for the subnet
+            print('Connecting a Pipe_node  and a subnet')
+            #Add nodes
+            self.add_recursive_node(left_node)
+            self.add_recursive_node(right_node)
+            #Connect the node sockets
+            for i in range(len(left_node.output_node_sockets)):
+                self.connect_node_sockets(left_node.output_node_sockets[i],right_node.input_node_sockets[i])
 
-    def as_output(self, socket):
-        if socket is None:
-            raise ValueError("socket must be not null")
-        elif socket not in self.sockets:
-            raise ValueError("socket must be already in the subnet")
-        elif socket in self.output_sockets:
-            raise ValueError("socket must not be already in the subnet inputs")
+    """ Functions on node_socket, filling sockets attribut """
+
+    def create_node_socket_input(self,input_node_socket):
+        if not input_node_socket.connected_socket == None:
+            #Add the existing socket
+            self.sockets.add(input_node_socket.connected_socket)
         else:
-            output = self.get_socket(socket, None, False)
-            self.output_sockets.append(output)
-            self.output_sockets.append(output.size)
+            #Creation of the socket and add it
+            socket = Socket(input_node_socket.datasink)
+            self.sockets.add(socket)
+            #Linking after check
+            input_node_socket.connect_socket(socket)
+        #Add one input_node_socket for the subnet
+        self.input_node_sockets.append(input_node_socket)
 
-
-
-    def get_socket_list(self, sockets, sockets_signature, is_input):
-        if sockets is None:
-            result = []
-            for i, element in enumerate(sockets_signature):
-                result.append(self.new_socket(sockets_signature(i)))
-            return result
-        elif type(sockets) is not list and len(sockets_signature) == 1:
-            return [self.get_socket(sockets, sockets_signature[0], is_input)]
-        elif type(sockets) is list and len(sockets) == len(sockets_signature):
-            result = []
-            for i, element in enumerate(sockets_signature):
-                result.append(self.get_socket(sockets[i], element, is_input))
-            return result
+    def create_node_socket_output(self,output_node_socket):
+        if not output_node_socket.connected_socket == None:
+            #Add the existing socket
+            self.sockets.add(output_node_socket.connected_socket)
         else:
-            raise InvalidSocket()
+            #Creation of the socket and add it
+            socket=Socket(output_node_socket.datasink)
+            self.sockets.add(socket)
+            #Linking after check
+            output_node_socket.connect_socket(socket)
+        #Add one output_node_socket for the subnet
+        self.output_node_sockets.append(output_node_socket)
+
+    def connect_node_sockets(self,output_node_socket,input_node_socket):
+        if output_node_socket.connected_socket == None and input_node_socket.connected_socket == None:
+            #Creation of a socket
+            socket=Socket(output_node_socket.datasink)
+            self.sockets.add(socket)
+            #Linking after check
+            output_node_socket.connect_socket(socket)
+            input_node_socket.connect_socket(socket)
+        elif output_node_socket.connected_socket == None and input_node_socket.connected_socket != None:
+            #Linking after check
+            output_node_socket.connect_socket(input_node_socket.connected_socket)
+        elif output_node_socket.connected_socket != None  and input_node_socket.connected_socket == None:
+            #Linking after check
+            input_node_socket.connect_socket(output_node_socket.connected_socket)
+        else:
+        #they already have a socket between them, we have to merge
+        #verifier que cela ne laisse pas un socket dans le vide ou quelque chose comme ca
+        #(au pire celui qui n est pas garder est jeter par le garbage collector)
+            print("merge")
+            output_node_socket.connect_socket(input_node_socket.connected_socket)
+            pass
+
+
+    """ Scheduling """
+    #TODO: check validity of the graph for complex case
+
+    def tests_before_scheduling(self):
+        if self.nodes == set()  and self.sockets == set():
+            raise EmptySubnetError
+
+        if self.input_node_sockets == []:
+            raise NoInputError
+
+        if self.output_node_sockets == []:
+            raise NoOutputError
+
+        for node in self.nodes:
+            if type(node) == type(self):
+                raise SubnetPresenceError
+
+        for node in self.nodes:
+            if node.input_socket == None:
+                raise NoInputSocketForEachNode
+
+    def tests_after_scheduling(self):
+        pass
+        """if unscheduled_sockets != []:
+            raise NoConvexError"""
+
+    def schedule(self):
+        self.tests_before_scheduling()
+
+        unscheduled_sockets = list(self.sockets)
+        for socket in unscheduled_sockets:
+            socket.level = maxsize
+
+        k = -1
+        print("Verifying the network structure and assembling the full graph")
+        while unscheduled_sockets:
+            k += 1
+            for socket in unscheduled_sockets:
+                candidate = True
+                for node in socket.input_nodes:
+                    if node.input_socket.level >= k:
+                        candidate = False
+                if candidate:
+                    socket.level = k
+                    unscheduled_sockets.remove(socket)
+        self.tests_after_scheduling()
+
+
+        # creating a list of empty lists to store the node by scheduling priority
+        self.sorted_node = [list() for i in range(k)]
+
+        for node in self.nodes:
+            self.sorted_node[node.input_socket.level].append(node)
+
+        return self.sorted_node
+
+    #TODO: realize different type of copies
+    def copy_reference(self):
+        return self
 
     #Un type de copie , il va  y en avoir d'autres
-    def copy(self, input_translations = None, output_translations = None):
+    def copy2(self, input_translations = None, output_translations = None):
         clone = Subnet()
 
         socket_translator = {}
 
         if input_translations is not None:
             for i, input_socket in enumerate(input_translations):
-                socket_translator[self.input_sockets[i]] = input_socket
+                socket_translator[self.input_node_sockets[i]] = input_socket
         else:
-            for input_socket in self.input_sockets:
+            for input_socket in self.input_node_sockets:
                 new_input_socket = Socket(input_socket.size)
                 socket_translator[input_socket] = new_input_socket
                 clone.sockets.add(new_input_socket)
-                clone.input_sockets.append(new_input_socket)
+                clone.input_node_sockets.append(new_input_socket)
 
         if output_translations is not None:
             for i, output_socket in enumerate(output_translations):
-                socket_translator[self.output_sockets[i]] = output_socket
+                socket_translator[self.output_node_sockets[i]] = output_socket
         else:
-            for output_socket in self.output_sockets:
+            for output_socket in self.output_node_sockets:
                 new_output_socket = Socket(output_socket.size)
                 socket_translator[output_socket] = new_output_socket
                 clone.sockets.add(new_output_socket)
-                clone.output_sockets.append(new_output_socket)
+                clone.output_node_sockets.append(new_output_socket)
 
 
         for socket in self.sockets:
@@ -174,6 +240,10 @@ class Subnet:
             clone.sockets |= new_subnet.sockets
 
         return clone
+
+    def randomize(self):
+        for node in self.nodes:
+            node.randomize()
 
 
 
