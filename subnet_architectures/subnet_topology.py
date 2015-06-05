@@ -1,12 +1,12 @@
 __author__ = 'lrx'
 
-from classic_subnet import *
+from subnet_architectures.subnet_classic import *
 
 """
-Class to choose how to fill a subnet with a given input_datasink and output_datasink
-Make it possible to test easily different and new implementations
+Class to choose how to test for different topologies.
+Subnet in series, Subnet of Subnet or even Subnet in Parallel
 """
-class FillSubnet:
+class SubnetTopology:
 
     @staticmethod
     def MLP1(input_datasink,output_datasink):
@@ -31,7 +31,7 @@ class FillSubnet:
     def MLP2(input_datasink,output_datasink):
         subnet = Subnet()
         #Define the subnets
-        s1 = FillSubnet.MLP1(input_datasink,output_datasink)
+        s1 = SubnetTopology.MLP1(input_datasink,output_datasink)
         #Connect the subnets
         subnet.create_input(s1)
         subnet.create_output(s1)
@@ -78,8 +78,8 @@ class FillSubnet:
     def MLPParallele2(input_datasink,output_datasink):
         subnet = Subnet()
         #Define the subnets
-        s1 = FillSubnet.MLP1(input_datasink,output_datasink)
-        s2 = FillSubnet.MLP1(input_datasink,output_datasink)
+        s1 = SubnetTopology.MLP1(input_datasink,output_datasink)
+        s2 = SubnetTopology.MLP1(input_datasink,output_datasink)
         #Connect the subnets
         subnet.create_input(s1)
         subnet.connect_input(s2)
@@ -91,8 +91,8 @@ class FillSubnet:
     def MLPParallele3(input_datasink,output_datasink):
         subnet = Subnet()
         #Define the subnets
-        s1 = FillSubnet.MLPSerie1(input_datasink,output_datasink)
-        s2 = FillSubnet.MLPSerie1(input_datasink,output_datasink)
+        s1 = SubnetTopology.MLPSerie1(input_datasink,output_datasink)
+        s2 = SubnetTopology.MLPSerie1(input_datasink,output_datasink)
         #Connect the subnets
         subnet.create_input(s1)
         subnet.connect_input(s2)
@@ -101,12 +101,12 @@ class FillSubnet:
         return subnet
 
     @staticmethod
-    def MLP_para3(input_datasink,output_datasink):
+    def MLPParallele4(input_datasink,output_datasink):
         subnet = Subnet()
         #Define the subnets
-        s1 = FillSubnet.MLP1(input_datasink,output_datasink)
-        s2 = FillSubnet.MLP1(input_datasink,output_datasink)
-        s3 = FillSubnet.MLP1(input_datasink,output_datasink)
+        s1 = SubnetTopology.MLP1(input_datasink,output_datasink)
+        s2 = SubnetTopology.MLP1(input_datasink,output_datasink)
+        s3 = SubnetTopology.MLP1(input_datasink,output_datasink)
         #Connect the subnets
         subnet.create_input(s1)
         subnet.connect_input(s2)
@@ -116,26 +116,14 @@ class FillSubnet:
         subnet.connect_output(s3)
         return subnet
 
-    @staticmethod
-    def Dropout(input_datasink,output_datasink,p):
+    def MLPParalleleParallele1(input_datasink,output_datasink):
         subnet = Subnet()
-        #Define the datasink
-        hidden_datasink = Float1D([200])
-        #Create the pipe nodes
-        output_layer = PerceptronLayer(output_datasink, Sigmoid)
-        hidden_layer = PerceptronLayer(hidden_datasink, Sigmoid)
-        connexion1 = FullConnexion(input_datasink, hidden_datasink)
-        connexion2 = FullConnexion(hidden_datasink, output_datasink)
-        dropout1 = DropoutLayer(input_datasink,p)
-        dropout2 = DropoutLayer(hidden_datasink,p)
-        #Connect the pipe nodes
-        subnet.connect_nodes(dropout1,connexion1)
-        subnet.connect_nodes(connexion1,hidden_layer)
-        subnet.connect_nodes(hidden_layer,dropout2)
-        subnet.connect_nodes(dropout2,connexion2)
-        subnet.connect_nodes(connexion2,output_layer)
-        #Create the input and output
-        subnet.create_input(dropout1)
-        subnet.create_output(output_layer)
+        #Create the subnet
+        s1 = SubnetTopology.MLPParallele2(input_datasink,output_datasink)
+        s2 = SubnetTopology.MLPParallele2(input_datasink,output_datasink)
+        #Connect the subnets
+        subnet.create_input(s1)
+        subnet.connect_input(s2)
+        subnet.create_output(s1)
+        subnet.connect_output(s2)
         return subnet
-

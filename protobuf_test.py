@@ -1,10 +1,8 @@
 __author__ = 'hadware'
 
 from subnet.network import *
-from datasets.encoder.onehot import *
 from datasets.MNIST import *
-from fill_subnet import *
-from execute import *
+from subnet_architectures.fill_subnet import *
 
 learn_db = MNIST("training")
 test_db = MNIST("testing")

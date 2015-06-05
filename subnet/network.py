@@ -10,13 +10,13 @@ class Network:
         #Scheduling
         self.sorted_node = self.subnet.schedule()
         #Initialisation
+        for node in self.subnet.nodes:
+            node.init_data()
         for socket in self.subnet.sockets:
             socket.socket_datasink.init_data()
         #Defining the input and output layer
         self.input_layer = self.subnet.input_node_sockets[0].connected_socket
         self.output_layer = self.subnet.output_node_sockets[0].connected_socket
-
-
 
     def propagation(self,learning = True):
         for node_list in self.sorted_node:

@@ -13,7 +13,10 @@ class NodeConnectedToItself(InConstructionError):
 class SocketNotExist(InConstructionError):
     pass
 
-class IndexNodeSocketOutofBound(InConstructionError):
+class IndexOutofBound_MaybeUncreatedNodeSocket(InConstructionError):
+    pass
+
+class UnknownNodesCanNotConnectTogether(InConstructionError):
     pass
 
 """ After construction Exception """

@@ -1,6 +1,6 @@
 __author__ = 'lrx'
 
-List of all the things we are eager to test, to verify or to have during construction of the network
+List of all the things in the order we are eager to test, to verify or to have during construction of the network
 All these checks will be done on subnets. By induction process, we therefore know that the final subnet will be stable
 The final goal is to succeed to explain to a user building his network where is his mistake.
 All the tests will classified in different sections:
@@ -9,6 +9,12 @@ All the tests will classified in different sections:
 
     DONE:
     -Check if a node_pipe is not connected with himself
+
+    TODO:
+    -Check that we can not connect to Unknown node together
+
+    TODO:
+    -Check that the index of the input or output exists
 
     TODO:
     -Check that a node_pipe has only one input_node_socket and one output_node_socket

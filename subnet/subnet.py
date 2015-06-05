@@ -6,14 +6,6 @@ from datasink.socket import *
 from nodes.node import *
 from tests.construction.test_construction_exception import *
 
-"""
-Warning: we decided firstly to implement subnet with only one input and one output
-The generalisation will be easy and using only loop on sockets such as:
-
-        for input_node_socket in input_node.input_node_sockets:
-            self.create_node_socket_input(input_node_socket)
-"""
-
 class Subnet(Node):
     """
     Represent a subnet which is a a space of storage with multiple input_node_sockets and output_node_sockets.
@@ -28,13 +20,11 @@ class Subnet(Node):
         self.nodes = set()
         self.sockets = set()
 
-
-
     def is_subnet(self,node):
         return type(self) == type(node)
 
     #TODO: si tout est recursif, vu que les constructions se font dans l'ordre on peut se permettre
-    #TODO: de n'aller chercher les infos qu'à letage d en dessous
+    #TODO: de n'aller chercher les infos qu'à letage d en dessous?! à reflechir
     def add_recursive_node(self,node):
         if not self.is_subnet(node):
             self.nodes.add(node)
@@ -118,16 +108,11 @@ class Subnet(Node):
 
     def connect_node_socket_input(self,input_node_socket ,index_node_socket):
         if index_node_socket < 0 or index_node_socket >= self.input_node_sockets.__len__():
-            raise IndexNodeSocketOutofBound
+            raise IndexOutofBound_MaybeUncreatedNodeSocket
         socket = (self.input_node_sockets[index_node_socket]).connected_socket
         if (socket == None):
             raise SocketNotExist
         else:
-
-            '''print("here1")
-            print(self.sockets.__contains__(input_node_socket.connected_socket))
-            self.sockets.remove(input_node_socket.connected_socket)
-            print(self.sockets.__contains__(input_node_socket.connected_socket))'''
             input_node_socket.connect_socket(socket)
 
     def create_node_socket_output(self,output_node_socket):
@@ -146,15 +131,11 @@ class Subnet(Node):
 
     def connect_node_socket_output(self,output_node_socket ,index_node_socket):
         if index_node_socket < 0 or index_node_socket >= self.output_node_sockets.__len__():
-            raise IndexNodeSocketOutofBound
+            raise IndexOutofBound_MaybeUncreatedNodeSocket
         socket = (self.output_node_sockets[index_node_socket]).connected_socket
         if (socket == None):
             raise SocketNotExist
         else:
-            '''print("here2")
-            print(self.sockets.__contains__(output_node_socket.connected_socket))
-            self.sockets.remove(output_node_socket.connected_socket)
-            print(self.sockets.__contains__(output_node_socket.connected_socket))'''
             output_node_socket.connect_socket(socket)
 
     def connect_node_sockets(self,output_node_socket,input_node_socket):
@@ -231,17 +212,14 @@ class Subnet(Node):
         k = -1
         print("Verifying the network structure and assembling the full graph")
         while unscheduled_sockets:
-            print("debut")
             socket_list_to_remove = []
             k += 1
             for socket in unscheduled_sockets:
                 candidate = True
                 for node in socket.input_nodes:
-                    print(node.input_socket.level)
                     if node.input_socket.level >= k:
                         candidate = False
                 if candidate:
-                    print('here :'  + str(k))
                     socket.level = k
                     socket_list_to_remove.append(socket)
                     #unscheduled_sockets.remove(socket)
@@ -255,7 +233,6 @@ class Subnet(Node):
 
         for node in self.nodes:
             self.sorted_node[node.input_socket.level].append(node)
-
         return self.sorted_node
 
     #TODO: realize different type of copies
