@@ -101,17 +101,22 @@ message DataArray{
     repeated bool bool_vector = 4;
 }
 
-message TrainingDataset{
+message TrainingDataEntry{
     required DataType input_datatype = 1;
     required DataType output_datatype = 2;
-    message TrainingEntry{
-        required DataArray input = 1;
-        required DataArray label = 2;
-    }
-    repeated TrainingEntry entries = 3;
+    required DataArray input = 3;
+    required DataArray label = 4;
 }
 
-message TestingDataset {
+message TestingDataEntry {
     required DataType input_datatype = 1;
-    repeated DataArray entries = 2;
+    required DataArray entries = 2;
+}
+
+message DataEntry {
+	enum DataEntryType { TRAIN = 1; TEST = 2;}
+
+	required DataEntryType type = 1;
+	optional TrainingDataEntry trainDataEntry = 2;
+	optional TrainingDataEntry testDataEntry = 3;	
 }
