@@ -48,6 +48,7 @@ class DropoutLayer(PipeNode):
     def __init__(self, datasink, p):
         super().__init__(datasink, datasink)
         self.filter = ones(self.input_shape)
+
         self.p = p
 
     def propagation(self, learning = True):

@@ -11,8 +11,7 @@ test_db = MNIST("testing")
 input_datasink = learn_db.input_datasink
 output_datasink = learn_db.output_datasink
 
-test_subnet = Subnet()
-FillSubnet.MLP2(test_subnet,input_datasink,output_datasink)
+test_subnet = FillSubnet.MLP_para3(input_datasink,output_datasink)
 n = Network(test_subnet)
 
 encoder = Onehot(output_datasink)

@@ -22,6 +22,12 @@ class Socket:
         self.socket_datasink.to_protobuff_message(socket_message.datatype)
         return socket_message
 
+    def add_output_node_socket(self, node):
+        self.output_node_sockets.append(node)
+
+    def add_input_node_socket(self, node):
+        self.input_node_sockets.append(node)
+
     @property
     def prop_data(self):
         return self.socket_datasink.prop_data
@@ -29,12 +35,6 @@ class Socket:
     @property
     def backprop_data(self):
         return self.socket_datasink.backprop_data
-
-    def add_output_node_socket(self, node):
-        self.output_node_sockets.append(node)
-
-    def add_input_node_socket(self, node):
-        self.input_node_sockets.append(node)
 
     @property
     def input_nodes(self):

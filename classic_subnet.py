@@ -69,7 +69,7 @@ class ClassicSubnet:
         #Creates the subnet
         subnet = Subnet()
         subnet.create_input(perceptron)
-        subnet.add_right_node(perceptron,pooling)
+        subnet.add_after_node(perceptron,pooling)
         subnet.create_output(pooling)
         return subnet
 

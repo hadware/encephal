@@ -28,6 +28,8 @@ class Subnet(Node):
         self.nodes = set()
         self.sockets = set()
 
+
+
     def is_subnet(self,node):
         return type(self) == type(node)
 
@@ -50,16 +52,33 @@ class Subnet(Node):
         for input_node_socket in input_node.input_node_sockets:
             self.create_node_socket_input(input_node_socket)
 
+
+    def connect_input(self,input_node,index_node_socket = 0):
+        #Add nodes
+        self.add_recursive_node(input_node)
+        index_increment = 0
+        for input_node_socket in input_node.input_node_sockets:
+            self.connect_node_socket_input(input_node_socket,index_node_socket + index_increment)
+            index_increment += 1
+
     def create_output(self,output_node):
         #Add nodes
         self.add_recursive_node(output_node)
         for output_node_socket in output_node.output_node_sockets:
             self.create_node_socket_output(output_node_socket)
 
-    def add_right_node(self,node,node_to_add):
+    def connect_output(self,output_node,index_node_socket = 0):
+        #Add nodes
+        self.add_recursive_node(output_node)
+        index_increment = 0
+        for output_node_socket in output_node.output_node_sockets:
+            self.connect_node_socket_output(output_node_socket,index_node_socket + index_increment)
+            index_increment += 1
+
+    def add_after_node(self,node,node_to_add):
         self.connect_nodes(node,node_to_add)
 
-    def add_left_node(self,node,node_to_add):
+    def add_before_node(self,node,node_to_add):
         self.connect_nodes(node_to_add,node)
 
     def connect_nodes(self,left_node,right_node):
@@ -97,6 +116,20 @@ class Subnet(Node):
         #Add one input_node_socket for the subnet
         self.input_node_sockets.append(input_node_socket)
 
+    def connect_node_socket_input(self,input_node_socket ,index_node_socket):
+        if index_node_socket < 0 or index_node_socket >= self.input_node_sockets.__len__():
+            raise IndexNodeSocketOutofBound
+        socket = (self.input_node_sockets[index_node_socket]).connected_socket
+        if (socket == None):
+            raise SocketNotExist
+        else:
+
+            '''print("here1")
+            print(self.sockets.__contains__(input_node_socket.connected_socket))
+            self.sockets.remove(input_node_socket.connected_socket)
+            print(self.sockets.__contains__(input_node_socket.connected_socket))'''
+            input_node_socket.connect_socket(socket)
+
     def create_node_socket_output(self,output_node_socket):
         if not output_node_socket.connected_socket == None:
             #Add the existing socket
@@ -109,6 +142,20 @@ class Subnet(Node):
             output_node_socket.connect_socket(socket)
         #Add one output_node_socket for the subnet
         self.output_node_sockets.append(output_node_socket)
+
+
+    def connect_node_socket_output(self,output_node_socket ,index_node_socket):
+        if index_node_socket < 0 or index_node_socket >= self.output_node_sockets.__len__():
+            raise IndexNodeSocketOutofBound
+        socket = (self.output_node_sockets[index_node_socket]).connected_socket
+        if (socket == None):
+            raise SocketNotExist
+        else:
+            '''print("here2")
+            print(self.sockets.__contains__(output_node_socket.connected_socket))
+            self.sockets.remove(output_node_socket.connected_socket)
+            print(self.sockets.__contains__(output_node_socket.connected_socket))'''
+            output_node_socket.connect_socket(socket)
 
     def connect_node_sockets(self,output_node_socket,input_node_socket):
         if output_node_socket.connected_socket == None and input_node_socket.connected_socket == None:
@@ -127,7 +174,7 @@ class Subnet(Node):
         else:
         #they already have a socket between them, we have to merge
         #verifier que cela ne laisse pas un socket dans le vide ou quelque chose comme ca
-        #(au pire celui qui n est pas garder est jeter par le garbage collector)
+        #(au pire celui qui n est pas garder est jete par le garbage collector)
             print("merge")
             output_node_socket.connect_socket(input_node_socket.connected_socket)
             pass
@@ -135,6 +182,21 @@ class Subnet(Node):
 
     """ Scheduling """
     #TODO: check validity of the graph for complex case
+
+
+    def empty_unnecessary_socket(self):
+        socket_to_remove = set()
+        for socket in self.sockets:
+            for node_socket in socket.input_node_sockets:
+                if node_socket.node.output_socket != socket:
+                    print('ok1')
+                    socket_to_remove.add(socket)
+            for node_socket in socket.output_node_sockets:
+                if node_socket.node.input_socket != socket:
+                    print('ok2')
+                    socket_to_remove.add(socket)
+        for socket in socket_to_remove:
+            self.sockets.remove(socket)
 
     def tests_before_scheduling(self):
         if self.nodes == set()  and self.sockets == set():
@@ -161,7 +223,7 @@ class Subnet(Node):
 
     def schedule(self):
         self.tests_before_scheduling()
-
+        self.empty_unnecessary_socket()
         unscheduled_sockets = list(self.sockets)
         for socket in unscheduled_sockets:
             socket.level = maxsize
@@ -169,15 +231,22 @@ class Subnet(Node):
         k = -1
         print("Verifying the network structure and assembling the full graph")
         while unscheduled_sockets:
+            print("debut")
+            socket_list_to_remove = []
             k += 1
             for socket in unscheduled_sockets:
                 candidate = True
                 for node in socket.input_nodes:
+                    print(node.input_socket.level)
                     if node.input_socket.level >= k:
                         candidate = False
                 if candidate:
+                    print('here :'  + str(k))
                     socket.level = k
-                    unscheduled_sockets.remove(socket)
+                    socket_list_to_remove.append(socket)
+                    #unscheduled_sockets.remove(socket)
+            for socket in socket_list_to_remove:
+                unscheduled_sockets.remove(socket)
         self.tests_after_scheduling()
 
 

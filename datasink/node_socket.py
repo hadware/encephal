@@ -14,9 +14,9 @@ class NodeSocket:
     IMPORTANT: This datasink has no data neither prop_data nor backprop_data initialized
     """
     def __init__(self, node, datasink):
-        self.node=node
+        self.node = node
         self.connected_socket = None
-        self.datasink=datasink
+        self.datasink = datasink
 
     #Checks if the datatype going out of the node matches the datatype
     def connect_socket(self, socket):

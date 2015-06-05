@@ -38,6 +38,8 @@ class DataSink:
     def to_protobuff_message(self, datatype_message):
         datatype_message.dimensions.extend(self.shape_data)
 
+class Unknown(DataSink):
+    pass
 
 class Float1D(DataSink):
 

@@ -10,6 +10,12 @@ class InConstructionError(Exception):
 class NodeConnectedToItself(InConstructionError):
     pass
 
+class SocketNotExist(InConstructionError):
+    pass
+
+class IndexNodeSocketOutofBound(InConstructionError):
+    pass
+
 """ After construction Exception """
 
 class AfterConstructionError(Exception):

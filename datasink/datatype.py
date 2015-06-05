@@ -6,10 +6,11 @@ class DataTypeError(Exception):
     pass
 
 class DataType:
-
     def matches(self, data_structure):
         """Returns true if the datatypes from the other datastructure match recursively"""
         pass
+
+
 
 class Vector(DataType):
 
