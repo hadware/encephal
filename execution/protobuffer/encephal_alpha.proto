@@ -118,5 +118,5 @@ message DataEntry {
 
 	required DataEntryType type = 1;
 	optional TrainingDataEntry trainDataEntry = 2;
-	optional TrainingDataEntry testDataEntry = 3;	
+	optional TestingDataEntry testDataEntry = 3;	
 }
