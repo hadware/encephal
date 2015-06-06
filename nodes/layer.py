@@ -3,6 +3,7 @@ __author__ = 'marechaux'
 from numpy import *
 from nodes.node import *
 from execution import protobuf
+from nodes.math_function.math_function import *
 
 class PerceptronLayer(PipeNode):
     """
@@ -13,10 +14,13 @@ class PerceptronLayer(PipeNode):
       activation_function : the function the layer will use on the sum to compute the output value. Usually a sigmoid.
     """
 
-    def __init__(self, datasink, activation_function):
+    def __init__(self, datasink, activation_function = Sigmoid):
         super().__init__(datasink, datasink)
-        self.bias = zeros(self.input_shape)
+        self.bias = None
         self.activation_function = activation_function
+
+    def init_data(self):
+        self.bias = zeros(self.input_shape)
 
     def propagation(self, learning):
         self.output_socket.prop_data[:] += self.activation_function.function(self.input_socket.prop_data + self.bias)
@@ -47,9 +51,11 @@ class DropoutLayer(PipeNode):
     """
     def __init__(self, datasink, p):
         super().__init__(datasink, datasink)
-        self.filter = ones(self.input_shape)
-
+        self.filter = None
         self.p = p
+
+    def init_data(self):
+        self.filter = ones(self.input_shape)
 
     def propagation(self, learning = True):
         if learning:

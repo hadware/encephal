@@ -27,6 +27,10 @@ class DataSink:
     def reinit_data(self):
         pass
 
+    @property
+    def isUnknown(datasink):
+        return type(datasink) == Unknown
+
     #Compute the size of the equivalent flat 1D array
     @property
     def total_size(self):

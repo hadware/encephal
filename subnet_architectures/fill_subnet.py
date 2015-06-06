@@ -9,6 +9,22 @@ Make it possible to test easily different and new implementations
 class FillSubnet:
 
     @staticmethod
+    def Convolu(input_datasink,output_datasink):
+        subnet = Subnet()
+        convo1 = ConvolutionalConnexion(input_datasink,(5,5),ZeroPadding.VALID)
+        p1 = PerceptronLayer(Unknown)
+        n = FullConnexion(Unknown,output_datasink)
+        p2 = PerceptronLayer(output_datasink)
+
+        subnet.create_input(convo1)
+        subnet.add_after_node(convo1,p1)
+        subnet.add_after_node(p1,n)
+        subnet.add_after_node(n,p2)
+        subnet.create_output(p2)
+        return subnet
+
+
+    @staticmethod
     def Dropout(input_datasink,output_datasink,p):
         subnet = Subnet()
         #Define the datasink

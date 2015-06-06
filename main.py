@@ -13,8 +13,8 @@ test_db = MNIST("testing")
 input_datasink = learn_db.input_datasink
 output_datasink = learn_db.output_datasink
 
-test_subnet = SubnetUnknownType.Unknown2(input_datasink,output_datasink)
-#test_subnet = SubnetTopology.MLP1(input_datasink,output_datasink)
+#test_subnet = SubnetUnknownType.Unknown1(input_datasink,output_datasink)
+test_subnet = FillSubnet.Convolu(input_datasink,output_datasink)
 n = Network(test_subnet)
 
 encoder = Onehot(output_datasink)

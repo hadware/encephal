@@ -33,3 +33,7 @@ class SubnetUnknownType():
         subnet.create_input(n1)
         subnet.create_output(p2)
         return subnet
+
+    @staticmethod
+    def Unknown_manyinput(input_datasink,output_datasink):
+        subnet = Subnet()

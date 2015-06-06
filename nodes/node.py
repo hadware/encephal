@@ -47,6 +47,18 @@ class PipeNode(Node):
         self.input_node_sockets.append(InputNodeSocket(self,input_datasink))
         self.output_node_sockets.append(OutputNodeSocket(self,output_datasink))
 
+    def update_datasink(self,datasink):
+        if self.input_node_sockets[0].datasink.isUnknown:
+            self.input_node_sockets[0].datasink = type(datasink)(datasink.shape_data)
+        if self.output_node_sockets[0].datasink.isUnknown:
+            self.output_node_sockets[0].datasink = type(datasink)(datasink.shape_data)
+
+
+    def init_data(self):
+        pass
+
+
+
     def to_protobuf_message(self, index):
         """Builds and fills a PipeNode message with the data from the pipenode"""
         protobuf_message = protobuf.PipeNode()
