@@ -89,7 +89,8 @@ message SchedulerNodeLayer{
 message Graph{
     repeated SchedulerNodeLayer node_layers = 1;
     repeated Socket sockets = 2;
-    //repeated Connection connections = 3;
+    required uint32 entry_socket = 3;
+    required uint32 exit_socket = 4;
 }
 
 // ================== Used to exchange data vectors ==================

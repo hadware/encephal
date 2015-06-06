@@ -12,9 +12,11 @@ input_datasink = learn_db.input_datasink
 output_datasink = learn_db.output_datasink
 
 test_subnet = Subnet()
-FillSubnet.MLP2(test_subnet, input_datasink, output_datasink)
+FillSubnet.MLP(test_subnet, input_datasink, output_datasink)
 n = Network(test_subnet)
 with open("dump", "wb") as file:
+    graph = n.to_protobuf_message()
+    graph
     file.write(n.to_protobuf_message().SerializeToString())
 
 with open("dump", "rb") as file:

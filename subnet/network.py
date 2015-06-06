@@ -73,4 +73,8 @@ class Network:
 
                 i += 1
 
+        # setting entry and exit sockets
+        scheduled_graph_msg.entry_socket = self.input_layer.index
+        scheduled_graph_msg.exit_socket = self.output_layer.index
+
         return scheduled_graph_msg
