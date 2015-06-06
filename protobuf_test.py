@@ -14,4 +14,10 @@ output_datasink = learn_db.output_datasink
 test_subnet = Subnet()
 FillSubnet.MLP2(test_subnet, input_datasink, output_datasink)
 n = Network(test_subnet)
-print(n.to_protobuf_message())
+with open("dump", "wb") as file:
+    file.write(n.to_protobuf_message().SerializeToString())
+
+with open("dump", "rb") as file:
+    graph = protobuf.Graph()
+    graph.ParseFromString(file.read())
+    print(graph)

@@ -38,7 +38,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   name='encephal_alpha.proto',
   package='encephal_alpha',
   serialized_pb=b(
-    '\n\x14\x65ncephal_alpha.proto\x12\x0e\x65ncephal_alpha\"\x8c\x01\n\x08\x44\x61taType\x12\x12\n\ndimensions\x18\x01 \x03(\r\x12\x32\n\x04type\x18\x02 \x02(\x0e\x32$.encephal_alpha.DataType.NumericType\"8\n\x0bNumericType\x12\t\n\x05\x46LOAT\x10\x01\x12\t\n\x05INT32\x10\x02\x12\t\n\x05INT64\x10\x03\x12\x08\n\x04\x42OOL\x10\x04\"V\n\x13PerceptronLayerData\x12?\n\x13\x61\x63tivation_function\x18\x01 \x02(\x0e\x32\".encephal_alpha.ActivationFunction\"\xae\x01\n\x16\x43onvolutionalLayerData\x12L\n\x0czero_padding\x18\x01 \x02(\x0e\x32\x36.encephal_alpha.ConvolutionalLayerData.ZeroPaddingType\x12\x14\n\x0ckernel_shape\x18\x02 \x03(\r\"0\n\x0fZeroPaddingType\x12\t\n\x05VALID\x10\x01\x12\x08\n\x04SAME\x10\x02\x12\x08\n\x04\x46ULL\x10\x03\"\x1d\n\x10\x44ropoutLayerData\x12\t\n\x01p\x18\x01 \x02(\x02\"\x18\n\x16\x46ullConnexionLayerData\"\x9a\x05\n\x08PipeNode\x12\r\n\x05index\x18\x01 \x02(\r\x12\x30\n\x0einput_datatype\x18\x02 \x02(\x0b\x32\x18.encephal_alpha.DataType\x12\x31\n\x0foutput_datatype\x18\x03 \x02(\x0b\x32\x18.encephal_alpha.DataType\x12\x1a\n\x12input_socket_index\x18\x04 \x02(\r\x12\x1b\n\x13output_socket_index\x18\x05 \x02(\r\x12\x38\n\tnode_type\x18\x06 \x02(\x0e\x32%.encephal_alpha.PipeNode.PipeNodeType\x12\x33\n\x04\x64\x61ta\x18\x07 \x02(\x0b\x32%.encephal_alpha.PipeNode.PipeNodeData\x1a\x8b\x02\n\x0cPipeNodeData\x12>\n\x0e\x66ull_connexion\x18\x01 \x01(\x0b\x32&.encephal_alpha.FullConnexionLayerData\x12\x37\n\rdropout_layer\x18\x02 \x01(\x0b\x32 .encephal_alpha.DropoutLayerData\x12=\n\x10perceptron_layer\x18\x03 \x01(\x0b\x32#.encephal_alpha.PerceptronLayerData\x12\x43\n\x13\x63onvolutional_layer\x18\x04 \x01(\x0b\x32&.encephal_alpha.ConvolutionalLayerData\"d\n\x0cPipeNodeType\x12\x12\n\x0e\x46ULL_CONNEXION\x10\x01\x12\x11\n\rDROPOUT_LAYER\x10\x02\x12\x14\n\x10PERCEPTRON_LAYER\x10\x03\x12\x17\n\x13\x43ONVOLUTIONAL_LAYER\x10\x04\"6\n\nConnection\x12\x14\n\x0csocket_index\x18\x01 \x02(\r\x12\x12\n\nnode_index\x18\x02 \x02(\r\"C\n\x06Socket\x12\r\n\x05index\x18\x01 \x02(\r\x12*\n\x08\x64\x61tatype\x18\x02 \x02(\x0b\x32\x18.encephal_alpha.DataType\"=\n\x12SchedulerNodeLayer\x12\'\n\x05nodes\x18\x01 \x03(\x0b\x32\x18.encephal_alpha.PipeNode\"i\n\x05Graph\x12\x37\n\x0bnode_layers\x18\x01 \x03(\x0b\x32\".encephal_alpha.SchedulerNodeLayer\x12\'\n\x07sockets\x18\x02 \x03(\x0b\x32\x16.encephal_alpha.Socket\"d\n\tDataArray\x12\x14\n\x0c\x66loat_vector\x18\x01 \x03(\x02\x12\x15\n\ruint32_vector\x18\x02 \x03(\r\x12\x15\n\ruint64_vector\x18\x03 \x03(\x04\x12\x13\n\x0b\x62ool_vector\x18\x04 \x03(\x08\"\x9b\x02\n\x0fTrainingDataset\x12\x30\n\x0einput_datatype\x18\x01 \x02(\x0b\x32\x18.encephal_alpha.DataType\x12\x31\n\x0foutput_datatype\x18\x02 \x02(\x0b\x32\x18.encephal_alpha.DataType\x12>\n\x07\x65ntries\x18\x03 \x03(\x0b\x32-.encephal_alpha.TrainingDataset.TrainingEntry\x1a\x63\n\rTrainingEntry\x12(\n\x05input\x18\x01 \x02(\x0b\x32\x19.encephal_alpha.DataArray\x12(\n\x05label\x18\x02 \x02(\x0b\x32\x19.encephal_alpha.DataArray\"n\n\x0eTestingDataset\x12\x30\n\x0einput_datatype\x18\x01 \x02(\x0b\x32\x18.encephal_alpha.DataType\x12*\n\x07\x65ntries\x18\x02 \x03(\x0b\x32\x19.encephal_alpha.DataArray*;\n\x12\x41\x63tivationFunction\x12\x0b\n\x07NOTHING\x10\x01\x12\x0b\n\x07SIGMOID\x10\x02\x12\x0b\n\x07SOFTMAX\x10\x03'))
+    '\n\x14\x65ncephal_alpha.proto\x12\x0e\x65ncephal_alpha\"\x8c\x01\n\x08\x44\x61taType\x12\x12\n\ndimensions\x18\x01 \x03(\r\x12\x32\n\x04type\x18\x02 \x02(\x0e\x32$.encephal_alpha.DataType.NumericType\"8\n\x0bNumericType\x12\t\n\x05\x46LOAT\x10\x01\x12\t\n\x05INT32\x10\x02\x12\t\n\x05INT64\x10\x03\x12\x08\n\x04\x42OOL\x10\x04\"V\n\x13PerceptronLayerData\x12?\n\x13\x61\x63tivation_function\x18\x01 \x02(\x0e\x32\".encephal_alpha.ActivationFunction\"\xae\x01\n\x16\x43onvolutionalLayerData\x12L\n\x0czero_padding\x18\x01 \x02(\x0e\x32\x36.encephal_alpha.ConvolutionalLayerData.ZeroPaddingType\x12\x14\n\x0ckernel_shape\x18\x02 \x03(\r\"0\n\x0fZeroPaddingType\x12\t\n\x05VALID\x10\x01\x12\x08\n\x04SAME\x10\x02\x12\x08\n\x04\x46ULL\x10\x03\"\x1d\n\x10\x44ropoutLayerData\x12\t\n\x01p\x18\x01 \x02(\x02\"\x18\n\x16\x46ullConnexionLayerData\"\x9a\x05\n\x08PipeNode\x12\r\n\x05index\x18\x01 \x02(\r\x12\x30\n\x0einput_datatype\x18\x02 \x02(\x0b\x32\x18.encephal_alpha.DataType\x12\x31\n\x0foutput_datatype\x18\x03 \x02(\x0b\x32\x18.encephal_alpha.DataType\x12\x1a\n\x12input_socket_index\x18\x04 \x02(\r\x12\x1b\n\x13output_socket_index\x18\x05 \x02(\r\x12\x38\n\tnode_type\x18\x06 \x02(\x0e\x32%.encephal_alpha.PipeNode.PipeNodeType\x12\x33\n\x04\x64\x61ta\x18\x07 \x02(\x0b\x32%.encephal_alpha.PipeNode.PipeNodeData\x1a\x8b\x02\n\x0cPipeNodeData\x12>\n\x0e\x66ull_connexion\x18\x01 \x01(\x0b\x32&.encephal_alpha.FullConnexionLayerData\x12\x37\n\rdropout_layer\x18\x02 \x01(\x0b\x32 .encephal_alpha.DropoutLayerData\x12=\n\x10perceptron_layer\x18\x03 \x01(\x0b\x32#.encephal_alpha.PerceptronLayerData\x12\x43\n\x13\x63onvolutional_layer\x18\x04 \x01(\x0b\x32&.encephal_alpha.ConvolutionalLayerData\"d\n\x0cPipeNodeType\x12\x12\n\x0e\x46ULL_CONNEXION\x10\x01\x12\x11\n\rDROPOUT_LAYER\x10\x02\x12\x14\n\x10PERCEPTRON_LAYER\x10\x03\x12\x17\n\x13\x43ONVOLUTIONAL_LAYER\x10\x04\"6\n\nConnection\x12\x14\n\x0csocket_index\x18\x01 \x02(\r\x12\x12\n\nnode_index\x18\x02 \x02(\r\"C\n\x06Socket\x12\r\n\x05index\x18\x01 \x02(\r\x12*\n\x08\x64\x61tatype\x18\x02 \x02(\x0b\x32\x18.encephal_alpha.DataType\"=\n\x12SchedulerNodeLayer\x12\'\n\x05nodes\x18\x01 \x03(\x0b\x32\x18.encephal_alpha.PipeNode\"i\n\x05Graph\x12\x37\n\x0bnode_layers\x18\x01 \x03(\x0b\x32\".encephal_alpha.SchedulerNodeLayer\x12\'\n\x07sockets\x18\x02 \x03(\x0b\x32\x16.encephal_alpha.Socket\"d\n\tDataArray\x12\x14\n\x0c\x66loat_vector\x18\x01 \x03(\x02\x12\x15\n\ruint32_vector\x18\x02 \x03(\r\x12\x15\n\ruint64_vector\x18\x03 \x03(\x04\x12\x13\n\x0b\x62ool_vector\x18\x04 \x03(\x08\"\xcc\x01\n\x11TrainingDataEntry\x12\x30\n\x0einput_datatype\x18\x01 \x02(\x0b\x32\x18.encephal_alpha.DataType\x12\x31\n\x0foutput_datatype\x18\x02 \x02(\x0b\x32\x18.encephal_alpha.DataType\x12(\n\x05input\x18\x03 \x02(\x0b\x32\x19.encephal_alpha.DataArray\x12(\n\x05label\x18\x04 \x02(\x0b\x32\x19.encephal_alpha.DataArray\"p\n\x10TestingDataEntry\x12\x30\n\x0einput_datatype\x18\x01 \x02(\x0b\x32\x18.encephal_alpha.DataType\x12*\n\x07\x65ntries\x18\x02 \x02(\x0b\x32\x19.encephal_alpha.DataArray\"\xdd\x01\n\tDataEntry\x12\x35\n\x04type\x18\x01 \x02(\x0e\x32\'.encephal_alpha.DataEntry.DataEntryType\x12\x39\n\x0etrainDataEntry\x18\x02 \x01(\x0b\x32!.encephal_alpha.TrainingDataEntry\x12\x38\n\rtestDataEntry\x18\x03 \x01(\x0b\x32!.encephal_alpha.TrainingDataEntry\"$\n\rDataEntryType\x12\t\n\x05TRAIN\x10\x01\x12\x08\n\x04TEST\x10\x02*;\n\x12\x41\x63tivationFunction\x12\x0b\n\x07NOTHING\x10\x01\x12\x0b\n\x07SIGMOID\x10\x02\x12\x0b\n\x07SOFTMAX\x10\x03'))
 
 _ACTIVATIONFUNCTION = _descriptor.EnumDescriptor(
   name='ActivationFunction',
@@ -61,8 +61,8 @@ _ACTIVATIONFUNCTION = _descriptor.EnumDescriptor(
   ],
   containing_type=None,
   options=None,
-  serialized_start=1969,
-  serialized_end=2028,
+  serialized_start=2116,
+  serialized_end=2175,
 )
 
 ActivationFunction = enum_type_wrapper.EnumTypeWrapper(_ACTIVATIONFUNCTION)
@@ -152,6 +152,27 @@ _PIPENODE_PIPENODETYPE = _descriptor.EnumDescriptor(
   options=None,
   serialized_start=1072,
   serialized_end=1172,
+)
+
+_DATAENTRY_DATAENTRYTYPE = _descriptor.EnumDescriptor(
+  name='DataEntryType',
+  full_name='encephal_alpha.DataEntry.DataEntryType',
+  filename=None,
+  file=DESCRIPTOR,
+  values=[
+    _descriptor.EnumValueDescriptor(
+      name='TRAIN', index=0, number=1,
+      options=None,
+      type=None),
+    _descriptor.EnumValueDescriptor(
+      name='TEST', index=1, number=2,
+      options=None,
+      type=None),
+  ],
+  containing_type=None,
+  options=None,
+  serialized_start=2078,
+  serialized_end=2114,
 )
 
 
@@ -604,24 +625,37 @@ _DATAARRAY = _descriptor.Descriptor(
   serialized_end=1569,
 )
 
-
-_TRAININGDATASET_TRAININGENTRY = _descriptor.Descriptor(
-  name='TrainingEntry',
-  full_name='encephal_alpha.TrainingDataset.TrainingEntry',
+_TRAININGDATAENTRY = _descriptor.Descriptor(
+  name='TrainingDataEntry',
+  full_name='encephal_alpha.TrainingDataEntry',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='input', full_name='encephal_alpha.TrainingDataset.TrainingEntry.input', index=0,
+      name='input_datatype', full_name='encephal_alpha.TrainingDataEntry.input_datatype', index=0,
       number=1, type=11, cpp_type=10, label=2,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='label', full_name='encephal_alpha.TrainingDataset.TrainingEntry.label', index=1,
+      name='output_datatype', full_name='encephal_alpha.TrainingDataEntry.output_datatype', index=1,
       number=2, type=11, cpp_type=10, label=2,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='input', full_name='encephal_alpha.TrainingDataEntry.input', index=2,
+      number=3, type=11, cpp_type=10, label=2,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='label', full_name='encephal_alpha.TrainingDataEntry.label', index=3,
+      number=4, type=11, cpp_type=10, label=2,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
@@ -630,75 +664,33 @@ _TRAININGDATASET_TRAININGENTRY = _descriptor.Descriptor(
   extensions=[
   ],
   nested_types=[],
-  enum_types=[
-  ],
-  options=None,
-  is_extendable=False,
-  extension_ranges=[],
-  serialized_start=1756,
-  serialized_end=1855,
-)
-
-_TRAININGDATASET = _descriptor.Descriptor(
-  name='TrainingDataset',
-  full_name='encephal_alpha.TrainingDataset',
-  filename=None,
-  file=DESCRIPTOR,
-  containing_type=None,
-  fields=[
-    _descriptor.FieldDescriptor(
-      name='input_datatype', full_name='encephal_alpha.TrainingDataset.input_datatype', index=0,
-      number=1, type=11, cpp_type=10, label=2,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='output_datatype', full_name='encephal_alpha.TrainingDataset.output_datatype', index=1,
-      number=2, type=11, cpp_type=10, label=2,
-      has_default_value=False, default_value=None,
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-    _descriptor.FieldDescriptor(
-      name='entries', full_name='encephal_alpha.TrainingDataset.entries', index=2,
-      number=3, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
-      message_type=None, enum_type=None, containing_type=None,
-      is_extension=False, extension_scope=None,
-      options=None),
-  ],
-  extensions=[
-  ],
-  nested_types=[_TRAININGDATASET_TRAININGENTRY, ],
   enum_types=[
   ],
   options=None,
   is_extendable=False,
   extension_ranges=[],
   serialized_start=1572,
-  serialized_end=1855,
+  serialized_end=1776,
 )
 
-
-_TESTINGDATASET = _descriptor.Descriptor(
-  name='TestingDataset',
-  full_name='encephal_alpha.TestingDataset',
+_TESTINGDATAENTRY = _descriptor.Descriptor(
+  name='TestingDataEntry',
+  full_name='encephal_alpha.TestingDataEntry',
   filename=None,
   file=DESCRIPTOR,
   containing_type=None,
   fields=[
     _descriptor.FieldDescriptor(
-      name='input_datatype', full_name='encephal_alpha.TestingDataset.input_datatype', index=0,
+      name='input_datatype', full_name='encephal_alpha.TestingDataEntry.input_datatype', index=0,
       number=1, type=11, cpp_type=10, label=2,
       has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
     _descriptor.FieldDescriptor(
-      name='entries', full_name='encephal_alpha.TestingDataset.entries', index=1,
-      number=2, type=11, cpp_type=10, label=3,
-      has_default_value=False, default_value=[],
+      name='entries', full_name='encephal_alpha.TestingDataEntry.entries', index=1,
+      number=2, type=11, cpp_type=10, label=2,
+      has_default_value=False, default_value=None,
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       options=None),
@@ -711,8 +703,50 @@ _TESTINGDATASET = _descriptor.Descriptor(
   options=None,
   is_extendable=False,
   extension_ranges=[],
-  serialized_start=1857,
-  serialized_end=1967,
+  serialized_start=1778,
+  serialized_end=1890,
+)
+
+_DATAENTRY = _descriptor.Descriptor(
+  name='DataEntry',
+  full_name='encephal_alpha.DataEntry',
+  filename=None,
+  file=DESCRIPTOR,
+  containing_type=None,
+  fields=[
+    _descriptor.FieldDescriptor(
+      name='type', full_name='encephal_alpha.DataEntry.type', index=0,
+      number=1, type=14, cpp_type=8, label=2,
+      has_default_value=False, default_value=1,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='trainDataEntry', full_name='encephal_alpha.DataEntry.trainDataEntry', index=1,
+      number=2, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+    _descriptor.FieldDescriptor(
+      name='testDataEntry', full_name='encephal_alpha.DataEntry.testDataEntry', index=2,
+      number=3, type=11, cpp_type=10, label=1,
+      has_default_value=False, default_value=None,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      options=None),
+  ],
+  extensions=[
+  ],
+  nested_types=[],
+  enum_types=[
+    _DATAENTRY_DATAENTRYTYPE,
+  ],
+  options=None,
+  is_extendable=False,
+  extension_ranges=[],
+  serialized_start=1893,
+  serialized_end=2114,
 )
 
 _DATATYPE.fields_by_name['type'].enum_type = _DATATYPE_NUMERICTYPE
@@ -734,14 +768,16 @@ _SOCKET.fields_by_name['datatype'].message_type = _DATATYPE
 _SCHEDULERNODELAYER.fields_by_name['nodes'].message_type = _PIPENODE
 _GRAPH.fields_by_name['node_layers'].message_type = _SCHEDULERNODELAYER
 _GRAPH.fields_by_name['sockets'].message_type = _SOCKET
-_TRAININGDATASET_TRAININGENTRY.fields_by_name['input'].message_type = _DATAARRAY
-_TRAININGDATASET_TRAININGENTRY.fields_by_name['label'].message_type = _DATAARRAY
-_TRAININGDATASET_TRAININGENTRY.containing_type = _TRAININGDATASET;
-_TRAININGDATASET.fields_by_name['input_datatype'].message_type = _DATATYPE
-_TRAININGDATASET.fields_by_name['output_datatype'].message_type = _DATATYPE
-_TRAININGDATASET.fields_by_name['entries'].message_type = _TRAININGDATASET_TRAININGENTRY
-_TESTINGDATASET.fields_by_name['input_datatype'].message_type = _DATATYPE
-_TESTINGDATASET.fields_by_name['entries'].message_type = _DATAARRAY
+_TRAININGDATAENTRY.fields_by_name['input_datatype'].message_type = _DATATYPE
+_TRAININGDATAENTRY.fields_by_name['output_datatype'].message_type = _DATATYPE
+_TRAININGDATAENTRY.fields_by_name['input'].message_type = _DATAARRAY
+_TRAININGDATAENTRY.fields_by_name['label'].message_type = _DATAARRAY
+_TESTINGDATAENTRY.fields_by_name['input_datatype'].message_type = _DATATYPE
+_TESTINGDATAENTRY.fields_by_name['entries'].message_type = _DATAARRAY
+_DATAENTRY.fields_by_name['type'].enum_type = _DATAENTRY_DATAENTRYTYPE
+_DATAENTRY.fields_by_name['trainDataEntry'].message_type = _TRAININGDATAENTRY
+_DATAENTRY.fields_by_name['testDataEntry'].message_type = _TRAININGDATAENTRY
+_DATAENTRY_DATAENTRYTYPE.containing_type = _DATAENTRY;
 DESCRIPTOR.message_types_by_name['DataType'] = _DATATYPE
 DESCRIPTOR.message_types_by_name['PerceptronLayerData'] = _PERCEPTRONLAYERDATA
 DESCRIPTOR.message_types_by_name['ConvolutionalLayerData'] = _CONVOLUTIONALLAYERDATA
@@ -753,8 +789,9 @@ DESCRIPTOR.message_types_by_name['Socket'] = _SOCKET
 DESCRIPTOR.message_types_by_name['SchedulerNodeLayer'] = _SCHEDULERNODELAYER
 DESCRIPTOR.message_types_by_name['Graph'] = _GRAPH
 DESCRIPTOR.message_types_by_name['DataArray'] = _DATAARRAY
-DESCRIPTOR.message_types_by_name['TrainingDataset'] = _TRAININGDATASET
-DESCRIPTOR.message_types_by_name['TestingDataset'] = _TESTINGDATASET
+DESCRIPTOR.message_types_by_name['TrainingDataEntry'] = _TRAININGDATAENTRY
+DESCRIPTOR.message_types_by_name['TestingDataEntry'] = _TESTINGDATAENTRY
+DESCRIPTOR.message_types_by_name['DataEntry'] = _DATAENTRY
 
 DataType = _reflection.GeneratedProtocolMessageType('DataType', (_message.Message,),
                                                     {
@@ -828,23 +865,23 @@ DataArray = _reflection.GeneratedProtocolMessageType('DataArray', (_message.Mess
                                                        # @@protoc_insertion_point(class_scope:encephal_alpha.DataArray)
                                                      })
 
-TrainingDataset = _reflection.GeneratedProtocolMessageType('TrainingDataset', (_message.Message,),
-                                                           {
-                                                             'DESCRIPTOR': _TRAININGDATASET,
-                                                             'TrainingEntry': _reflection.GeneratedProtocolMessageType(
-                                                               'TrainingEntry', (_message.Message,),
-                                                               {
-                                                                 'DESCRIPTOR': _TRAININGDATASET_TRAININGENTRY,
-                                                                 # @@protoc_insertion_point(class_scope:encephal_alpha.TrainingDataset.TrainingEntry)
-                                                               }),
-                                                             # @@protoc_insertion_point(class_scope:encephal_alpha.TrainingDataset)
-                                                           })
+TrainingDataEntry = _reflection.GeneratedProtocolMessageType('TrainingDataEntry', (_message.Message,),
+                                                             {
+                                                               'DESCRIPTOR': _TRAININGDATAENTRY,
+                                                               # @@protoc_insertion_point(class_scope:encephal_alpha.TrainingDataEntry)
+                                                             })
 
-TestingDataset = _reflection.GeneratedProtocolMessageType('TestingDataset', (_message.Message,),
-                                                          {
-                                                            'DESCRIPTOR': _TESTINGDATASET,
-                                                            # @@protoc_insertion_point(class_scope:encephal_alpha.TestingDataset)
-                                                          })
+TestingDataEntry = _reflection.GeneratedProtocolMessageType('TestingDataEntry', (_message.Message,),
+                                                            {
+                                                              'DESCRIPTOR': _TESTINGDATAENTRY,
+                                                              # @@protoc_insertion_point(class_scope:encephal_alpha.TestingDataEntry)
+                                                            })
+
+DataEntry = _reflection.GeneratedProtocolMessageType('DataEntry', (_message.Message,),
+                                                     {
+                                                       'DESCRIPTOR': _DATAENTRY,
+                                                       # @@protoc_insertion_point(class_scope:encephal_alpha.DataEntry)
+                                                     })
 
 
 # @@protoc_insertion_point(module_scope)

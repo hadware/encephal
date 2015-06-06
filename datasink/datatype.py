@@ -11,6 +11,10 @@ class DataType:
         """Returns true if the datatypes from the other datastructure match recursively"""
         pass
 
+    def base_type(self):
+        """Returns the "end" type of the datatype, meaning, a leaf type, such as an int, float, bool"""
+        pass
+
 class Vector(DataType):
 
     def __init__(self, child_datatype, dimension):
@@ -31,6 +35,13 @@ class Vector(DataType):
                 return False
         else:
             return False
+
+    def base_type(self):
+        if self.child_datatype in (float, int, bool):
+            return self.child_datatype
+        else:
+            return self.child_datatype.base_type()
+
 
 
 class TimeSeries(DataType):

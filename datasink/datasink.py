@@ -38,6 +38,10 @@ class DataSink:
     def to_protobuff_message(self, datatype_message):
         datatype_message.dimensions.extend(self.shape_data)
 
+    @property
+    def base_type(self):
+        return self.type.base_type()
+
 
 class Float1D(DataSink):
 
