@@ -35,7 +35,7 @@ int performDataEntry(CudaNetwork &network, encephal_alpha::DataEntry const &entr
 int main(int argc, char *argv[]) {
 
 	if (argc < 2) {
-		fprintf(stderr, "Erreur spécifier un fichier de description de graphe en argument.");
+		fprintf(stderr, "Erreur spécifier un fichier de description de graphe en argument.\n");
 		return -1;
 	}
 

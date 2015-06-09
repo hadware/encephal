@@ -1,37 +1,17 @@
 #ifndef _CUDA_NETWORK_H
 #define _CUDA_NETWORK_H
 
-#include <inttypes.h>
 #include "NNetworkDescriptor.h"
 #include "cuda_runtime.h"
 
-#define DTYPE float
-
-typedef struct buffer_t {
-	uint32_t size;
-	DTYPE * propagation_calculated;
-	DTYPE * propagation_valid;
-	DTYPE * back_propagation;
-} buffer;
-
-
-typedef struct node_t {
-	type_node type;
-	uint32_t indice;
-} node;
-
-typedef struct FC_t {
-	DTYPE * matrix;
-} FC;
-
-typedef struct PCPTR_t {
-	DTYPE * bias;
-} PCPTR;
+#include "CudaType.h"
 
 class CudaNetwork {
 public:
-	CudaNetwork(){};
-	virtual ~CudaNetwork(){};
+	CudaNetwork() : input_size(0), output_size(0),
+    node_number(0), maxdim(0), GPUbuffer_tab(NULL), GPUnode_tab(NULL), GPUFC_tab(NULL), GPUPCPTR_tab(NULL), GPUexpected(NULL) {};
+	
+    virtual ~CudaNetwork(){};
 
 	void setInput(DTYPE const * buffer);
 	uint32_t getInputSize();
@@ -48,20 +28,20 @@ public:
 private:
 	CudaNetwork& operator=(const CudaNetwork& other) = delete;
 
-	uint32_t input_size = 0;
-	uint32_t output_size = 0;
+	uint32_t input_size;
+	uint32_t output_size;
 
-	uint32_t node_number = 0;
-	uint32_t maxdim = 0;
+	uint32_t node_number;
+	uint32_t maxdim;
 	std::vector<uint32_t> buffer_size;
 	std::vector<type_node> node_type;
 	std::vector<uint32_t> index;
-	buffer * GPUbuffer_tab = NULL;
-	node * GPUnode_tab = NULL;
-	FC * GPUFC_tab = NULL;
-	PCPTR * GPUPCPTR_tab = NULL;
+	buffer * GPUbuffer_tab;
+	node * GPUnode_tab;
+	FC * GPUFC_tab;
+	PCPTR * GPUPCPTR_tab;
 
-	DTYPE * GPUexpected = NULL;
+	DTYPE * GPUexpected;
 
 	cudaError_t allocNetwork(const NNetworkDescriptor& network);
 	cudaError_t initNetwork(const NNetworkDescriptor& network);

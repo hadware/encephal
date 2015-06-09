@@ -1,16 +1,16 @@
 #include "cuda_runtime.h"
 #include "device_launch_parameters.h"
+#include "device_functions.h"
+#include <vector>
 
 #ifndef __CUDACC__
 #define __CUDACC__
 #endif
-#include "CudaNetwork.h"
-#include "KernelNNetwork.h"
+#include "CudaType.h"
 
-#define SHAREDSIZE ((16 * 1024)/sizeof(DTYPE))
+#define SHAREDSIZE ((4 * 1024)/sizeof(DTYPE))
 
 extern __device__ void __syncthreads();
-extern __device__ float __expf(float f);
 
 __global__ void kernelBuffer_propagation(buffer * buffers) {
 	int id_buf = blockIdx.x;
