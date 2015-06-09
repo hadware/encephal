@@ -14,7 +14,9 @@ static int reverseInt(int i) {
 }
 
 ImageDB * readMNIST_db(int number_image, const char * filename) {
-	FILE * file = fopen(filename, "rb");
+
+printf("%s\n", filename);
+    FILE * file = fopen(filename, "rb");
 
 	if (file == NULL) {
 		perror("Impossible d'ouvrir le fichier");

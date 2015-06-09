@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include <limits.h>
 #include "CudaNetwork.h"
-extern "C" {
+//extern "C" {
 	#include "MNISTLoader.h"
-}
+//}
 
 DTYPE * encoder(DTYPE * buffer, size_t taille, int value) {
 	memset(buffer, 0, taille);
@@ -45,12 +45,12 @@ int main(int argc, char *argv[]) {
 	descriptor.nodes.push_back(PERCEPTRON);
 	descriptor.nodes.push_back(FCONNECTION);
 	descriptor.nodes.push_back(PERCEPTRON);
-
+/*
 	descriptor.connection.push_back(1);
 	descriptor.connection.push_back(2);
 	descriptor.connection.push_back(3);
 	descriptor.connection.push_back(4);
-	
+*/	
 	descriptor.buffer_size.push_back(784);
 	descriptor.buffer_size.push_back(200);
 	descriptor.buffer_size.push_back(200);
@@ -59,16 +59,14 @@ int main(int argc, char *argv[]) {
 
 	CudaNetwork network;
 	network.loadNetwork(descriptor);
-	uint32_t size_in = network.getInputSize();
 	uint32_t size_out = network.getOutputSize();
 
 	DTYPE * buffer_out = (DTYPE*)malloc(sizeof(DTYPE) * size_out);
-	DTYPE * buffer_in = (DTYPE*) malloc(sizeof(DTYPE) * size_in);
 	
 	DTYPE * buffer_learning = (DTYPE*)malloc(sizeof(DTYPE) * size_out);
 
-	ImageDB * db_learn = readMNIST_db(60000, "../MNIST/train-images.idx3-ubyte");
-	addMNISTLabel(db_learn, "../MNIST/train-labels.idx1-ubyte");
+	ImageDB * db_learn = readMNIST_db(60000, "../MNIST/train-images-idx3-ubyte");
+	addMNISTLabel(db_learn, "../MNIST/train-labels-idx1-ubyte");
 	clock_t start = clock(), diff;
 
 	encoder(buffer_learning, sizeof(DTYPE) * size_out, db_learn->db[0].label);
@@ -106,8 +104,8 @@ int main(int argc, char *argv[]) {
 
 	printf("---------- Test --------- \n");
 
-	ImageDB * db_test = readMNIST_db(1000, "MNIST/t10k-images.idx3-ubyte");
-	addMNISTLabel(db_test, "MNIST/t10k-labels.idx1-ubyte");
+	ImageDB * db_test = readMNIST_db(1000, "../MNIST/t10k-images-idx3-ubyte");
+	addMNISTLabel(db_test, "../MNIST/t10k-labels-idx1-ubyte");
 
 	int accum = 0;
 	for (int32_t i = 0; i < db_test->number; i++) {

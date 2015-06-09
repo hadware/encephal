@@ -4,10 +4,10 @@
 #include <vector>
 #include <inttypes.h>
 #include "encephal_alpha.pb.h"
+#include "CudaType.h"
 
 using namespace std;
 
-typedef enum type_node_t { FCONNECTION, PERCEPTRON } type_node;
 
 class NNetworkDescriptor {
 public:
