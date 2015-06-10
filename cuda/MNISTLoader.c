@@ -61,6 +61,7 @@ printf("%s\n", filename);
 			}
 		}
 	}
+	fclose(file);
 
 	return db;
 }
@@ -80,6 +81,8 @@ void addMNISTLabel(ImageDB * db, const char * filename) {
 		fread(&(db->db[i].label), sizeof(unsigned char), 1, file);
 		assert(db->db[i].label < 10);
 	}
+
+	fclose(file);
 }
 
 void printImage(const LImage * img, size_t size) {

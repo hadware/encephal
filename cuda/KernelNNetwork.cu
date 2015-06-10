@@ -8,7 +8,7 @@
 #endif
 #include "CudaType.h"
 
-#define SHAREDSIZE ((4 * 1024)/sizeof(DTYPE))
+#define SHAREDSIZE ((16 * 1024)/sizeof(DTYPE))
 
 extern __device__ void __syncthreads();
 

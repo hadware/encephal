@@ -3,9 +3,14 @@
 #include <stdlib.h>
 #include <limits.h>
 #include "CudaNetwork.h"
-//extern "C" {
-	#include "MNISTLoader.h"
-//}
+#ifdef __cplusplus
+extern "C" {
+#endif
+#include "MNISTLoader.h"
+#ifdef __cplusplus
+}
+#endif
+
 
 DTYPE * encoder(DTYPE * buffer, size_t taille, int value) {
 	memset(buffer, 0, taille);
@@ -45,15 +50,10 @@ int main(int argc, char *argv[]) {
 	descriptor.nodes.push_back(PERCEPTRON);
 	descriptor.nodes.push_back(FCONNECTION);
 	descriptor.nodes.push_back(PERCEPTRON);
-/*
-	descriptor.connection.push_back(1);
-	descriptor.connection.push_back(2);
-	descriptor.connection.push_back(3);
-	descriptor.connection.push_back(4);
-*/	
+
 	descriptor.buffer_size.push_back(784);
-	descriptor.buffer_size.push_back(200);
-	descriptor.buffer_size.push_back(200);
+	descriptor.buffer_size.push_back(5);
+	descriptor.buffer_size.push_back(5);
 	descriptor.buffer_size.push_back(10);
 	descriptor.buffer_size.push_back(10);
 
@@ -104,7 +104,7 @@ int main(int argc, char *argv[]) {
 
 	printf("---------- Test --------- \n");
 
-	ImageDB * db_test = readMNIST_db(1000, "../MNIST/t10k-images-idx3-ubyte");
+	ImageDB * db_test = readMNIST_db(10000, "../MNIST/t10k-images-idx3-ubyte");
 	addMNISTLabel(db_test, "../MNIST/t10k-labels-idx1-ubyte");
 
 	int accum = 0;

@@ -13,15 +13,47 @@ public:
 	
     virtual ~CudaNetwork(){};
 
+	/*
+	* Define the input of the network (in the input buffer of the first node)
+	* This function do a blocking cudaMemCpy.
+	*/
 	void setInput(DTYPE const * buffer);
-	uint32_t getInputSize();
-	uint32_t getOutputSize();
+
+	/*
+	* Retrieve the current output of the network (the data in the output buffer of the last node)
+	* This function do a blocking cudaMemCpy
+	*/
 	void getOutput(DTYPE * buffer);
+
+	/*
+	* Return the size of the input buffer
+	*/
+	uint32_t getInputSize();
+
+	/*
+	* Return the size of the output buffer
+	*/
+	uint32_t getOutputSize();
+
+	/*
+	* Load a network on the device described by the NNetworkDescriptor.
+	* Allocate and init the network on GPU memory. 
+	*/
 	cudaError_t loadNetwork(const NNetworkDescriptor& network);
 
+	/*
+	* Run a propagation phase on the device.
+	*/
 	void propagation();
+
+	/*
+	* Run a learning phase on the device.
+	*/
 	void learning(DTYPE const * expected, DTYPE alpha);
 
+	/*
+	* Synchronize the device (wait that all pending operation are performed)
+	*/
 	void wait_finish();
 
 
