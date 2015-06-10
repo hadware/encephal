@@ -1,7 +1,7 @@
 __author__ = 'lrx'
 
 from subnet_architectures.subnet_classic import *
-
+from subnet_architectures.subnet_architecture import *
 """
 Class to choose how to test for different topologies.
 Subnet in series, Subnet of Subnet or even Subnet in Parallel
@@ -9,10 +9,10 @@ Subnet in series, Subnet of Subnet or even Subnet in Parallel
 class SubnetTopology:
 
     @staticmethod
-    def MLP1(input_datasink,output_datasink):
+    def MLP1(input_datasink,output_datasink,n):
         subnet = Subnet()
         #Define the datasink
-        hidden_datasink = Float1D([200])
+        hidden_datasink = Float1D([n])
         #Create the pipe nodes
         output_layer = PerceptronLayer(output_datasink, Sigmoid)
         hidden_layer = PerceptronLayer(hidden_datasink, Sigmoid)
@@ -26,6 +26,34 @@ class SubnetTopology:
         subnet.create_input(connexion1)
         subnet.create_output(output_layer)
         return subnet
+
+    @staticmethod
+    def MLP1(input_datasink,output_datasink,n,L,p,dropout = 0):
+        hidden_datasink = Float1D([n])
+        #Create the pipe nodes
+        list_node = []
+        list_node.append(SubnetClassic.FullConnexion_PerceptronLayer_generator(input_datasink,hidden_datasink))
+        for l in range(L-1):
+            if dropout == 1:
+                list_node.append(DropoutLayer(hidden_datasink,p))
+                print('here')
+            list_node.append(SubnetClassic.FullConnexion_PerceptronLayer_generator(hidden_datasink,hidden_datasink))
+        if dropout == 1:
+            list_node.append(DropoutLayer(hidden_datasink,p))
+            print('here')
+        list_node.append(SubnetClassic.FullConnexion_PerceptronLayer_generator(hidden_datasink,output_datasink))
+        return SubnetArchitecture.Sequencing(list_node)
+
+    @staticmethod
+    def DeepMLP(input_datasink,output_datasink,size_hidden_layer,nb_layers):
+        hidden_datasink = Float1D([size_hidden_layer])
+        list = []
+        list.append(SubnetClassic.FullConnexion_PerceptronLayer_generator(input_datasink,hidden_datasink))
+        for i in range(nb_layers-1):
+            hidden_datasink = Float1D([size_hidden_layer])
+            list.append(SubnetClassic.FullConnexion_PerceptronLayer_generator(hidden_datasink,hidden_datasink))
+        list.append(SubnetClassic.FullConnexion_PerceptronLayer_generator(hidden_datasink,output_datasink))
+        return SubnetArchitecture.Sequencing(list)
 
     @staticmethod
     def MLP2(input_datasink,output_datasink):
@@ -43,8 +71,8 @@ class SubnetTopology:
         #Define the datasink
         hidden_datasink = Float1D([200])
         #Define the subnets
-        s1 = ClassicSubnet.FullConnexion_PerceptronLayer(input_datasink,hidden_datasink)
-        s2 = ClassicSubnet.FullConnexion_PerceptronLayer(hidden_datasink,output_datasink)
+        s1 = SubnetClassic.FullConnexion_PerceptronLayer(input_datasink,hidden_datasink)
+        s2 = SubnetClassic.FullConnexion_PerceptronLayer(hidden_datasink,output_datasink)
         #Connect the subnets
         subnet.connect_nodes(s1,s2)
         subnet.create_input(s1)

@@ -24,6 +24,11 @@ All the tests will classified in different sections:
     -For the moment test the add to list for node sockets. Useful?
 
     TODO:
+    -Check if the input_datasink and output_datasink coorespond to the input and output
+        Pool puis Perceptron(Unknown) alors: operands could not be broadcast together with shapes (26,26) (10,)
+        à l execution car forcement le type en sortie du perceptron est 2D
+
+    TODO:
     -Check for connexion that the datasink is corresponding
         Send the 2 nodes that are not connecting well
 

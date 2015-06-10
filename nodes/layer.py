@@ -14,7 +14,7 @@ class PerceptronLayer(PipeNode):
       activation_function : the function the layer will use on the sum to compute the output value. Usually a sigmoid.
     """
 
-    def __init__(self, datasink, activation_function = Sigmoid):
+    def __init__(self, datasink = Unknown, activation_function = Sigmoid):
         super().__init__(datasink, datasink)
         self.bias = None
         self.activation_function = activation_function
@@ -49,7 +49,7 @@ class DropoutLayer(PipeNode):
       filter (numpy.ndarray): a ndarray of
       p: the probability to keep
     """
-    def __init__(self, datasink, p):
+    def __init__(self, datasink = Unknown, p = 0.5):
         super().__init__(datasink, datasink)
         self.filter = None
         self.p = p

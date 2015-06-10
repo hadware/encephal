@@ -14,9 +14,15 @@ class MNIST(LabeledDatabase):
         self.input_datasink = Float2D([28,28])
         self.output_datasink = Float1D([10])
         self.nb_input = labels.size
+        #if database == 'training':
+         #   self.nb_input = 100
 
-        for i in range(0, labels.size):
+        for i in range(0, self.nb_input):
             self.database.append((data[i]/255, labels[i]))
+
+        print(database)
+        print(self.database.__len__())
+        print(self.nb_input)
 
     #TODO : make path more usable
     def read(self, dataset="training", path="./MNIST"):

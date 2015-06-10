@@ -2,7 +2,7 @@ __author__ = 'marechaux'
 
 from datasink.node_socket import *
 from execution import protobuf
-from tests.instantation.test_instantation_exception import *
+from tests.instanciation.test_instanciation_exception import *
 
 class Node:
     """
