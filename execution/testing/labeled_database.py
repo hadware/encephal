@@ -20,3 +20,11 @@ class TestLabeledDatabase:
                 nb_ok += 1
             self.network.init_buffer()
         return nb_ok / len(self.database.database)
+
+    def single_test(self):
+        data, label = self.database.random_element()
+        self.network.input_layer.prop_data[:] = data
+        self.network.propagation(learning=False)
+        result = self.encoder.decode(self.network.output_layer.prop_data)
+        self.network.init_buffer()
+        return data, result

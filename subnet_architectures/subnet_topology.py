@@ -9,7 +9,7 @@ Subnet in series, Subnet of Subnet or even Subnet in Parallel
 class SubnetTopology:
 
     @staticmethod
-    def MLP1(input_datasink,output_datasink,n):
+    def MLP_simple(input_datasink, output_datasink, n):
         subnet = Subnet()
         #Define the datasink
         hidden_datasink = Float1D([n])
