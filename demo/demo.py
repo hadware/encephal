@@ -24,11 +24,12 @@ class Main(Gtk.Window):
 
         self._set_up_layout()
         self._set_up_signals()
-
-        # temporary tests
-        self.image_display.set_from_file("sample_digit.png")
-        self.result_label.set_markup("<span  font='100'>?</span>")
         self._set_up_neural_lib()
+
+        self.set_border_width(20)
+        self.set_icon_from_file("demo/encephal_logo_only.png")
+        self.image_display.set_from_file("demo/question_mark.png")
+        self.result_label.set_markup("<span  font='100'>?</span>")
 
         GObject.threads_init()
 
