@@ -1,0 +1,18 @@
+MNIST :
+train-images-idx3-ubyte.gz:  training set images (9912422 bytes)
+train-labels-idx1-ubyte.gz:  training set labels (28881 bytes)
+t10k-images-idx3-ubyte.gz:   test set images (1648877 bytes)
+t10k-labels-idx1-ubyte.gz:   test set labels (4542 bytes)
+
+CIFAR10:
+un fichier archive, qui contient pas mal de fichiers
+
+STL 10:
+http://ai.stanford.edu/~acoates/stl10/stl10_binary.tar.gz
+4 fichiers
+
+
+Bases sonores:
+    http://www.speech.cs.cmu.edu/databases/
+
+http://deeplearning.net/datasets/
